@@ -1,136 +1,159 @@
-# Retail Data Analytics (2024–2025)
+::: {align="center"}
+# 🛒 Retail Data Analytics
 
-<div align="center">
+[![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![SQLite](https://img.shields.io/badge/Database-SQLite-003B57?logo=sqlite&logoColor=white)](#)
+[![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+[![GitHub](https://img.shields.io/badge/Git-GitHub-black?logo=github)](https://github.com/)
 
-[![Project Type](https://img.shields.io/badge/Project-Educational_Material-orange?logo=readme&logoColor=white)](#)
-[![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
-[![Data Source](https://img.shields.io/badge/Data-CSV%20%7C%20Parquet%20%7C%20Excel-green?logo=microsoft-excel&logoColor=white)](#)
-[![Framework](https://img.shields.io/badge/Data_Stack-Pandas%20%7C%20NumPy%20%7C%20Seaborn-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+**Командний навчальний проєкт з Data Analytics на базі SQLite**
+:::
 
-</div>
+------------------------------------------------------------------------
 
----
+## 📌 Опис
 
-Командний навчальний проєкт з аналізу даних роздрібної торгівлі за 2024–2025 роки. Проєкт охоплює дослідження продуктового портфеля, аналіз виручки та прибутковості, обробку повернень, моделювання часових рядів, фінансове моделювання, оцінку якості даних та побудову аналітичних дашбордів.
-
----
+Проєкт присвячений аналізу даних інтернет-магазину. Використовуються
+SQL, SQLite та Python для отримання, очищення, аналізу та візуалізації
+даних. У роботі реалізовано повний цикл Data Analytics: завантаження
+даних, Data Cleaning, SQL-запити, побудова бізнес-метрик, аналітичних
+звітів і графіків.
 
 ## 🛠 Технологічний стек
 
-* **Мова програмування:** Python 3
-* **Обробка даних:** `pandas`, `NumPy`
-* **Візуалізація:** `matplotlib`, `seaborn`
-* **Середовище розробки:** Jupyter Notebook
-* **Контроль версій:** Git & GitHub
+-   Python 3
+-   SQLite
+-   Pandas
+-   NumPy
+-   Matplotlib
+-   Seaborn
+-   Git & GitHub
 
----
+## 📁 Структура проєкту
 
-## 📂 Опис даних
+``` text
+.
+├── online_store.db
+├── main.py
+├── README.md
+└── images/
+```
 
-Для виконання аналітичних завдань використовуються такі файли:
-* `transactions.csv` — історія транзакцій (продажів).
-* `returns.csv` — дані про повернення товарів.
-* `marketing.csv` — маркетингові витрати та кампанії.
-* `salaries.parquet` — інформація про заробітні плати працівників.
-* `company_data.xlsx` — містить довідники: `Products` (Товари), `Stores` (Магазини), `Employees` (Співробітники), `Inventory` (Запаси).
+## 🗄 Основні таблиці
 
-> ⚠️ **Важливо:** Файли з персональними даними (PII), секретами або занадто великими наборами даних додавати до репозиторію без попереднього узгодження **суворо заборонено**.
+  Таблиця             Призначення
+  ------------------- -------------------
+  customers           Клієнти
+  customer_pii        Контактні дані
+  orders              Замовлення
+  order_items         Позиції замовлень
+  products            Товари
+  categories          Категорії
+  suppliers           Постачальники
+  payments            Оплати
+  returns             Повернення
+  reviews             Відгуки
+  employees           Співробітники
+  employee_salaries   Зарплати
+  promotions          Акції
+  shipments           Доставки
+  shippers            Служби доставки
+  inventory           Склад
+  warehouses          Склади
 
----
+## 🔗 Схема зв'язків
 
-## 🎯 План та структура завдань
+``` text
+customers ── customer_pii
+      │
+      └──── orders ───── payments
+              │
+              ├──── returns
+              ├──── shipments ── shippers
+              ├──── employees ── employee_salaries
+              └──── order_items ── products ── categories
+                                 ├──────────── suppliers
+                                 └──────────── promotions
 
-### Блок 1. Product & Revenue Analysis / Finance & Strategy Analysis
-**Фокус:** Аналіз продуктового портфеля, ціноутворення, виручка та споживчі кошики.
+products ── inventory ── warehouses
+customers ── reviews
+```
 
-* **Базові завдання (pandas):**
-    * Топ-10 товарів за виручкою (без урахування повернень).
-    * Розподіл виручки за категоріями та місяцями (`pivot_table`), визначення щомісячних лідерів.
-    * Розрахунок середнього чека за магазинами (визначення лідерів та аутсайдерів).
-* **Візуалізація (matplotlib / seaborn):**
-    * *Barplot:* Порівняння виручки за категоріями у 2024 vs 2025 роках.
-    * *Heatmap:* Кореляційна матриця для `unit_price`, `cost_price`, `margin_pct`, `quantity`, `total_amount`.
-    * *Boxplot / Violinplot + KDE:* Розподіл додатного `total_amount` за категоріями з відображенням щільності та викидів.
-* **Просунуті завдання:**
-    * *ABC-аналіз товарів:* Поділ на групи A (70%), B (20%), C (10%) за кумулятивною виручкою.
-    * *Market Basket Analysis:* Пошук топ-5 пар категорій, що купуються разом (за днями або ISO-тижнями через `itertools.combinations`).
-    * *Аналіз знижок:* Порівняння транзакцій зі знижками та без для оцінки їхньої ефективності.
-    * *Cohort Retention:* Розрахунок Retention Rate для клієнтів у межах категорій за місяцями.
-* **⭐️ Додаткове завдання:**
-    * Естимація CLV (Customer Lifetime Value): Розрахунок ARPU, частоти покупок, життєвого циклу та сегментація клієнтів (*Low, Medium, High, Premium*).
+## 🧹 Data Cleaning
 
-### Блок 2. Profitability, Pareto, Time Series, Dashboards & Data Quality
-**Фокус:** Прибутковість, Pareto-аналіз, часові ряди, дашборди та якість даних.
+-   Перевірка пропущених значень
+-   Видалення дублікатів
+-   Перетворення типів даних
+-   Уніфікація текстових полів
+-   Нормалізація назв країн
+-   Перевірка бізнес-логіки
 
-* **Базові завдання (pandas):**
-    * *Profit-аналіз:* Розрахунок чистого прибутку (з урахуванням 5% операційних витрат), визначення найприбутковіших місяців.
-    * *Pareto Analysis (80/20):* Визначення кількості продуктів, які формують 80% виручки.
-    * *Data Quality Score:* Розрахунок метрик якості (`completeness`, `uniqueness`, `validity`, `consistency`, `overall_score`) для датафреймів.
-* **Візуалізація (matplotlib / seaborn):**
-    * *Stacked bar:* Співвідношення revenue, cost та profit за 12 місяців 2025 року.
-    * *Pareto curve:* Графік кумулятивної виручки (bar + line) із лінією 80%.
-    * *Dashboard 2×2:* Тренд виручки, маржинальність за форматами магазинів, відсоток повернень за категоріями, кількість транзакцій за місяцями.
-* **Просунуті завдання:**
-    * *Time Series Analysis:* Агрегація денної виручки, rolling averages (7 та 30 днів), пошук аномалій (> 2 std) та топ-5 стрибків/падінь через `shift()`.
-    * *Returns Analysis:* Аналіз причин повернень, зв'язку з формою оплати, знижками та розрахунок часу між покупкою і поверненням.
-    * *Магазинна аналітика:* Розрахунок ефективності: revenue per $m^2$ та revenue per employee.
-    * *Фінансове моделювання:* Побудова місячного P&L звіту (Revenue, COGS, Gross Profit, Marketing, Salaries, OpEx, Net Margin %).
-* **⭐️ Додаткове завдання:**
-    * Динамічний executive дашборд: Функція `generate_dashboard(data_path, month)` для автоматичної генерації звітів у форматі PNG за січень, червень та грудень 2025 року.
+## 📊 Реалізовані завдання
 
----
+### SQL
 
-## 📝 Правила найменування файлів
+-   SELECT
+-   JOIN
+-   GROUP BY
+-   ORDER BY
+-   Aggregate Functions
 
-Оскільки всі скрипти, артефакти та звіти зберігаються **в одному коріння проєкту (разом із головним файлом)**, для уникнення хаосу обов'язково використовуйте чіткий префікс із номером блоку та завдання.
+### Аналіз
 
-* **Для скриптів:** `block_1_task_04_category_revenue.py`
-* **Для графіків:** `block_1_task_04_category_revenue.png`
-* **Для звітів:** `block_2_task_01_profit_analysis.xlsx`
+-   Revenue Analysis
+-   Profitability Analysis
+-   Returns Analysis
+-   Payment Method Analysis
+-   Customer Analysis
+-   Churn Risk Scoring
 
----
+### Візуалізації
 
-## 👥 Наша команда
+-   Lineplot
+-   Barplot
+-   Scatterplot
+-   Boxplot
+-   Violinplot
+-   Heatmap
+-   Dashboard
+-   Stacked Bar Chart
 
-Репозиторій належить організації **Python-DA-Team**.  
-Робоча група: `data-analysts`
+## 📈 Основні метрики
 
-* 🧑‍💻 Дмитро
-* 👩‍💻 Оксана
-* 👩‍💻 Світлана
-* 🧑‍💻 Сергій
-* 👩‍💻 Юлія
+-   Revenue
+-   Profit
+-   Refund Amount
+-   Return Rate
+-   Average Rating
+-   Days Since Last Order
+-   Frequency Decline
+-   Churn Risk
 
+## 🌿 Git Flow
 
----
+``` bash
+git switch main
+git pull origin main
 
-## 🔄 Git Flow & Командний процес
+git switch -c username/task-name
 
-Робота над проєктом ведеться виключно через **Pull Requests (PR)**. Прямі коміти в гілку `main` заборонені.
+git add .
+git commit -m "Complete task"
+git push origin username/task-name
+```
 
-1.  **Оновлення локального репозиторію:**
-    ```bash
-    git switch main
-    git pull origin main
-    ```
-2.  **Створення робочої гілки** під конкретне завдання:
-    ```bash
-    git switch -c username/block-1-task-04
-    ```
-3.  **Розробка:** Створіть файл завдання в корені, напишіть код, додайте короткі висновки у коментарях, перевірте результат.
-4.  **Фіксація та відправка змін:**
-    ```bash
-    git add .
-    git commit -m "feat: додано аналіз виручки за категоріями для Блоку 1"
-    git push origin username/block-1-task-04
-    ```
-5.  **Створення Pull Request:** Перейдіть на GitHub та створіть PR (`base: main` ← `compare: ваша_гілка`).
-    > 💡 *Правило:* Один завершений логічний результат — один Pull Request. Після merge оновіть свій `main` перед початком нового завдання.
+Після завершення роботи створюється Pull Request до `main`.
 
-### 📋 Вимоги до оформлення Pull Request:
-* Чітко вказати номер блоку та завдання у назві PR.
-* Додати створений файл коду (`.py`) або дослідження (`.ipynb`).
-* Додати згенеровані графіки/таблиці, якщо вони передбачені завданням.
-* Написати короткий опис використаного методу.
-* Сформулювати **2–5 основних бізнес-висновків** на основі отриманих даних.
-* Перевірити відсутність випадкових змін чи видалень чужого коду.
+## 👥 Команда
+
+-   Сергій
+-   Дмитро
+-   Світлана
+-   Юлія
+-   Оксана
+
+## ✅ Висновок
+
+Проєкт демонструє повний цикл роботи дата-аналітика: від роботи з
+реляційною базою даних SQLite до створення аналітичних звітів,
+бізнес-метрик і візуалізацій для підтримки прийняття рішень.
