@@ -1,8 +1,15 @@
 # Retail Data Analytics (2024–2025)
 
-![Python](https://img.shields.io/badge/python-3.10+-blue.svg)
-![Pandas](https://img.shields.io/badge/pandas-%23150458.svg?style=flat&logo=pandas&logoColor=white)
-![Git](https://img.shields.io/badge/git-%23F05033.svg?style=flat&logo=git&logoColor=white)
+<div align="center">
+
+[![Project Type](https://img.shields.io/badge/Project-Educational_Material-orange?logo=readme&logoColor=white)](#)
+[![Python Version](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Data Source](https://img.shields.io/badge/Data-CSV%20%7C%20Parquet%20%7C%20Excel-green?logo=microsoft-excel&logoColor=white)](#)
+[![Framework](https://img.shields.io/badge/Data_Stack-Pandas%20%7C%20NumPy%20%7C%20Seaborn-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+
+</div>
+
+---
 
 Командний навчальний проєкт з аналізу даних роздрібної торгівлі за 2024–2025 роки. Проєкт охоплює дослідження продуктового портфеля, аналіз виручки та прибутковості, обробку повернень, моделювання часових рядів, фінансове моделювання, оцінку якості даних та побудову аналітичних дашбордів.
 
