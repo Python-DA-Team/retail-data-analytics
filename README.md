@@ -1,4 +1,3 @@
-::: {align="center"}
 # 🛒 Retail Data Analytics
 
 [![Python](https://img.shields.io/badge/Python-3.10+-3776AB?logo=python&logoColor=white)](https://www.python.org/)
