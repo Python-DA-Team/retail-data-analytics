@@ -35,17 +35,12 @@ def number(series: pd.Series) -> pd.Series:
 
 
 def mixed_date(series: pd.Series) -> pd.Series:
-    text = series.astype("string").str.strip()
-    result = pd.Series(pd.NaT, index=series.index, dtype="datetime64[ns]")
-    day_first = text.str.match(r"^\d{2}[/.]\d{2}[/.]\d{4}", na=False)
-    iso = text.str.match(r"^\d{4}-\d{2}-\d{2}", na=False)
-    result.loc[day_first] = pd.to_datetime(
-        text.loc[day_first], errors="coerce", format="mixed", dayfirst=True
+    return pd.to_datetime(
+        series.astype("string").str.strip(),
+        format="mixed",
+        dayfirst=True,
+        errors="coerce",
     )
-    result.loc[iso] = pd.to_datetime(text.loc[iso], errors="coerce")
-    other = result.isna() & text.notna()
-    result.loc[other] = pd.to_datetime(text.loc[other], errors="coerce", format="mixed")
-    return result
 
 
 def dates(df: pd.DataFrame, columns: list[str], reject_future: bool = False) -> None:
