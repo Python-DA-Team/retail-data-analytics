@@ -26,12 +26,10 @@ def base_clean(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def number(series: pd.Series) -> pd.Series:
-    return pd.to_numeric(
-        series.astype("string")
-        .str.replace(r"[^0-9,.-]", "", regex=True)
-        .str.replace(",", "", regex=False),
-        errors="coerce",
-    )
+    text = series.astype("string")
+    for symbol in ["$", "€", "₴", "%", ",", " units"]:
+        text = text.str.replace(symbol, "", regex=False)
+    return pd.to_numeric(text, errors="coerce")
 
 
 def mixed_date(series: pd.Series) -> pd.Series:
