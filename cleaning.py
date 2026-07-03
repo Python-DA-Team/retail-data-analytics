@@ -1,5 +1,3 @@
-"""Очищення вхідних даних проєкту."""
-
 from __future__ import annotations
 
 import csv
@@ -20,7 +18,6 @@ NA_PATTERN = re.compile(r"^\s*(?:|nan|none|n/?a|null|\?)\s*$", re.I)
 
 
 def base_clean(df: pd.DataFrame) -> pd.DataFrame:
-    """Прибирає зайві пробіли, пропуски та дублікати."""
     df = df.copy()
     for col in df.select_dtypes(include=["object", "string"]).columns:
         text = df[col].astype("string").str.strip()
@@ -29,7 +26,6 @@ def base_clean(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def number(series: pd.Series) -> pd.Series:
-    """Перетворює грошові значення на числа."""
     return pd.to_numeric(
         series.astype("string")
         .str.replace(r"[^0-9,.-]", "", regex=True)
@@ -39,18 +35,12 @@ def number(series: pd.Series) -> pd.Series:
 
 
 def mixed_date(series: pd.Series) -> pd.Series:
-    """Перетворює дати різних форматів."""
-    text = series.astype("string").str.strip()
-    result = pd.Series(pd.NaT, index=series.index, dtype="datetime64[ns]")
-    day_first = text.str.match(r"^\d{2}[/.]\d{2}[/.]\d{4}", na=False)
-    iso = text.str.match(r"^\d{4}-\d{2}-\d{2}", na=False)
-    result.loc[day_first] = pd.to_datetime(
-        text.loc[day_first], errors="coerce", format="mixed", dayfirst=True
+    return pd.to_datetime(
+        series.astype("string").str.strip(),
+        format="mixed",
+        dayfirst=True,
+        errors="coerce",
     )
-    result.loc[iso] = pd.to_datetime(text.loc[iso], errors="coerce")
-    other = result.isna() & text.notna()
-    result.loc[other] = pd.to_datetime(text.loc[other], errors="coerce", format="mixed")
-    return result
 
 
 def dates(df: pd.DataFrame, columns: list[str], reject_future: bool = False) -> None:
@@ -141,7 +131,6 @@ def clean_inventory(df: pd.DataFrame, store_ids: set[int], product_ids: set[int]
 
 
 def read_broken_transactions(path: Path) -> tuple[pd.DataFrame, dict[str, int]]:
-    """Виправляє пошкоджені рядки у файлі транзакцій."""
     fixed, tabs, shifted, rejected = [], 0, 0, 0
     with path.open(encoding="utf-8-sig", newline="") as source:
         header = next(csv.reader([source.readline()]))
@@ -266,7 +255,6 @@ def clean_json(path: Path) -> pd.DataFrame:
 # PyCharm cannot infer the schema of a SQLite file selected at runtime.
 # noinspection SqlNoDataSourceInspection,SqlResolve
 def clean_database(source: Path, destination: Path) -> None:
-    """Створює очищену копію бази SQLite."""
     shutil.copy2(source, destination)
     with sqlite3.connect(destination) as con:
         con.execute("UPDATE customers SET gender='Male' WHERE lower(trim(gender)) IN ('m','male','mle')")
