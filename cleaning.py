@@ -1,63 +1,4 @@
-# Усі команди працюють з одними й тими самими файлами, але виконують різні завдання
-# Кожна команда здає один Python-файл (`.py`) з аналізом + презентацію (наприклад: PDF, 5–7 слайдів)
-#
-# Файли даних
-#
-# | Файл | Формат | Обсяг | Записів | Опис |
-# |------|--------|-------|---------|------|
-# | `company_data.xlsx` | Excel (5 аркушів) | ~350 KB | 5050+128+120+505+572 | Customers, Products, Stores, Employees, Inventory |
-# | `transactions.csv` | CSV | ~7.5 MB | 101 000 | Транзакції за 2024–2025 |
-# | `support_tickets.tsv` | TSV | ~1 MB | 15 150 | Звернення в підтримку |
-# | `api_logs.json` | JSON | ~13 MB | 50 000 | Логи API-запитів |
-# | `marketing.csv` | CSV | ~7 KB | 60 | Маркетингові кампанії з метриками |
-# | `salaries.csv` | CSV | ~660 KB | 10 157 | Помісячні зарплати |
-# | `returns.csv` | CSV | ~580 KB | 5 000 | Повернення товарів |
-# | `customers.csv` | CSV | ~490 KB | 5 050 | Клієнти (окремо для зручності) |
-# | `employees.csv` | CSV | ~57 KB | 505 | Співробітники (окремо) |
-# | `stores.csv` | CSV | ~6 KB | 120 | Магазини (окремо) |
-#
-#  Схема зв'язків між файлами
-#
-# ```
-# customers.customer_id -> transactions.customer_id -> support_tickets.customer_id
-# customers.customer_id -> api_logs.user_id
-# products.product_id   -> transactions.product_id -> inventory.product_id
-# products.product_id   -> marketing.product_id
-# stores.store_id       -> transactions.store_id -> employees.store_id
-# stores.store_id       -> inventory.store_id
-# employees.employee_id -> salaries.employee_id
-# ```
-#
-#  Дані містять навмисні помилки!
-#
-# Дані були навмисно забруднені, щоб імітувати реальну роботу дата-аналітика:
-#
-# | Тип помилки | Де |
-# |-------------|----|
-# | Дата в різних форматах: `YYYY-MM-DD`, `DD/MM/YYYY`, `DD.MM.YYYY` | `transactions.csv` |
-# | Різний кейс: male, Male, MALE, M | `gender` (Customers) |
-# | Описки: Femail замість Female | `gender` (Customers) |
-# | Країна як код: UA, PL, DE замість назв | `customers.csv` |
-# | Ціни як рядки: `$49.99`, `€120.00` | `unit_price` (Products) |
-# | Пропуски: NaN, None, N/A, NULL, "", ? | Всі файли |
-# | Зайві коми (зсув колонок) | `transactions.csv` (~1%) |
-# | Сторонні ID: customer_id=999999, store_id=-1 | transactions, employees |
-# | Дублікати рядків | Всі файли (~1%) |
-# | total_amount не відповідає формулі `qty×price×discount` | transactions (~3%) |
-# | CTR > 100% (неможливо) | marketing |
-# | Кількість = 0 або від'ємна | transactions |
-# | Дата в майбутньому | customers, stores, employees |
-# | Статус-код як рядок `"200"` | api_logs |
-# | has_cafe як "yes"/"no" | Stores |
-# | Зарплата як рядок `"$3500"` | Employees |
-# | JSON з extra/missing полями | api_logs (~1%) |
-
-"""Очищення навчальних даних без зміни оригіналів.
-
-Запуск: python main.py
-Результат: папка cleaned_data поруч із цим файлом.
-Неможливі значення не вигадуються: вони замінюються на pd.NA.
-"""
+"""Очищення вхідних даних проєкту."""
 
 from __future__ import annotations
 
@@ -79,7 +20,7 @@ NA_PATTERN = re.compile(r"^\s*(?:|nan|none|n/?a|null|\?)\s*$", re.I)
 
 
 def base_clean(df: pd.DataFrame) -> pd.DataFrame:
-    """Trim text, unify missing markers and remove exact duplicates."""
+    """Прибирає зайві пробіли, пропуски та дублікати."""
     df = df.copy()
     for col in df.select_dtypes(include=["object", "string"]).columns:
         text = df[col].astype("string").str.strip()
@@ -88,7 +29,7 @@ def base_clean(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def number(series: pd.Series) -> pd.Series:
-    """$3,500 / €120 / ₴8185 -> numeric."""
+    """Перетворює грошові значення на числа."""
     return pd.to_numeric(
         series.astype("string")
         .str.replace(r"[^0-9,.-]", "", regex=True)
@@ -98,7 +39,7 @@ def number(series: pd.Series) -> pd.Series:
 
 
 def mixed_date(series: pd.Series) -> pd.Series:
-    """Unambiguous YYYY-MM-DD, DD/MM/YYYY and DD.MM.YYYY parser."""
+    """Перетворює дати різних форматів."""
     text = series.astype("string").str.strip()
     result = pd.Series(pd.NaT, index=series.index, dtype="datetime64[ns]")
     day_first = text.str.match(r"^\d{2}[/.]\d{2}[/.]\d{4}", na=False)
@@ -200,7 +141,7 @@ def clean_inventory(df: pd.DataFrame, store_ids: set[int], product_ids: set[int]
 
 
 def read_broken_transactions(path: Path) -> tuple[pd.DataFrame, dict[str, int]]:
-    """Repair injected tabs, extra commas and the shifted empty fifth field."""
+    """Виправляє пошкоджені рядки у файлі транзакцій."""
     fixed, tabs, shifted, rejected = [], 0, 0, 0
     with path.open(encoding="utf-8-sig", newline="") as source:
         header = next(csv.reader([source.readline()]))
@@ -325,7 +266,7 @@ def clean_json(path: Path) -> pd.DataFrame:
 # PyCharm cannot infer the schema of a SQLite file selected at runtime.
 # noinspection SqlNoDataSourceInspection,SqlResolve
 def clean_database(source: Path, destination: Path) -> None:
-    """Clean the large SQLite source in a copied file, never in-place."""
+    """Створює очищену копію бази SQLite."""
     shutil.copy2(source, destination)
     with sqlite3.connect(destination) as con:
         con.execute("UPDATE customers SET gender='Male' WHERE lower(trim(gender)) IN ('m','male','mle')")
