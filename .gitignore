@@ -27,3 +27,4 @@ backup/
 cleaned_data/
 
 *.tsv
+*.ini
