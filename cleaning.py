@@ -81,6 +81,9 @@ def clean_customers(df: pd.DataFrame) -> pd.DataFrame:
 
 def clean_products(df: pd.DataFrame) -> pd.DataFrame:
     df = base_clean(df)
+    for col in ["category", "subcategory"]:
+        if col in df:
+            df[col] = df[col].astype("string").str.title()
     for col in ["unit_price", "cost_price", "margin_pct", "weight_kg"]:
         if col in df:
             df[col] = number(df[col])
