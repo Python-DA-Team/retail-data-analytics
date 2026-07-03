@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+venv/
+
+# PyCharm
+.idea/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Results
+results/
+
+# Logs
+*.log
+# Local data
+backup/
+*.csv
+*.xlsx
+*.json
+cleaned_data/
+
+*.tsv
