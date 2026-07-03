@@ -6,63 +6,60 @@
 [![GitHub](https://img.shields.io/badge/Git-GitHub-black?logo=github)](https://github.com/)
 
 **Командний навчальний проєкт з Data Analytics на базі SQLite**
-:::
 
-------------------------------------------------------------------------
+---
 
 ## 📌 Опис
 
-Проєкт присвячений аналізу даних інтернет-магазину. Використовуються
-SQL, SQLite та Python для отримання, очищення, аналізу та візуалізації
-даних. У роботі реалізовано повний цикл Data Analytics: завантаження
-даних, Data Cleaning, SQL-запити, побудова бізнес-метрик, аналітичних
-звітів і графіків.
+Проєкт присвячений аналізу даних інтернет-магазину. Використовуються SQL, SQLite та Python для отримання, очищення, аналізу та візуалізації даних. У роботі реалізовано повний цикл Data Analytics: завантаження даних, Data Cleaning, SQL-запити, побудова бізнес-метрик, аналітичних звітів і графіків.
 
 ## 🛠 Технологічний стек
 
--   Python 3
--   SQLite
--   Pandas
--   NumPy
--   Matplotlib
--   Seaborn
--   Git & GitHub
+- Python 3
+- SQLite
+- Pandas
+- NumPy
+- Matplotlib
+- Seaborn
+- Git & GitHub
 
 ## 📁 Структура проєкту
 
-``` text
+```text
 .
-├── online_store.db
-├── main.py
+├── main.py                 # головна точка запуску
+├── cleaning.py             # централізоване очищення всіх джерел даних
+├── tasks/                  # файли із завданнями учасників
+├── cleaned_data/           # створюється автоматично, у Git не додається
 ├── README.md
 └── images/
 ```
 
 ## 🗄 Основні таблиці
 
-  Таблиця             Призначення
-  ------------------- -------------------
-  customers           Клієнти
-  customer_pii        Контактні дані
-  orders              Замовлення
-  order_items         Позиції замовлень
-  products            Товари
-  categories          Категорії
-  suppliers           Постачальники
-  payments            Оплати
-  returns             Повернення
-  reviews             Відгуки
-  employees           Співробітники
-  employee_salaries   Зарплати
-  promotions          Акції
-  shipments           Доставки
-  shippers            Служби доставки
-  inventory           Склад
-  warehouses          Склади
+| Таблиця | Призначення |
+|---|---|
+| customers | Клієнти |
+| customer_pii | Контактні дані |
+| orders | Замовлення |
+| order_items | Позиції замовлень |
+| products | Товари |
+| categories | Категорії |
+| suppliers | Постачальники |
+| payments | Оплати |
+| returns | Повернення |
+| reviews | Відгуки |
+| employees | Співробітники |
+| employee_salaries | Зарплати |
+| promotions | Акції |
+| shipments | Доставки |
+| shippers | Служби доставки |
+| inventory | Склад |
+| warehouses | Склади |
 
 ## 🔗 Схема зв'язків
 
-``` text
+```text
 customers ── customer_pii
       │
       └──── orders ───── payments
@@ -80,57 +77,77 @@ customers ── reviews
 
 ## 🧹 Data Cleaning
 
--   Перевірка пропущених значень
--   Видалення дублікатів
--   Перетворення типів даних
--   Уніфікація текстових полів
--   Нормалізація назв країн
--   Перевірка бізнес-логіки
+Файл `cleaning.py` містить єдиний для всієї команди процес очищення даних:
+
+- перевірка пропущених значень і дублікатів;
+- приведення дат, чисел та інших типів;
+- уніфікація текстових значень;
+- нормалізація назв країн;
+- виправлення зміщених рядків у транзакціях;
+- перевірка зовнішніх ID та бізнес-логіки;
+- створення очищених CSV, TSV, JSON, Excel і копії SQLite;
+- формування звіту `cleaning_report.json`.
+
+Оригінальні файли не змінюються. Результати записуються до папки `cleaned_data`.
+
+### Порядок роботи команди
+
+1. `cleaning.py` зберігається в репозиторії один раз як спільний модуль.
+2. Учасники завантажують у свої гілки лише власні файли завдань `.py`.
+3. Після об'єднання робіт `main.py` спочатку запускає очищення, а потім усі 22 завдання.
+4. Файли завдань повинні читати дані з `cleaned_data`, щоб усі використовували однаковий набір очищених даних.
+5. Папку `cleaned_data` і великі файли `.db` не потрібно додавати до GitHub.
+
+Запуск:
+
+```bash
+python main.py
+```
 
 ## 📊 Реалізовані завдання
 
 ### SQL
 
--   SELECT
--   JOIN
--   GROUP BY
--   ORDER BY
--   Aggregate Functions
+- SELECT
+- JOIN
+- GROUP BY
+- ORDER BY
+- Aggregate Functions
 
 ### Аналіз
 
--   Revenue Analysis
--   Profitability Analysis
--   Returns Analysis
--   Payment Method Analysis
--   Customer Analysis
--   Churn Risk Scoring
+- Revenue Analysis
+- Profitability Analysis
+- Returns Analysis
+- Payment Method Analysis
+- Customer Analysis
+- Churn Risk Scoring
 
 ### Візуалізації
 
--   Lineplot
--   Barplot
--   Scatterplot
--   Boxplot
--   Violinplot
--   Heatmap
--   Dashboard
--   Stacked Bar Chart
+- Lineplot
+- Barplot
+- Scatterplot
+- Boxplot
+- Violinplot
+- Heatmap
+- Dashboard
+- Stacked Bar Chart
 
 ## 📈 Основні метрики
 
--   Revenue
--   Profit
--   Refund Amount
--   Return Rate
--   Average Rating
--   Days Since Last Order
--   Frequency Decline
--   Churn Risk
+- Revenue
+- Profit
+- Refund Amount
+- Return Rate
+- Average Rating
+- Days Since Last Order
+- Frequency Decline
+- Churn Risk
 
 ## 🌿 Git Flow
 
-``` bash
+```bash
 git switch main
 git pull origin main
 
@@ -145,14 +162,12 @@ git push origin username/task-name
 
 ## 👥 Команда
 
--   Сергій
--   Дмитро
--   Світлана
--   Юлія
--   Оксана
+- Сергій
+- Дмитро
+- Світлана
+- Юлія
+- Оксана
 
 ## ✅ Висновок
 
-Проєкт демонструє повний цикл роботи дата-аналітика: від роботи з
-реляційною базою даних SQLite до створення аналітичних звітів,
-бізнес-метрик і візуалізацій для підтримки прийняття рішень.
+Проєкт демонструє повний цикл роботи дата-аналітика: від очищення та підготовки даних до створення аналітичних звітів, бізнес-метрик і візуалізацій для підтримки прийняття рішень.
