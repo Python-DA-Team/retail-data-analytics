@@ -41,6 +41,7 @@
 
 | Файл | Формат | Обсяг | Записів | Опис |
 |---|---|---:|---:|---|
+| `analytics_practice.db` | SQLite | ~473 MB | 17 таблиць | Навчальна реляційна база для SQL-завдань |
 | `company_data.xlsx` | Excel, 5 аркушів | ~350 KB | 5050+128+120+505+572 | Customers, Products, Stores, Employees, Inventory |
 | `transactions.csv` | CSV | ~7.5 MB | 101 000 | Транзакції за 2024–2025 роки |
 | `support_tickets.tsv` | TSV | ~1 MB | 15 150 | Звернення в підтримку |
@@ -51,6 +52,8 @@
 | `customers.csv` | CSV | ~490 KB | 5 050 | Клієнти, окремий файл для зручності |
 | `employees.csv` | CSV | ~57 KB | 505 | Співробітники, окремий файл |
 | `stores.csv` | CSV | ~6 KB | 120 | Магазини, окремий файл |
+
+Усього використовується 11 вхідних файлів. `analytics_practice.db` очищається в окрему копію `cleaned_data/analytics_practice_cleaned.db`; оригінальна база не змінюється.
 
 ## 🔗 Схема зв'язків між файлами
 
