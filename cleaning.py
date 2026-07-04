@@ -162,6 +162,7 @@ def clean_transactions(df: pd.DataFrame, ids: dict[str, set[int]], prices: pd.Se
     valid_id(df, "store_id", ids["store"])
     valid_id(df, "product_id", ids["product"])
     df["quantity"] = df["quantity"].where(df["quantity"].gt(0))
+    df["is_return"] = df["is_return"].where(df["is_return"].isin([0, 1]))
     df["discount_percent"] = df["discount_percent"].where(df["discount_percent"].between(0, 100))
     dates(df, ["transaction_date"])
     df["payment_method"] = df["payment_method"].astype("string").str.title()
@@ -169,7 +170,9 @@ def clean_transactions(df: pd.DataFrame, ids: dict[str, set[int]], prices: pd.Se
 
     expected = (df["quantity"].astype("Float64") * df["product_id"].map(prices)
                 * (1 - df["discount_percent"] / 100))
-    expected = expected.where(df["is_return"].ne(1), -expected.abs()).round(2)
+    expected = expected.where(df["is_return"].notna())
+    return_rows = df["is_return"].eq(1).fillna(False)
+    expected = expected.where(~return_rows, -expected.abs()).round(2)
     mismatch = expected.notna() & (df["total_amount"].sub(expected).abs() > 0.01)
     df.loc[mismatch, "total_amount"] = expected.loc[mismatch]
     return df
@@ -239,12 +242,18 @@ def clean_support(df: pd.DataFrame, ids: dict[str, set[int]]) -> pd.DataFrame:
     return df
 
 
-def clean_json(path: Path) -> pd.DataFrame:
+def clean_json(path: Path, customer_ids: set[int]) -> pd.DataFrame:
     try:
         df = pd.read_json(path, lines=True)
     except ValueError:
         df = pd.read_json(path)
-    df = base_clean(df)
+    expected_columns = [
+        "log_id", "timestamp", "endpoint", "method", "status_code",
+        "response_time_ms", "user_id", "device_type", "ip_address",
+        "user_agent", "error_message",
+    ]
+    df = base_clean(df).reindex(columns=expected_columns)
+    valid_id(df, "user_id", customer_ids)
     dates(df, ["timestamp"])
     code = pd.to_numeric(df["status_code"], errors="coerce").round().astype("Int64")
     df["status_code"] = code.where(code.between(100, 599))
@@ -322,7 +331,7 @@ def main() -> None:
 
     json_path = ROOT / "api_logs.json"
     if json_path.exists():
-        api = clean_json(json_path)
+        api = clean_json(json_path, ids["customer"])
         api.to_json(OUT / "api_logs_cleaned.json", orient="records", lines=True,
                     force_ascii=False, date_format="iso")
         report["api_logs_cleaned.json"] = {"rows": len(api), "missing": int(api.isna().sum().sum())}
