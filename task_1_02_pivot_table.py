@@ -2,9 +2,9 @@
 # category по рядках, місяць по стовпцях, сума total_amount.
 # Яка категорія лідирує щомісяця?
 
-ROOT = Path(__file__).resolve().parent/"урок 02.07.26"
+ROOT = Path(__file__).resolve().parent
 CLEAN_DIR = ROOT / "cleaned_data"
-RESULT_DIR = ROOT / "results" / "task_1_02_patero_analysis"
+RESULT_DIR = ROOT / "results" / "task_1_02_pivot_table"
 
 def load_table(filename: str, sep: str = ",") -> pd.DataFrame:
     """Універсальне завантаження очищених таблиць з cleaned_data"""
@@ -26,7 +26,7 @@ df = transactions.merge(products, on="product_id", how="left")
 
 # 4. Побудова pivot_table: категорії по рядках, місяці по стовпцях, сума total_amount
 pivot = pd.pivot_table(
-    df,
+    df,    
     values="total_amount",
     index="category",
     columns="month",
