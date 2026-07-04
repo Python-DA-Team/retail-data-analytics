@@ -29,51 +29,73 @@
 .
 ├── main.py                 # головна точка запуску
 ├── cleaning.py             # централізоване очищення всіх джерел даних
-├── tasks/                  # файли із завданнями учасників
+├── task_*.py               # перевірені файли окремих завдань
 ├── cleaned_data/           # створюється автоматично, у Git не додається
 ├── results/                # створюється автоматично, у Git не додається
-├── README.md
+└── README.md
 ```
 
-## 🗄 Основні таблиці
+## 🗄 Файли даних
 
-| Таблиця | Призначення |
-|---|---|
-| customers | Клієнти |
-| customer_pii | Контактні дані |
-| orders | Замовлення |
-| order_items | Позиції замовлень |
-| products | Товари |
-| categories | Категорії |
-| suppliers | Постачальники |
-| payments | Оплати |
-| returns | Повернення |
-| reviews | Відгуки |
-| employees | Співробітники |
-| employee_salaries | Зарплати |
-| promotions | Акції |
-| shipments | Доставки |
-| shippers | Служби доставки |
-| inventory | Склад |
-| warehouses | Склади |
+Усі завдання працюють з одними й тими самими вхідними файлами, але виконують різні види аналізу.
 
-## 🔗 Схема зв'язків
+| Файл | Формат | Обсяг | Записів | Опис |
+|---|---|---:|---:|---|
+| `company_data.xlsx` | Excel, 5 аркушів | ~350 KB | 5050+128+120+505+572 | Customers, Products, Stores, Employees, Inventory |
+| `transactions.csv` | CSV | ~7.5 MB | 101 000 | Транзакції за 2024–2025 роки |
+| `support_tickets.tsv` | TSV | ~1 MB | 15 150 | Звернення в підтримку |
+| `api_logs.json` | JSON | ~13 MB | 50 000 | Логи API-запитів |
+| `marketing.csv` | CSV | ~7 KB | 60 | Маркетингові кампанії з метриками |
+| `salaries.csv` | CSV | ~660 KB | 10 157 | Помісячні зарплати |
+| `returns.csv` | CSV | ~580 KB | 5 000 | Повернення товарів |
+| `customers.csv` | CSV | ~490 KB | 5 050 | Клієнти, окремий файл для зручності |
+| `employees.csv` | CSV | ~57 KB | 505 | Співробітники, окремий файл |
+| `stores.csv` | CSV | ~6 KB | 120 | Магазини, окремий файл |
+
+## 🔗 Схема зв'язків між файлами
 
 ```text
-customers ── customer_pii
-      │
-      └──── orders ───── payments
-              │
-              ├──── returns
-              ├──── shipments ── shippers
-              ├──── employees ── employee_salaries
-              └──── order_items ── products ── categories
-                                 ├──────────── suppliers
-                                 └──────────── promotions
-
-products ── inventory ── warehouses
-customers ── reviews
+customers.customer_id -> transactions.customer_id -> support_tickets.customer_id
+customers.customer_id -> api_logs.user_id
+products.product_id   -> transactions.product_id -> inventory.product_id
+products.product_id   -> marketing.product_id
+stores.store_id       -> transactions.store_id -> employees.store_id
+stores.store_id       -> inventory.store_id
+employees.employee_id -> salaries.employee_id
 ```
+
+## ⚠️ Навмисно забруднені дані
+
+Набір даних містить навмисні помилки, що імітують реальну роботу дата-аналітика.
+
+| Тип помилки | Де зустрічається |
+|---|---|
+| Дати у форматах `YYYY-MM-DD`, `DD/MM/YYYY`, `DD.MM.YYYY` | `transactions.csv` |
+| Різний регістр: male, Male, MALE, M | `gender`, Customers |
+| Описка Femail замість Female | `gender`, Customers |
+| Коди UA, PL, DE замість назв країн | `customers.csv` |
+| Ціни як рядки: `$49.99`, `€120.00` | `unit_price`, Products |
+| Пропуски: NaN, None, N/A, NULL, порожній рядок, ? | Усі файли |
+| Зайві коми та зсув колонок | `transactions.csv`, ~1% |
+| Сторонні ID: customer_id=999999, store_id=-1 | Transactions, Employees |
+| Дублікати рядків | Усі файли, ~1% |
+| `total_amount` не відповідає `qty × price × discount` | Transactions, ~3% |
+| CTR понад 100% | Marketing |
+| Кількість дорівнює 0 або є від'ємною | Transactions |
+| Дата в майбутньому | Customers, Stores, Employees |
+| Статус-код як рядок `"200"` | `api_logs.json` |
+| `has_cafe` як yes/no | Stores |
+| Зарплата як рядок `"$3500"` | Employees |
+| JSON з зайвими або відсутніми полями | `api_logs.json`, ~1% |
+
+## 📦 Формат здачі
+
+Команда здає:
+
+- один Python-файл `.py` з очищенням даних і всіма виконаними завданнями;
+- презентацію у форматі PDF на 5–7 слайдів.
+
+Під час розробки очищення та 22 завдання зберігаються в окремих файлах. Перед здачею вони об'єднуються в один `main.py`.
 
 ## 🧹 Data Cleaning
 
