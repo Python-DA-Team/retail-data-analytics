@@ -7,7 +7,7 @@ import seaborn as sns
 
 ROOT = Path(__file__).resolve().parent
 CLEAN_DIR = ROOT / "cleaned_data"
-RESULT_DIR = ROOT / "results" / "task_2_06_Dashboard_(multi-plot)"
+RESULT_DIR = ROOT / "results" / "task_2_06"
 
 
 def load_table(filename: str, sep: str = ",") -> pd.DataFrame:
@@ -42,6 +42,8 @@ transactions["transaction_date"] = pd.to_datetime(
     transactions["transaction_date"],
     errors="coerce"
 )
+
+transactions["month"] = transactions["transaction_date"].dt.month
 
 revenue_trend = (
     transactions
@@ -127,4 +129,10 @@ axes[1,1].set_xlabel('Month')
 axes[1,1].set_ylabel('Transaction Count')
 
 plt.tight_layout()
-plt.show()
+
+RESULT_DIR.mkdir(parents=True, exist_ok=True)
+output_path = RESULT_DIR / "dashboard_multi_plot.png"
+plt.savefig(output_path, dpi=300, bbox_inches="tight")
+print(f"Графік збережено: {output_path}")
+
+plt.close()
