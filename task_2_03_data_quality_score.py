@@ -1,210 +1,151 @@
-from pathlib import Path
-
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns
+from pathlib import Path
 
+sns.set_theme(style='whitegrid')
+plt.rcParams['figure.figsize'] = (10, 5)
 
-ROOT = Path(__file__).resolve().parent
-CLEAN_DIR = ROOT / "cleaned_data"
-RESULT_DIR = ROOT / "results" / "task_2_03"
+BASE_DIR = Path(__file__).resolve().parent
+CLEAN_DIR = BASE_DIR / "cleaned_data"
 
+files_to_check = {
+   'Customers': CLEAN_DIR / 'customers_cleaned.csv',
+   'Employees': CLEAN_DIR / 'employees_cleaned.csv',
+   'Marketing': CLEAN_DIR / 'marketing_cleaned.csv',
+   'Stores': CLEAN_DIR / 'stores_cleaned.csv',
+   'Returns': CLEAN_DIR / 'returns_cleaned.csv'
+}
 
-def load_data() -> dict[str, pd.DataFrame]:
-    paths = {
-        "Customers": CLEAN_DIR / "customers_cleaned.csv",
-        "Employees": CLEAN_DIR / "employees_cleaned.csv",
-        "Marketing": CLEAN_DIR / "marketing_cleaned.csv",
-        "Stores": CLEAN_DIR / "stores_cleaned.csv",
-        "Returns": CLEAN_DIR / "returns_cleaned.csv",
-    }
+if not all(path.exists() for path in files_to_check.values()):
+   from cleaning import main as clean_data
+   clean_data()
 
-    if any(not path.exists() for path in paths.values()):
-        from cleaning import main as clean_data
+dq_results = []
 
-        clean_data()
+for name, path in files_to_check.items():
+   if not path.exists():
+      print(f'Не знайдено файл {name} за шляхом {path}.')
+      continue
 
-    return {
-        name: pd.read_csv(path, low_memory=False)
-        for name, path in paths.items()
-    }
+   df = pd.read_csv(path)
+   total_rows = len(df)
 
+   if total_rows == 0:
+      continue
 
-def calculate_score(
-    name: str,
-    data: pd.DataFrame,
-) -> dict[str, str | float]:
-    if data.empty:
-        raise ValueError(f"Файл {name} не містить даних")
+# перевіряю заповненість файлів даними
+   total_cells = df.size
+   missing_cells = df.isna().sum().sum()
+   completeness = 1.0 - (missing_cells / total_cells) if total_cells > 0 else 1.0
 
-    total_rows = len(data)
-    completeness = data.notna().sum().sum() / data.size
-    uniqueness = 1 - data.duplicated().sum() / total_rows
+# перевіряю на наявність дублікатів
+   duplicate_rows = df.duplicated().sum()
+   uniqueness = 1.0 - (duplicate_rows / total_rows)
 
-    if name == "Customers":
-        age = pd.to_numeric(data["age"], errors="coerce")
-        orders = pd.to_numeric(data["total_orders"], errors="coerce")
-        lifetime_value = pd.to_numeric(data["lifetime_value"], errors="coerce")
-        registration_date = pd.to_datetime(
-            data["registration_date"], errors="coerce"
-        )
-        valid = data["customer_id"].notna() & age.between(0, 100)
-        consistent = (
-            orders.ge(0)
-            & lifetime_value.ge(0)
-            & registration_date.le(pd.Timestamp("2025-12-31"))
-        )
+# перевіряю рядки на наявність аномалій та коректність типів даних
+   valid_rows_count = total_rows
+   consistent_rows_count = total_rows
 
-    elif name == "Employees":
-        salary = pd.to_numeric(data["salary"], errors="coerce")
-        performance = pd.to_numeric(
-            data["performance_score"], errors="coerce"
-        )
-        hire_date = pd.to_datetime(data["hire_date"], errors="coerce")
-        valid = (
-            data["employee_id"].notna()
-            & data["store_id"].notna()
-            & salary.gt(0)
-        )
-        consistent = (
-            performance.between(0, 100)
-            & hire_date.le(pd.Timestamp("2025-12-31"))
-        )
+   if name == 'Customers':
+      df['age'] = pd.to_numeric(df['age'], errors='coerce')
+      df['total_orders'] = pd.to_numeric(df['total_orders'], errors='coerce')
 
-    elif name == "Marketing":
-        budget = pd.to_numeric(data["budget"], errors="coerce")
-        impressions = pd.to_numeric(data["impressions"], errors="coerce")
-        clicks = pd.to_numeric(data["clicks"], errors="coerce")
-        conversions = pd.to_numeric(data["conversions"], errors="coerce")
-        ctr = pd.to_numeric(data["ctr_pct"], errors="coerce")
-        conversion_rate = pd.to_numeric(
-            data["conversion_rate_pct"], errors="coerce"
-        )
-        start_date = pd.to_datetime(data["start_date"], errors="coerce")
-        end_date = pd.to_datetime(data["end_date"], errors="coerce")
-        valid = (
-            data["campaign_id"].notna()
-            & budget.ge(0)
-            & impressions.ge(0)
-            & clicks.ge(0)
-            & conversions.ge(0)
-        )
-        consistent = (
-            clicks.le(impressions)
-            & conversions.le(clicks)
-            & ctr.between(0, 100)
-            & conversion_rate.between(0, 100)
-            & end_date.ge(start_date)
-        )
+      anomalies = df[(df['age'] > 100) | (df['customer_id'].isna()) | (df['age'].isna())]
+      valid_rows_count = total_rows - len(anomalies)
 
-    elif name == "Stores":
-        size = pd.to_numeric(data["size_sqm"], errors="coerce")
-        open_date = pd.to_datetime(data["open_date"], errors="coerce")
-        boolean_values = ["true", "false"]
-        valid = data["store_id"].notna() & size.gt(0)
-        consistent = (
-            data["has_cafe"].astype(str).str.lower().isin(boolean_values)
-            & data["has_parking"].astype(str).str.lower().isin(boolean_values)
-            & open_date.le(pd.Timestamp("2025-12-31"))
-        )
+      consistent = df[(df['age'] > 0) & (df['age'] <= 100) & (df['total_orders'] >= 0)]
+      consistent_rows_count = len(consistent)
 
-    else:
-        quantity = pd.to_numeric(data["quantity"], errors="coerce")
-        total_amount = pd.to_numeric(data["total_amount"], errors="coerce")
-        refund_amount = pd.to_numeric(data["refund_amount"], errors="coerce")
-        transaction_date = pd.to_datetime(
-            data["transaction_date"], errors="coerce"
-        )
-        return_date = pd.to_datetime(data["return_date"], errors="coerce")
-        valid = (
-            data["transaction_id"].notna()
-            & quantity.gt(0)
-            & total_amount.lt(0)
-            & refund_amount.ge(0)
-        )
-        consistent = (
-            data["is_return"].eq(1)
-            & refund_amount.le(total_amount.abs())
-            & return_date.ge(transaction_date)
-        )
+   elif name == 'Employees':
+      if df['salary'].dtype == 'object':
+         df['salary'] = df['salary'].astype(str).str.replace(r'[₴\$€£]|(?:USD|UAH|EUR|GBP)|\s|', "", regex=True)
+      df['salary'] = pd.to_numeric(df['salary'], errors='coerce')
+      df['performance_score'] = pd.to_numeric(df['performance_score'], errors='coerce')
 
-    validity = valid.fillna(False).mean()
-    consistency = consistent.fillna(False).mean()
-    overall_score = (
-        completeness + uniqueness + validity + consistency
-    ) / 4
+      anomalies = df[df['employee_id'].isna() | df['department'].isna() | df['salary'].isna()]
+      valid_rows_count = total_rows - len(anomalies)
+      consistent = df[(df['performance_score'] >= 0) & (df['performance_score'] <= 100) & (df['salary'] > 0)]
+      consistent_rows_count = len(consistent)
 
-    return {
-        "Файл": name,
-        "Повнота (%)": round(completeness * 100, 2),
-        "Унікальність (%)": round(uniqueness * 100, 2),
-        "Валідність (%)": round(validity * 100, 2),
-        "Узгодженість (%)": round(consistency * 100, 2),
-        "Загальна оцінка (%)": round(overall_score * 100, 2),
-    }
+   elif name == 'Marketing':
+      if df['budget'].dtype == 'object':
+         df['budget'] = df['budget'].astype(str).str.replace(r'[₴\$€£]|(?:USD|UAH|EUR|GBP)|\s|', "", regex=True)
+      df['budget'] = pd.to_numeric(df['budget'], errors='coerce')
 
+      if df['clicks'].dtype == 'object':
+         df['clicks'] = df['clicks'].astype(str).str.replace(r'[₴\$€£]|(?:USD|UAH|EUR|GBP)|\s|', "", regex=True)
+      df['clicks'] = pd.to_numeric(df['clicks'], errors='coerce')
 
-def save_results(report: pd.DataFrame) -> tuple[Path, Path]:
-    RESULT_DIR.mkdir(parents=True, exist_ok=True)
-    table_path = RESULT_DIR / "data_quality_score.csv"
-    chart_path = RESULT_DIR / "data_quality_score.png"
-    report.to_csv(table_path, index=False, encoding="utf-8-sig")
+      anomalies = df[(df['budget'] < 0) | (df['clicks'] < 0) | (df['budget'].isna()) | (df['clicks'].isna())]
+      valid_rows_count = total_rows - len(anomalies)
+      consistent = df[(df['ctr_pct'] >= 0) & (df['ctr_pct'] <= 100) &
+                      (df['conversion_rate_pct'] >= 0) & (df['conversion_rate_pct'] <= 100)]
+      consistent_rows_count = len(consistent)
 
-    metrics = [
-        "Повнота (%)",
-        "Унікальність (%)",
-        "Валідність (%)",
-        "Узгодженість (%)",
-    ]
-    chart_data = report.melt(
-        id_vars="Файл",
-        value_vars=metrics,
-        var_name="Метрика",
-        value_name="Оцінка",
-    )
+   elif name == 'Stores':
+      df['size_sqm'] = pd.to_numeric(df['size_sqm'], errors='coerce')
+      anomalies = df[(df['size_sqm'] <= 0) | (df['size_sqm'].isna())]
+      valid_rows_count = total_rows - len(anomalies)
 
-    sns.set_theme(style="whitegrid")
-    plt.figure(figsize=(11, 6))
-    sns.barplot(
-        data=chart_data,
-        x="Файл",
-        y="Оцінка",
-        hue="Метрика",
-        palette="viridis",
-    )
-    plt.title("Data Quality Score очищених даних")
-    plt.xlabel("Набір даних")
-    plt.ylabel("Оцінка, %")
-    plt.ylim(0, 105)
-    plt.legend(title="Метрика", bbox_to_anchor=(1.02, 1), loc="upper left")
-    plt.tight_layout()
-    plt.savefig(chart_path, dpi=300)
-    plt.close()
-    return table_path, chart_path
+      consistent = df[df['has_cafe'].astype(str).str.lower().isin(['true', 'false', '1', '0', 'yes', 'no']) &
+                      df['has_parking'].astype(str).str.lower().isin(['true', 'false', '1', '0', 'yes', 'no'])]
+      consistent_rows_count = len(consistent)
 
+   elif name == 'Returns':
+      df['refund_amount'] = pd.to_numeric(df['refund_amount'], errors='coerce')
+      df['total_amount'] = pd.to_numeric(df['total_amount'], errors='coerce')
+      df['quantity'] = pd.to_numeric(df['quantity'], errors='coerce')
 
-def main() -> None:
-    datasets = load_data()
-    report = pd.DataFrame(
-        [calculate_score(name, data) for name, data in datasets.items()]
-    )
+      anomalies = df[(df['refund_amount'].abs() > df['total_amount'].abs()) | df['refund_amount'].isna()]
+      valid_rows_count = total_rows - len(anomalies)
+      consistent = df[df['quantity'] >= 1]
+      consistent_rows_count = len(consistent)
 
-    best = report.loc[report["Загальна оцінка (%)"].idxmax()]
-    worst = report.loc[report["Загальна оцінка (%)"].idxmin()]
-    table_path, chart_path = save_results(report)
+   validity = valid_rows_count / total_rows
+   consistency = consistent_rows_count / total_rows
+   overall_score = (completeness + uniqueness + validity + consistency) / 4.0
 
-    print(report.to_string(index=False))
-    print(
-        f"\nНайвищий DQ Score: {best['Файл']} "
-        f"({best['Загальна оцінка (%)']:.2f}%)"
-    )
-    print(
-        f"Найнижчий DQ Score: {worst['Файл']} "
-        f"({worst['Загальна оцінка (%)']:.2f}%)"
-    )
-    print(f"Таблицю збережено: {table_path}")
-    print(f"Графік збережено: {chart_path}")
+   dq_results.append({
+      'File Name': name,
+      'Повнота (%)': round(completeness * 100, 2),
+      'Унікальність (%)': round(uniqueness * 100, 2),
+      'Валідність (%)': round(validity * 100, 2),
+      'Узгодженість (%)': round(consistency * 100, 2),
+      'Загальна оцінка (%)': round(overall_score * 100, 2)
+   })
 
+df_dq_report = pd.DataFrame(dq_results)
 
-if __name__ == "__main__":
-    main()
+print(f'\nЗвіт про якість даних(DATA QUALITY REPORT)\n\n{df_dq_report.to_string(index=False)}')
+print('-' * 20)
+
+best_file = df_dq_report.loc[df_dq_report['Загальна оцінка (%)'].idxmax()]
+worst_file = df_dq_report.loc[df_dq_report['Загальна оцінка (%)'].idxmin()]
+
+print(f"\nНайвищий DQ Score: файл '{best_file['File Name']}' з показником {best_file['Загальна оцінка (%)']}%")
+print(f"Найнижчий DQ Score: файл '{worst_file['File Name']}' з показником {worst_file['Загальна оцінка (%)']}%")
+
+df_melted = df_dq_report.melt(id_vars='File Name',
+                              value_vars=['Повнота (%)', 'Унікальність (%)', 'Валідність (%)', 'Узгодженість (%)'],
+                              var_name='Metric', value_name='Percentage')
+
+plt.figure(figsize=(10, 5))
+ax = sns.barplot(x='File Name', y='Percentage', hue='Metric', data=df_melted, palette='viridis')
+
+for i, name in enumerate(df_dq_report['File Name']):
+   score = df_dq_report.loc[df_dq_report['File Name'] == name, 'Загальна оцінка (%)'].values[0]
+   plt.plot([i - 0.3, i + 0.3], [score, score], color='red', linestyle='--', linewidth=1.5)
+   plt.text(i, score + 2, f'{score}%')
+
+plt.title('Порівняльний аналіз метрик Data Quality Score')
+plt.xlabel('Назва файлу / Датасету')
+plt.ylabel('Показник якості (%)')
+plt.ylim(0, 115)
+plt.legend(title="Метрики оцінки", bbox_to_anchor=(1.02, 1), loc='upper left')
+plt.tight_layout()
+#
+# plot_path = os.path.join(BASE_DIR, 'data_quality_report.png')
+# plt.savefig(plot_path, dpi=300)
+plt.show()
