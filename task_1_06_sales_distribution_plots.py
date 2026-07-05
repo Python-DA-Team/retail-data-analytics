@@ -1,156 +1,111 @@
 from pathlib import Path
 
-import matplotlib
-matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns
 
+# 6. Boxplot / Violinplot (seaborn) + KDE: розподіл total_amount по категоріях (тільки продажі > 0).
+# Показати викиди.
 
 ROOT = Path(__file__).resolve().parent
 CLEAN_DIR = ROOT / "cleaned_data"
-RESULT_DIR = ROOT / "results" / "task_1_06"
 
+transactions_path = CLEAN_DIR / "transactions_cleaned.csv"
+company_path = CLEAN_DIR / "company_data_cleaned.xlsx"
 
-def load_data():
-    transactions_path = CLEAN_DIR / "transactions_cleaned.csv"
-    company_path = CLEAN_DIR / "company_data_cleaned.xlsx"
+if not transactions_path.exists() or not company_path.exists():
+    from cleaning import main as clean_data
+    clean_data()
 
-    if not transactions_path.exists() or not company_path.exists():
-        from cleaning import main as clean_data
+tx = pd.read_csv(transactions_path, low_memory=False)
 
-        clean_data()
+tx["quantity"] = pd.to_numeric(tx["quantity"], errors="coerce").abs()
+tx["quantity"] = tx["quantity"].replace(0, 1).fillna(1).astype(int)
 
-    transactions = pd.read_csv(transactions_path, low_memory=False)
-    products = pd.read_excel(company_path, sheet_name="Products")
-    return transactions, products
+if "discount" in tx.columns:
+    tx["discount"] = pd.to_numeric(tx["discount"], errors="coerce").fillna(0.0)
+    tx.loc[tx["discount"] > 1, "discount"] = tx["discount"] / 100.0
+else:
+    tx["discount"] = 0.0
 
+products = pd.read_excel(company_path, sheet_name="Products")
 
-def prepare_sales(transactions, products):
-    sales = transactions.query("is_return == 0").copy()
+products["unit_price"] = (
+    products["unit_price"]
+    .astype(str)
+    .str.replace(r"[$\u20AC\u00A3,]", "", regex=True)
+)
+products["unit_price"] = pd.to_numeric(products["unit_price"], errors="coerce").fillna(0.0)
 
-    for column in ["product_id", "quantity", "total_amount"]:
-        sales[column] = pd.to_numeric(sales[column], errors="coerce")
+products["category"] = products["category"].astype(str).str.strip()
+products["category"] = products["category"].str.capitalize()
 
-    sales = sales.dropna(
-        subset=["product_id", "quantity", "total_amount"]
-    )
-    sales = sales.loc[
-        sales["quantity"].gt(0) & sales["total_amount"].gt(0)
-    ]
-    sales["product_id"] = sales["product_id"].astype(int)
+products_clean = products[
+    ["product_id", "category", "unit_price"]
+]
 
-    product_data = products[["product_id", "category"]].drop_duplicates(
-        "product_id"
-    )
-    sales = sales.merge(product_data, on="product_id", how="inner")
-    sales = sales.dropna(subset=["category"])
-    return sales
+merged_df = pd.merge(tx, products_clean, on="product_id", how="left")
 
+merged_df["clean_total_amount"] = (
+    merged_df["quantity"]
+    * merged_df["unit_price"]
+    * (1 - merged_df["discount"])
+)
 
-def calculate_summary(sales):
-    summary = (
-        sales.groupby("category", as_index=False)
-        .agg(
-            sales_count=("total_amount", "count"),
-            average_amount=("total_amount", "mean"),
-            median_amount=("total_amount", "median"),
-            minimum_amount=("total_amount", "min"),
-            maximum_amount=("total_amount", "max"),
-        )
-        .sort_values("median_amount", ascending=False)
-    )
-    numeric_columns = [
-        "average_amount",
-        "median_amount",
-        "minimum_amount",
-        "maximum_amount",
-    ]
-    summary[numeric_columns] = summary[numeric_columns].round(2)
-    return summary
+df_filtered = merged_df[merged_df["clean_total_amount"] > 0]
 
+sns.set_theme(style="whitegrid")
 
-def save_results(sales, summary):
-    RESULT_DIR.mkdir(parents=True, exist_ok=True)
-    table_path = RESULT_DIR / "sales_distribution_by_category.csv"
-    boxplot_path = RESULT_DIR / "sales_boxplot.png"
-    violinplot_path = RESULT_DIR / "sales_violinplot.png"
-    kdeplot_path = RESULT_DIR / "sales_kdeplot.png"
-    summary.to_csv(table_path, index=False, encoding="utf-8-sig")
+plt.figure(figsize=(10, 6))
+sns.boxplot(
+    data=df_filtered,
+    x="category",
+    y="clean_total_amount",
+    hue="category",
+    legend=False,
+    palette="Set3",
+)
 
-    sns.set_theme(style="whitegrid")
+plt.title("1. Boxplot")
+plt.xlabel("Категорія товару")
+plt.ylabel("Сума")
+plt.xticks(rotation=30, ha="right")
+plt.ticklabel_format(style="plain", axis="y")
+plt.tight_layout()
+plt.show()
 
-    plt.figure(figsize=(11, 6))
-    sns.boxplot(
-        data=sales,
-        x="category",
-        y="total_amount",
-        hue="category",
-        legend=False,
-        palette="Set3",
-        showfliers=True,
-    )
-    plt.title("Розподіл суми продажів за категоріями: boxplot")
-    plt.xlabel("Категорія")
-    plt.ylabel("Сума продажу")
-    plt.xticks(rotation=30, ha="right")
-    plt.tight_layout()
-    plt.savefig(boxplot_path, dpi=300, bbox_inches="tight")
-    plt.close()
+plt.figure(figsize=(10, 6))
+sns.violinplot(
+    data=df_filtered,
+    x="category",
+    y="clean_total_amount",
+    hue="category",
+    legend=False,
+    palette="Set3",
+)
 
-    plt.figure(figsize=(11, 6))
-    sns.violinplot(
-        data=sales,
-        x="category",
-        y="total_amount",
-        hue="category",
-        legend=False,
-        palette="Set3",
-        cut=0,
-    )
-    plt.title("Розподіл суми продажів за категоріями: violinplot")
-    plt.xlabel("Категорія")
-    plt.ylabel("Сума продажу")
-    plt.xticks(rotation=30, ha="right")
-    plt.tight_layout()
-    plt.savefig(violinplot_path, dpi=300, bbox_inches="tight")
-    plt.close()
+plt.title("2. Violinplot")
+plt.xlabel("Категорія товару")
+plt.ylabel("Сума транзакції")
+plt.xticks(rotation=30, ha="right")
+plt.ticklabel_format(style="plain", axis="y")
+plt.tight_layout()
+plt.show()
 
-    plt.figure(figsize=(11, 6))
-    sns.kdeplot(
-        data=sales,
-        x="total_amount",
-        hue="category",
-        fill=True,
-        alpha=0.3,
-        common_norm=False,
-        palette="Set1",
-    )
-    plt.title("Щільність розподілу суми продажів за категоріями")
-    plt.xlabel("Сума продажу")
-    plt.ylabel("Щільність")
-    plt.tight_layout()
-    plt.savefig(kdeplot_path, dpi=300, bbox_inches="tight")
-    plt.close()
+plt.figure(figsize=(10, 6))
+sns.kdeplot(
+    data=df_filtered,
+    x="clean_total_amount",
+    hue="category",
+    fill=True,
+    alpha=0.35,
+    palette="Set1",
+)
 
-    return table_path, boxplot_path, violinplot_path, kdeplot_path
-
-
-def main():
-    transactions, products = load_data()
-    sales = prepare_sales(transactions, products)
-
-    if sales.empty:
-        raise ValueError("Не знайдено продажів для побудови графіків")
-
-    summary = calculate_summary(sales)
-    output_paths = save_results(sales, summary)
-
-    print("Розподіл суми продажів за категоріями:")
-    print(summary.to_string(index=False))
-    for path in output_paths:
-        print(f"Збережено: {path}")
-
-
-if __name__ == "__main__":
-    main()
+plt.title("3. KDEplot")
+plt.xlabel("Сума транзакції")
+plt.ylabel("Щільність розподілу")
+plt.ticklabel_format(style="plain", axis="x")
+plt.tight_layout()
+plt.show()

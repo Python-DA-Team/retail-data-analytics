@@ -1,3 +1,8 @@
+# Базові (pandas)
+# 1. Топ-10 товарів за виручкою.
+# Згрупувати transactions.csv по product_id (лише продажі, не returns), порахувати sum(total_amount).
+# Об'єднати з Products через company_data.xlsx. Вивести таблицю.
+
 from pathlib import Path
 
 import pandas as pd
@@ -5,65 +10,50 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 CLEAN_DIR = ROOT / "cleaned_data"
-RESULT_DIR = ROOT / "results" / "task_1_01"
 
+marketing_path = CLEAN_DIR / "marketing_cleaned.csv"
+excel_path = CLEAN_DIR / "company_data_cleaned.xlsx"
 
-def load_data():
-    transactions_path = CLEAN_DIR / "transactions_cleaned.csv"
-    company_path = CLEAN_DIR / "company_data_cleaned.xlsx"
+if not marketing_path.exists() or not excel_path.exists():
+    from cleaning import main as clean_data
+    clean_data()
 
-    if not transactions_path.exists() or not company_path.exists():
-        from cleaning import main as clean_data
-        clean_data()
+df_marketing = pd.read_csv(marketing_path)
+df_products = pd.read_excel(excel_path, sheet_name="Products")
 
-    transactions = pd.read_csv(transactions_path, low_memory=False)
-    products = pd.read_excel(company_path, sheet_name="Products")
-    return transactions, products
-
-
-def calculate_top_products(transactions, products, top_n=10):
-    sales = transactions.loc[transactions["is_return"].eq(0)].copy()
-    sales["product_id"] = pd.to_numeric(sales["product_id"], errors="coerce")
-    sales["total_amount"] = pd.to_numeric(sales["total_amount"], errors="coerce")
-    sales = sales.dropna(subset=["product_id", "total_amount"])
-    sales = sales.loc[sales["total_amount"].gt(0)]
-    sales["product_id"] = sales["product_id"].astype(int)
-
-    revenue = (
-        sales.groupby("product_id", as_index=False)["total_amount"]
-        .sum()
-        .rename(columns={"total_amount": "total_revenue"})
+if df_marketing["revenue_generated"].dtype == "object":
+    df_marketing["revenue_generated"] = (
+        df_marketing["revenue_generated"]
+        .astype(str)
+        .str.replace("", "", regex=True)
     )
 
-    product_columns = ["product_id", "product_name", "category"]
-    product_info = products[product_columns].drop_duplicates(subset="product_id")
-    result = revenue.merge(product_info, on="product_id", how="inner")
-    result = result.sort_values("total_revenue", ascending=False).head(top_n)
-    result["total_revenue"] = result["total_revenue"].round(2)
-    return result[
-        ["product_id", "product_name", "category", "total_revenue"]
-    ].reset_index(drop=True)
+df_marketing["revenue_generated"] = pd.to_numeric(
+    df_marketing["revenue_generated"], errors="coerce"
+)
 
+# групую товари та обчислюю загальну виручку
+revenue_per_product = (
+    df_marketing.groupby("product_id")["revenue_generated"]
+    .sum()
+    .reset_index()
+)
 
-def save_results(result):
-    RESULT_DIR.mkdir(parents=True, exist_ok=True)
-    output_path = RESULT_DIR / "top_10_products_by_revenue.csv"
-    result.to_csv(output_path, index=False, encoding="utf-8-sig")
-    return output_path
+revenue_per_product.columns = ["product_id", "total_amount"]
 
+final_table = pd.merge(revenue_per_product, df_products, on="product_id", how="inner")
 
-def main():
-    transactions, products = load_data()
-    result = calculate_top_products(transactions, products)
+# сортую товари з топ-10 за спаданням
+top_10_products = (
+    final_table.sort_values(by="total_amount", ascending=False)
+    .head(10)
+    .reset_index(drop=True)
+)
 
-    if result.empty:
-        raise ValueError("Не знайдено продажів для розрахунку виручки за товарами")
+top_10_products["total_amount"] = top_10_products["total_amount"].map("{:,.2f}".format)
 
-    output_path = save_results(result)
-    print("Топ-10 товарів за виручкою:")
-    print(result.to_string(index=False))
-    print(f"Таблицю збережено: {output_path}")
+output_columns = ["product_name", "category", "total_amount"]
+available_columns = [col for col in output_columns if col in top_10_products.columns]
 
-
-if __name__ == "__main__":
-    main()
+print(f"\nТОП-10 товарів за виручкою:\n\n{top_10_products[available_columns].to_string(index=False)}")
+print("-" * 20)
