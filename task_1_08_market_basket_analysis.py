@@ -36,12 +36,10 @@ def run_market_basket_analysis():
 
     df = pd.merge(df_trans, df_prod, on="product_id", how="inner")
 
-    df["transaction_date"] = pd.to_datetime(df["transaction_date"], errors="coerce")
-    df = df.dropna(subset=["customer_id", "transaction_date", "product_id", "category"])
+    df["transaction_date"] = pd.to_datetime(df["transaction_date"])
+    df["week"] = df["transaction_date"].dt.isocalendar().week
 
-    df["purchase_date"] = df["transaction_date"].dt.date
-
-    grouped = df.groupby(["customer_id", "purchase_date"])["category"].apply(set)
+    grouped = df.groupby(["customer_id", "week"])["category"].apply(set)
 
     all_pairs = []
 
@@ -49,9 +47,6 @@ def run_market_basket_analysis():
         if len(categories) >= 2:
             sorted_cats = sorted(list(categories))
             all_pairs.extend(list(combinations(sorted_cats, 2)))
-
-    if not all_pairs:
-        raise ValueError("Не знайдено покупок з двома або більше категоріями за один день")
 
     pairs_series = pd.Series(all_pairs)
     top_5 = pairs_series.value_counts().head(5)
