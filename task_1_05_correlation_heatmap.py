@@ -1,108 +1,86 @@
 from pathlib import Path
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import seaborn as sns
 
+# Heatmap (sns.heatmap): кореляція unit_price, cost_price, margin_pct,
+# quantity, total_amount. Використати annot=True та cmap='coolwarm'.
 
 ROOT = Path(__file__).resolve().parent
 CLEAN_DIR = ROOT / "cleaned_data"
-RESULT_DIR = ROOT / "results" / "task_1_05"
 
+transactions_path = CLEAN_DIR / "transactions_cleaned.csv"
+company_path = CLEAN_DIR / "company_data_cleaned.xlsx"
 
-def load_data():
-    transactions_path = CLEAN_DIR / "transactions_cleaned.csv"
-    company_path = CLEAN_DIR / "company_data_cleaned.xlsx"
+if not transactions_path.exists() or not company_path.exists():
+    from cleaning import main as clean_data
+    clean_data()
 
-    if not transactions_path.exists() or not company_path.exists():
-        from cleaning import main as clean_data
+tx = pd.read_csv(transactions_path, low_memory=False)
 
-        clean_data()
+tx["quantity"] = pd.to_numeric(tx["quantity"], errors="coerce").abs()
+tx["quantity"] = tx["quantity"].replace(0, 1).fillna(1).astype(int)
 
-    transactions = pd.read_csv(transactions_path, low_memory=False)
-    products = pd.read_excel(company_path, sheet_name="Products")
-    return transactions, products
+if "discount" in tx.columns:
+    tx["discount"] = pd.to_numeric(tx["discount"], errors="coerce").fillna(0.0)
+    tx.loc[tx["discount"] > 1, "discount"] = tx["discount"] / 100.0
+else:
+    tx["discount"] = 0.0
 
+products = pd.read_excel(company_path, sheet_name="Products")
 
-def calculate_correlation(transactions, products):
-    sales = transactions.query("is_return == 0").copy()
-
-    for column in ["product_id", "quantity", "total_amount"]:
-        sales[column] = pd.to_numeric(sales[column], errors="coerce")
-
-    sales = sales.dropna(
-        subset=["product_id", "quantity", "total_amount"]
-    )
-    sales = sales.loc[
-        sales["quantity"].gt(0) & sales["total_amount"].gt(0)
-    ]
-    sales["product_id"] = sales["product_id"].astype(int)
-
-    product_columns = [
-        "product_id",
-        "unit_price",
-        "cost_price",
-        "margin_pct",
-    ]
-    product_data = products[product_columns].drop_duplicates("product_id")
-
-    for column in ["unit_price", "cost_price", "margin_pct"]:
-        product_data[column] = pd.to_numeric(
-            product_data[column], errors="coerce"
+for col in ["unit_price", "cost_price"]:
+    if col in products.columns:
+        products[col] = (
+            products[col]
+            .astype(str)
+            .str.replace(r"[$\u20AC\u00A3,]", "", regex=True)
         )
+        products[col] = pd.to_numeric(products[col], errors="coerce").fillna(0.0)
 
-    merged = sales.merge(product_data, on="product_id", how="inner")
-    correlation_columns = [
-        "unit_price",
-        "cost_price",
-        "margin_pct",
-        "quantity",
-        "total_amount",
-    ]
-    correlation_data = merged[correlation_columns].dropna()
+products["margin_pct"] = np.where(
+    products["unit_price"] > 0,
+    (products["unit_price"] - products["cost_price"]) / products["unit_price"],
+    0.0,
+)
 
-    if len(correlation_data) < 2:
-        raise ValueError("Недостатньо даних для розрахунку кореляції")
+products_clean = products[
+    ["product_id", "unit_price", "cost_price", "margin_pct"]
+]
 
-    return correlation_data.corr().round(2)
+merged_df = pd.merge(tx, products_clean, on="product_id", how="left")
 
+merged_df["clean_total_amount"] = (
+    merged_df["quantity"]
+    * merged_df["unit_price"]
+    * (1 - merged_df["discount"])
+)
 
-def save_results(correlation):
-    RESULT_DIR.mkdir(parents=True, exist_ok=True)
-    table_path = RESULT_DIR / "correlation_matrix.csv"
-    chart_path = RESULT_DIR / "correlation_heatmap.png"
-    correlation.to_csv(table_path, encoding="utf-8-sig")
+columns_for_corr = [
+    "unit_price",
+    "cost_price",
+    "margin_pct",
+    "quantity",
+    "clean_total_amount",
+]
 
-    sns.set_theme(style="white")
-    plt.figure(figsize=(9, 6))
-    sns.heatmap(
-        correlation,
-        annot=True,
-        cmap="coolwarm",
-        fmt=".2f",
-        vmin=-1,
-        vmax=1,
-        linewidths=0.5,
-    )
-    plt.title("Матриця кореляції показників продажів")
-    plt.tight_layout()
-    plt.savefig(chart_path, dpi=300, bbox_inches="tight")
-    plt.close()
-    return table_path, chart_path
+df_corr_ready = merged_df[columns_for_corr].dropna()
 
+corr_matrix = df_corr_ready.corr()
 
-def main():
-    transactions, products = load_data()
-    correlation = calculate_correlation(transactions, products)
-    table_path, chart_path = save_results(correlation)
+plt.figure(figsize=(10, 6))
 
-    print("Матриця кореляції:")
-    print(correlation.to_string())
-    print(f"Таблицю збережено: {table_path}")
-    print(f"Графік збережено: {chart_path}")
+sns.heatmap(
+    corr_matrix,
+    annot=True,
+    cmap="coolwarm",
+    fmt=".2f",
+    linewidths=0.5,
+)
 
+plt.title("Матриця кореляції")
+plt.tight_layout()
 
-if __name__ == "__main__":
-    main()
+plt.show()
