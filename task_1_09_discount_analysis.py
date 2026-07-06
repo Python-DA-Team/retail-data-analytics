@@ -1,3 +1,7 @@
+# Блок 1. Завдання 9.
+# Аналіз знижок. Розбити транзакції на: discount_percent == 0 vs >0.
+# Порівняти середню кількість одиниць (quantity) та виручку. Чи працюють знижки?
+
 from pathlib import Path
 
 import pandas as pd
@@ -5,107 +9,48 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 CLEAN_DIR = ROOT / "cleaned_data"
-RESULT_DIR = ROOT / "results" / "task_1_09"
 
 
 def load_data():
     transactions_path = CLEAN_DIR / "transactions_cleaned.csv"
+    company_path = CLEAN_DIR / "company_data_cleaned.xlsx"
 
-    if not transactions_path.exists():
+    if not transactions_path.exists() or not company_path.exists():
         from cleaning import main as clean_data
         clean_data()
 
-    return pd.read_csv(transactions_path, low_memory=False)
+    df_trans = pd.read_csv(transactions_path, low_memory=False)
+    df_prod = pd.read_excel(company_path, sheet_name="Products")
+
+    return df_trans, df_prod
 
 
-def calculate_discount_metrics(transactions):
-    sales = transactions.loc[transactions["is_return"].eq(0)].copy()
+def run_discount_analysis():
+    df_trans, df_prod = load_data()
 
-    numeric_columns = ["quantity", "total_amount", "discount_percent"]
-    for column in numeric_columns:
-        sales[column] = pd.to_numeric(sales[column], errors="coerce")
+    df_trans = df_trans[["quantity", "total_amount", "discount_percent", "product_id"]]
+    df_prod = df_prod[["product_id", "category"]]
 
-    sales = sales.dropna(subset=numeric_columns)
-    sales = sales.loc[
-        sales["quantity"].gt(0)
-        & sales["total_amount"].gt(0)
-        & sales["discount_percent"].between(0, 100)
-    ].copy()
+    df = pd.merge(df_trans, df_prod, on="product_id", how="left")
 
-    sales["discount_group"] = "Без знижки"
-    sales.loc[sales["discount_percent"].gt(0), "discount_group"] = "Зі знижкою"
+    df["discount_percent"] = df["discount_percent"].fillna(0)
+    df["Groups_name"] = df["discount_percent"] > 0
 
-    result = (
-        sales.groupby("discount_group", as_index=False)
-        .agg(
-            sales_count=("transaction_id", "count"),
-            average_quantity=("quantity", "mean"),
-            average_revenue=("total_amount", "mean"),
-            total_revenue=("total_amount", "sum"),
-        )
-    )
+    comparison = df.groupby("Groups_name").agg({
+        "quantity": "mean",
+        "total_amount": "mean"
+    }).rename(columns={"quantity": "Avg_Quantity", "total_amount": "Avg_Revenue"})
 
-    group_order = ["Без знижки", "Зі знижкою"]
-    result["discount_group"] = pd.Categorical(
-        result["discount_group"], categories=group_order, ordered=True
-    )
-    result = result.sort_values("discount_group").reset_index(drop=True)
-    result["discount_group"] = result["discount_group"].astype("string")
-    result[["average_quantity", "average_revenue", "total_revenue"]] = result[
-        ["average_quantity", "average_revenue", "total_revenue"]
-    ].round(2)
-    return result
+    comparison = comparison.rename(index={False: "Без знижки", True: "Зі знижкою"})
 
+    print("Результати аналізу ефективності знижок")
+    print(comparison)
 
-def save_results(result):
-    RESULT_DIR.mkdir(parents=True, exist_ok=True)
-    output_path = RESULT_DIR / "discount_comparison.csv"
-    result.to_csv(output_path, index=False, encoding="utf-8-sig")
-    return output_path
-
-
-def print_conclusion(result):
-    comparison = result.set_index("discount_group")
-    no_discount = comparison.loc["Без знижки"]
-    with_discount = comparison.loc["Зі знижкою"]
-
-    quantity_change = (
-        with_discount["average_quantity"] / no_discount["average_quantity"] - 1
-    ) * 100
-    revenue_change = (
-        with_discount["average_revenue"] / no_discount["average_revenue"] - 1
-    ) * 100
-
-    print(
-        f"Зміна середньої кількості товарів зі знижкою: "
-        f"{quantity_change:+.2f}%"
-    )
-    print(f"Зміна середньої виручки зі знижкою: {revenue_change:+.2f}%")
-
-    if quantity_change > 0 and revenue_change > 0:
-        print("Висновок: продажі зі знижкою мають вищі середні показники.")
-    elif quantity_change > 0:
-        print(
-            "Висновок: знижки пов'язані з більшою кількістю товарів, "
-            "але не з вищою середньою виручкою."
-        )
+    if comparison.loc["Зі знижкою", "Avg_Revenue"] > comparison.loc["Без знижки", "Avg_Revenue"]:
+        print("Висновок: Знижки стимулюють вищий середній чек.")
     else:
-        print("Висновок: знижки не підвищують середню кількість товарів у продажу.")
-
-
-def main():
-    transactions = load_data()
-    result = calculate_discount_metrics(transactions)
-
-    required_groups = {"Без знижки", "Зі знижкою"}
-    if set(result["discount_group"]) != required_groups:
-        raise ValueError("Недостатньо даних для порівняння груп зі знижкою та без неї")
-
-    output_path = save_results(result)
-    print(result.to_string(index=False))
-    print_conclusion(result)
-    print(f"Таблицю збережено: {output_path}")
+        print("Висновок: Середній чек без знижок вищий (знижки зменшують маржинальність).")
 
 
 if __name__ == "__main__":
-    main()
+    run_discount_analysis()
