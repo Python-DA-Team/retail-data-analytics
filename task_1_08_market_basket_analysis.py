@@ -1,7 +1,10 @@
-# Блок 1. Завдання 8.
+# # Блок 1. Завдання 8.
 # Market Basket Analysis. Для кожного customer_id зібрати всі category куплених товарів за один день.
 # Знайти найчастіші пари категорій, що купують разом (комбінації 2 категорій).
 # Які топ-5 пар?
+# > Підказка: якщо same-day покупок мало — спробуйте згрупувати по customer_id + тиждень через .dt.isocalendar().week.
+# Використайте itertools.combinations() для генерації пар категорій.
+# Для підрахунку пар зручно застосуйте value_counts() на серії пар або nunique() для перевірки кількості унікальних пар.
 
 from itertools import combinations
 from pathlib import Path
@@ -11,7 +14,6 @@ import pandas as pd
 
 ROOT = Path(__file__).resolve().parent
 CLEAN_DIR = ROOT / "cleaned_data"
-RESULT_DIR = ROOT / "results" / "task_1_08_market_basket_analysis"
 
 
 def load_data():
@@ -51,19 +53,8 @@ def run_market_basket_analysis():
     pairs_series = pd.Series(all_pairs)
     top_5 = pairs_series.value_counts().head(5)
 
-    result = top_5.reset_index()
-    result.columns = ["category_pair", "basket_count"]
-    result["category_1"] = result["category_pair"].str[0]
-    result["category_2"] = result["category_pair"].str[1]
-    result = result[["category_1", "category_2", "basket_count"]]
-
-    RESULT_DIR.mkdir(parents=True, exist_ok=True)
-    output_path = RESULT_DIR / "top_5_category_pairs.csv"
-    result.to_csv(output_path, index=False, encoding="utf-8-sig")
-
     print("Топ-5 пар категорій, що купують разом")
-    print(result.to_string(index=False))
-    print(f"Таблицю збережено: {output_path}")
+    print(top_5)
 
 
 if __name__ == "__main__":

@@ -1,16 +1,25 @@
+from pathlib import Path
+
+import pandas as pd
+import matplotlib.pyplot as plt
+
+
 ROOT = Path(__file__).resolve().parent
 CLEAN_DIR = ROOT / "cleaned_data"
 RESULT_DIR = ROOT / "results" / "task_2_10_P&L_Financial_Modeling"
+
 
 def load_table(filename: str, sep: str = ",") -> pd.DataFrame:
     """Універсальне завантаження очищених таблиць з cleaned_data"""
     path = CLEAN_DIR / filename
     if not path.exists():
-        raise FileNotFoundError(f"Файл {path} не знайдено")
+        from cleaning import main as clean_data
+        clean_data()
     return pd.read_csv(path, low_memory=False, sep=sep)
 
+
 transactions = load_table("transactions_cleaned.csv")
-products = load_table("products_cleaned.csv")
+products = pd.read_excel(CLEAN_DIR / "company_data_cleaned.xlsx", sheet_name="Products")
 marketing = load_table("marketing_cleaned.csv")
 salaries = load_table("salaries_cleaned.csv")
 
@@ -73,12 +82,16 @@ pnl["Operating Profit"] = pnl["Gross Profit"] - pnl["Marketing Cost"] - pnl["Sal
 # - Net Margin % = Operating Profit / Revenue * 100
 pnl["Net Margin %"] = pnl["Operating Profit"] / pnl["Revenue"] * 100
 
-print(pnl.head())
+print("\nФінансова модель P&L по місяцях")
+print("-" * 80)
+print(pnl.to_string(index=False))
 
 # Net Margin % — негативний, показує збитковість.
 # Висновок: вийшла таблиця P&L по місяцях — і видно, що витрати на зарплати та маркетинг значно перевищують
 # валовий прибуток, тому Operating Profit виходить від’ємним, а Net Margin % негативний (наприклад, −58% у січні).
 # Це тестові дані, то: модель правильно працює, просто фінансові показники показують збитковість
+
+RESULT_DIR.mkdir(parents=True, exist_ok=True)
 
 # графіки для візуалізації:
 # Лінійний графік Net Margin %
@@ -90,7 +103,8 @@ plt.xlabel('Місяць')
 plt.ylabel('Net Margin %')
 plt.grid(True)
 plt.tight_layout()
-plt.show()
+plt.savefig(RESULT_DIR / "net_margin_by_month.png", dpi=300, bbox_inches="tight")
+plt.close()
 
 # Барплот Revenue vs Operating Profit
 plt.figure(figsize=(10,5))
@@ -106,5 +120,5 @@ plt.xlabel('Місяць', fontsize=14)
 plt.ylabel('Сума')
 plt.legend()
 plt.tight_layout()
-plt.show()
-
+plt.savefig(RESULT_DIR / "revenue_vs_operating_profit.png", dpi=300, bbox_inches="tight")
+plt.close()
