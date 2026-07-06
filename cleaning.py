@@ -272,7 +272,12 @@ def clean_database(source: Path, destination: Path) -> None:
         con.execute("UPDATE employees SET store_id=NULL WHERE store_id NOT IN (SELECT store_id FROM stores)")
         con.execute("UPDATE transactions SET customer_id=NULL WHERE customer_id NOT IN (SELECT customer_id FROM customers)")
         con.execute("UPDATE transactions SET store_id=NULL WHERE store_id NOT IN (SELECT store_id FROM stores)")
-        con.execute("UPDATE order_items SET quantity=NULL WHERE quantity<=0")
+        tables = {
+            row[0]
+            for row in con.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        }
+        if "order_items" in tables:
+            con.execute("UPDATE order_items SET quantity=NULL WHERE quantity<=0")
         con.execute("UPDATE api_logs SET status_code=NULL WHERE status_code<100 OR status_code>599")
         con.commit()
 
