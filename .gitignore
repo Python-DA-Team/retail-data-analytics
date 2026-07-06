@@ -23,7 +23,6 @@ results/
 backup/
 *.csv
 *.xlsx
-*.json
 cleaned_data/
 
 *.tsv
