@@ -27,3 +27,6 @@ cleaned_data/
 
 *.tsv
 *.ini
+
+# Local Codex/project assembly notes
+MAIN_ASSEMBLY_RULES.md
