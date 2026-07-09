@@ -762,8 +762,10 @@ def task_1_10_cohort_retention() -> None:
     plt.savefig(chart_path, dpi=180, bbox_inches="tight")
     plt.close()
 
-    print("Cohort Retention, %")
-    print(retention.to_string())
+    print(
+        f"Cohort Retention: {len(retention)} когорт, "
+        f"{retention.columns[0]}-{retention.columns[-1]}"
+    )
     print(f"Таблицю збережено: {retention_path.relative_to(ROOT)}")
     print(f"Таблицю збережено: {details_path.relative_to(ROOT)}")
     print(f"Графік збережено: {chart_path.relative_to(ROOT)}")
