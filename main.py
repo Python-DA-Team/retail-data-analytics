@@ -420,8 +420,6 @@ def main() -> None:
     clean_data()
     task_1_01_top_products_by_revenue()
 
-    # Сюда будут добавлены вызовы заданий после проверки файлов участников.
-
 
 if __name__ == "__main__":
     main()
