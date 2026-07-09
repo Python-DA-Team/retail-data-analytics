@@ -380,6 +380,8 @@ def clean_data() -> None:
 # Згрупувати transactions.csv по product_id (лише продажі, не returns), порахувати sum(total_amount).
 # Об'єднати з Products через company_data.xlsx. Вивести таблицю.
 def task_1_01_top_products_by_revenue() -> None:
+    print("\nЗавдання 1_01. Топ-10 товарів за виручкою")
+
     transactions_path = OUT / 'transactions_cleaned.csv'
     excel_path = OUT / 'company_data_cleaned.xlsx'
 
@@ -421,6 +423,8 @@ def task_1_01_top_products_by_revenue() -> None:
 # category по рядках, місяць по стовпцях, сума total_amount.
 # Яка категорія лідирує щомісяця?
 def task_1_02_pivot_table() -> None:
+    print("\nЗавдання 1_02. Розподіл виручки по категоріях")
+
     CLEAN_DIR = OUT
     RESULT_DIR = ROOT / "results" / "task_1_02_patero_analysis"
 
