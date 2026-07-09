@@ -415,6 +415,11 @@ def task_1_01_top_products_by_revenue() -> None:
     available_columns = [col for col in output_columns if col in top_10_products.columns]
 
     print(f'\nТОП-10 товарів за виручкою:\n\n{top_10_products[available_columns].to_string(index=False)}')
+    result_dir = ROOT / "results" / "task_1_01"
+    result_dir.mkdir(parents=True, exist_ok=True)
+    output_path = result_dir / "top_10_products_by_revenue.csv"
+    top_10_products[available_columns].to_csv(output_path, index=False, encoding="utf-8-sig")
+    print(f"Таблицю збережено: {output_path.relative_to(ROOT)}")
     print('-' * 20)
 
 
@@ -471,6 +476,13 @@ def task_1_02_pivot_table() -> None:
         "leader_category": leaders.values
     })
     print("\nLeaderboard:\n", leaders_table)
+    RESULT_DIR.mkdir(parents=True, exist_ok=True)
+    pivot_path = RESULT_DIR / "revenue_pivot_by_category.csv"
+    leaders_path = RESULT_DIR / "monthly_category_leaders.csv"
+    pivot.to_csv(pivot_path, encoding="utf-8-sig")
+    leaders_table.to_csv(leaders_path, index=False, encoding="utf-8-sig")
+    print(f"Pivot-таблицю збережено: {pivot_path.relative_to(ROOT)}")
+    print(f"Таблицю лідерів збережено: {leaders_path.relative_to(ROOT)}")
 
 
 # задание 1_03
@@ -570,7 +582,7 @@ def task_1_03_average_check_by_store() -> None:
     output_path = save_results(result)
     print_store("Найвищий середній чек", result.iloc[0])
     print_store("Найнижчий середній чек", result.iloc[-1])
-    print(f"Таблицю збережено: {output_path}")
+    print(f"Таблицю збережено: {output_path.relative_to(ROOT)}")
 
 
 def main() -> None:
