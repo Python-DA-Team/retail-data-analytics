@@ -1574,6 +1574,9 @@ def task_2_06_dashboard_multi_plot() -> None:
 # Використати shift() для визначення днів з різким зростанням/падінням виручки відносно попереднього дня
 # (day-over-day change). Знайти топ-5 днів з найбільшим приростом та падінням.
 # Визначити дні з аномальним падінням/зростанням (>2 std від середнього)
+pd.set_option("display.max_columns", None)
+pd.set_option("display.width", 1000)
+
 DATA_PATH_TIME_SERIES = OUT / "transactions_cleaned.csv"
 
 
