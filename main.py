@@ -2,9 +2,11 @@ from __future__ import annotations
 
 import csv
 import json
+import os
 import re
 import shutil
 import sqlite3
+from itertools import combinations
 from pathlib import Path
 
 import matplotlib
@@ -882,6 +884,126 @@ def task_1_07_abc_analysis_of_products() -> None:
     print(f"Таблицю збережено: {counts_path.relative_to(ROOT)}")
 
 
+# задание 1_08
+# Блок 1. Завдання 8.
+# Market Basket Analysis. Для кожного customer_id зібрати всі category куплених товарів за один день.
+# Знайти найчастіші пари категорій, що купують разом (комбінації 2 категорій).
+# Які топ-5 пар?
+# > Підказка: якщо same-day покупок мало — спробуйте згрупувати по customer_id + тиждень через .dt.isocalendar().week.
+# Використайте itertools.combinations() для генерації пар категорій.
+# Для підрахунку пар зручно застосувати value_counts() на серії пар або nunique() для перевірки кількості унікальних пар.
+def task_1_08_market_basket_analysis() -> None:
+    print("\nЗавдання 1_08. Market Basket Analysis")
+
+    CLEAN_DIR = OUT
+    result_dir = ROOT / "results" / "task_1_08"
+
+    transactions_path = CLEAN_DIR / "transactions_cleaned.csv"
+    excel_path = CLEAN_DIR / "company_data_cleaned.xlsx"
+
+    if not transactions_path.exists() or not excel_path.exists():
+        clean_data()
+
+    df_trans = pd.read_csv(transactions_path)
+    df_prod = pd.read_excel(excel_path, sheet_name="Products")
+
+    df = pd.merge(df_trans, df_prod[["product_id", "category"]], on="product_id", how="left")
+
+    df = df.dropna(subset=["customer_id", "transaction_date", "category"])
+
+    df["transaction_date"] = pd.to_datetime(df["transaction_date"])
+    df["week"] = df["transaction_date"].dt.isocalendar().week
+
+    basket = df.groupby(["customer_id", "week"])["category"].apply(set)
+
+    pairs = []
+    for cats in basket:
+        if len(cats) > 1:
+            pairs.extend(combinations(sorted(list(cats)), 2))
+
+    top_5 = pd.Series(pairs).value_counts().head(5)
+
+    result_dir.mkdir(parents=True, exist_ok=True)
+    table_path = result_dir / "top_5_category_pairs.csv"
+    top_5.rename_axis("category_pair").reset_index(name="count").to_csv(
+        table_path,
+        index=False,
+        encoding="utf-8-sig",
+    )
+
+    print(" Топ-5 пар категорій, що купують разом")
+    print(top_5)
+    print(f"Таблицю збережено: {table_path.relative_to(ROOT)}")
+
+
+# задание 1_09
+# Блок 1. Завдання 9.
+# Аналіз знижок. Розбити транзакції на: discount_percent == 0 vs >0.
+#  Порівняти середню кількість одиниць (quantity) та виручку. Чи працюють знижки?
+DATA_PATH = OUT / "transactions_cleaned.csv"
+
+
+def task_1_09_discount_analysis() -> None:
+    print("\nЗавдання 1_09. Аналіз знижок")
+
+    result_dir = ROOT / "results" / "task_1_09"
+
+    if not os.path.exists(DATA_PATH):
+        print(f"Файл {DATA_PATH} не знайдено!")
+        return
+
+    df = pd.read_csv(DATA_PATH)
+
+    no_discount_df = df[df["discount_percent"] == 0]
+    with_discount_df = df[df["discount_percent"] > 0]
+
+    no_discount_table = pd.DataFrame({"Кількість": [no_discount_df["transaction_id"].count()],
+                                      "Сума": [no_discount_df["total_amount"].sum()]})
+    with_discount_table = pd.DataFrame({"Кількість": [with_discount_df["transaction_id"].count()],
+                                        "Сума": [with_discount_df["total_amount"].sum()]})
+
+    print("ТАБЛИЦЯ: Транзакції БЕЗ знижок")
+    print(no_discount_table)
+    print("\n" + "=" * 50 + "\n")
+
+    print("ТАБЛИЦЯ: Транзакції ЗІ знижкою")
+    print(with_discount_table)
+    print("\n" + "=" * 50 + "\n")
+
+    df["discount_group"] = ["Без знижки" if d == 0 else "Зі знижкою" for d in df["discount_percent"]]
+    analysis = df.groupby("discount_group")[["quantity", "total_amount"]].mean()
+
+    print("СЕРЕДНІ ПОКАЗНИКИ: Без знижки vs Зі знижкою")
+    print(analysis.round(2))
+
+    print(" ВИСНОВКИ")
+    q_no = analysis.loc["Без знижки", "quantity"]
+    q_yes = analysis.loc["Зі знижкою", "quantity"]
+    t_no = analysis.loc["Без знижки", "total_amount"]
+    t_yes = analysis.loc["Зі знижкою", "total_amount"]
+
+    if q_yes > q_no:
+        print(f"- Кількість товарів у кошику зі знижкою вища (+{((q_yes / q_no) - 1) * 100:.1f}%)")
+    else:
+        print("- Знижки НЕ стимулюють клієнтів купувати більше товарів.")
+
+    if t_yes < t_no:
+        print("- Середній чек зі знижкою НИЖЧИЙ: знижки зменшують маржинальність без приросту обсягу.")
+    else:
+        print("- Середній чек зі знижкою вищий — акції працюють ефективно.")
+
+    result_dir.mkdir(parents=True, exist_ok=True)
+    no_discount_path = result_dir / "transactions_without_discount.csv"
+    with_discount_path = result_dir / "transactions_with_discount.csv"
+    analysis_path = result_dir / "discount_analysis.csv"
+    no_discount_table.to_csv(no_discount_path, index=False, encoding="utf-8-sig")
+    with_discount_table.to_csv(with_discount_path, index=False, encoding="utf-8-sig")
+    analysis.round(2).to_csv(analysis_path, encoding="utf-8-sig")
+    print(f"Таблицю збережено: {no_discount_path.relative_to(ROOT)}")
+    print(f"Таблицю збережено: {with_discount_path.relative_to(ROOT)}")
+    print(f"Таблицю збережено: {analysis_path.relative_to(ROOT)}")
+
+
 # задание 1_10
 def task_1_10_cohort_retention() -> None:
     print("\nЗавдання 1_10. Cohort Retention")
@@ -1690,24 +1812,28 @@ def task_2_07_time_series_analysis() -> None:
 # Чи корелює discount_percent із ймовірністю повернення? Порівняти середній discount для returns vs non-returns
 # Чи відрізняється return rate по payment_method?
 # Який середній час між покупкою та поверненням (return_date - transaction_date)?
-DATA_DIR_RETURN_ANALYSIS = OUT
-FILES_RETURN_ANALYSIS = {
-    "transactions": DATA_DIR_RETURN_ANALYSIS / "transactions_cleaned.csv",
-    "returns": DATA_DIR_RETURN_ANALYSIS / "returns_cleaned.csv",
-    "products": DATA_DIR_RETURN_ANALYSIS / "company_data_cleaned.xlsx"
+# Конфігурація відображення
+pd.set_option("display.max_columns", None)
+pd.set_option("display.width", 1000)
+
+DATA_DIR = OUT
+FILES = {
+    "transactions": DATA_DIR / "transactions_cleaned.csv",
+    "returns": DATA_DIR / "returns_cleaned.csv",
+    "products": DATA_DIR / "company_data_cleaned.xlsx"
 }
 
 
 def analyze_return_rate_by_category(transactions, returns, products):
 
-    for name, path in FILES_RETURN_ANALYSIS.items():
+    for name, path in FILES.items():
         if not path.exists():
             print(f"Помилка: Файл {path} не знайдено!")
             return None
 
-    transactions = pd.read_csv(FILES_RETURN_ANALYSIS["transactions"])
-    returns = pd.read_csv(FILES_RETURN_ANALYSIS["returns"])
-    products = pd.read_excel(FILES_RETURN_ANALYSIS["products"], sheet_name="Products")
+    transactions = pd.read_csv(FILES["transactions"])
+    returns = pd.read_csv(FILES["returns"])
+    products = pd.read_excel(FILES["products"], sheet_name="Products")
 
     total_tx = transactions.groupby("product_id").size().reset_index(name="total_transactions")
     total_returns = returns.groupby("product_id").size().reset_index(name="total_returns")
@@ -1756,13 +1882,13 @@ def task_2_08_returns_analysis() -> None:
 
     result_dir = ROOT / "results" / "task_2_08"
 
-    if not all(f.exists() for f in FILES_RETURN_ANALYSIS.values()):
+    if not all(f.exists() for f in FILES.values()):
         print("Помилка: Не всі файли знайдено в папці cleaned_data!")
         return
 
-    transactions = pd.read_csv(FILES_RETURN_ANALYSIS["transactions"])
-    returns = pd.read_csv(FILES_RETURN_ANALYSIS["returns"])
-    products = pd.read_excel(FILES_RETURN_ANALYSIS["products"], sheet_name="Products")
+    transactions = pd.read_csv(FILES["transactions"])
+    returns = pd.read_csv(FILES["returns"])
+    products = pd.read_excel(FILES["products"], sheet_name="Products")
 
     result_dir.mkdir(parents=True, exist_ok=True)
 
@@ -1772,6 +1898,7 @@ def task_2_08_returns_analysis() -> None:
     category_path = result_dir / "return_rate_by_category.csv"
     category_results.to_csv(category_path, encoding="utf-8-sig")
     print(f"Таблицю збережено: {category_path.relative_to(ROOT)}")
+    print("\n" + "=" * 50 + "\n")
 
     reason_results = analyze_refunds_by_reason(returns)
     print("Середня сума повернення за причиною")
@@ -1779,6 +1906,7 @@ def task_2_08_returns_analysis() -> None:
     reason_path = result_dir / "average_refund_by_reason.csv"
     reason_results.to_csv(reason_path, encoding="utf-8-sig")
     print(f"Таблицю збережено: {reason_path.relative_to(ROOT)}")
+    print("\n" + "=" * 50 + "\n")
 
     discount_stats, correlation = analyze_discount_vs_return(transactions)
 
@@ -1806,6 +1934,7 @@ def task_2_08_returns_analysis() -> None:
         }
     ).to_csv(discount_path, index=False, encoding="utf-8-sig")
     print(f"Таблицю збережено: {discount_path.relative_to(ROOT)}")
+    print("\n" + "=" * 50 + "\n")
 
     print("Return Rate за методом оплати (%)")
     payment_results = analyze_return_rate_by_payment(transactions)
@@ -1813,6 +1942,7 @@ def task_2_08_returns_analysis() -> None:
     payment_path = result_dir / "return_rate_by_payment_method.csv"
     payment_results.to_csv(payment_path, encoding="utf-8-sig")
     print(f"Таблицю збережено: {payment_path.relative_to(ROOT)}")
+    print("\n" + "=" * 50 + "\n")
 
     avg_days = analyze_return_time(returns)
     print(f"Середній час між покупкою та поверненням")
@@ -2076,6 +2206,8 @@ def main() -> None:
     task_1_05_correlation_heatmap()
     task_1_06_sales_distribution_plots()
     task_1_07_abc_analysis_of_products()
+    task_1_08_market_basket_analysis()
+    task_1_09_discount_analysis()
     task_1_10_cohort_retention()
     task_1_11_clv_estimation()
     task_2_01_profit_analysis()
