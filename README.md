@@ -34,6 +34,17 @@ Trello: https://trello.com/b/FnI0Waiu/tima1
 ├── main.py                 # головна точка запуску
 ├── cleaning.py             # централізоване очищення всіх джерел даних
 ├── task_*.py               # окремі файли завдань, синхронізовані з блоками з main.py
+├── analytics_practice.db   # навчальна SQLite-база
+├── company_data.xlsx       # основний Excel-файл з довідниками
+├── transactions.csv        # транзакції
+├── support_tickets.tsv     # звернення в підтримку
+├── api_logs.json           # API-логи
+├── marketing.csv           # маркетингові кампанії
+├── salaries.csv            # зарплати
+├── returns.csv             # повернення товарів
+├── customers.csv           # клієнти
+├── employees.csv           # співробітники
+├── stores.csv              # магазини
 ├── cleaned_data/           # створюється автоматично, у Git не додається
 ├── results/                # створюється автоматично, у Git не додається
 └── README.md
@@ -227,3 +238,4 @@ task_2_11_dynamic_executive_dashboard.py
 ## ✅ Висновок
 
 Проєкт демонструє повний цикл роботи дата-аналітика: від очищення та підготовки даних до створення аналітичних звітів, бізнес-метрик і візуалізацій для підтримки прийняття рішень.
+
