@@ -1,20 +1,47 @@
+from __future__ import annotations
+
+import os
+from itertools import combinations
 from pathlib import Path
 
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+import seaborn as sns
+
+from cleaning import main as run_cleaning
 
 
 ROOT = Path(__file__).resolve().parent
-CLEAN_DIR = ROOT / "cleaned_data"
-RESULT_DIR = ROOT / "results" / "task_2_01"
+OUT = ROOT / "cleaned_data"
+CLEANED_FILES = [
+    "company_data_cleaned.xlsx",
+    "customers_cleaned.csv",
+    "employees_cleaned.csv",
+    "stores_cleaned.csv",
+    "marketing_cleaned.csv",
+    "returns_cleaned.csv",
+    "salaries_cleaned.csv",
+    "transactions_cleaned.csv",
+    "support_tickets_cleaned.tsv",
+]
 
 
-def load_data() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    transactions_path = CLEAN_DIR / "transactions_cleaned.csv"
-    company_path = CLEAN_DIR / "company_data_cleaned.xlsx"
+def cleaned_data_exists() -> bool:
+    return OUT.exists() and all((OUT / filename).exists() for filename in CLEANED_FILES)
 
-    if not transactions_path.exists() or not company_path.exists():
-        from cleaning import main as clean_data
-        clean_data()
+
+def clean_data() -> None:
+    if not cleaned_data_exists():
+        run_cleaning()
+
+
+# задание 2_01
+def task_2_01_load_data() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    transactions_path = OUT / "transactions_cleaned.csv"
+    company_path = OUT / "company_data_cleaned.xlsx"
 
     transactions = pd.read_csv(transactions_path, low_memory=False)
     products = pd.read_excel(company_path, sheet_name="Products")
@@ -22,7 +49,7 @@ def load_data() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     return transactions, products, stores
 
 
-def prepare_sales(
+def task_2_01_prepare_sales(
     transactions: pd.DataFrame,
     products: pd.DataFrame,
     stores: pd.DataFrame,
@@ -77,7 +104,7 @@ def prepare_sales(
     return sales
 
 
-def calculate_monthly_profit(sales: pd.DataFrame) -> pd.DataFrame:
+def task_2_01_calculate_monthly_profit(sales: pd.DataFrame) -> pd.DataFrame:
     monthly = (
         sales.groupby("month", as_index=False)
         .agg(
@@ -104,24 +131,27 @@ def calculate_monthly_profit(sales: pd.DataFrame) -> pd.DataFrame:
     return monthly
 
 
-def save_results(monthly: pd.DataFrame) -> Path:
+def task_2_01_save_results(monthly: pd.DataFrame) -> Path:
+    RESULT_DIR = ROOT / "results" / "task_2_01"
     RESULT_DIR.mkdir(parents=True, exist_ok=True)
     output_path = RESULT_DIR / "monthly_profit_analysis.csv"
     monthly.to_csv(output_path, index=False, encoding="utf-8-sig")
     return output_path
 
 
-def main() -> None:
-    transactions, products, stores = load_data()
-    sales = prepare_sales(transactions, products, stores)
-    monthly = calculate_monthly_profit(sales)
+def task_2_01_profit_analysis() -> None:
+    print("\nЗавдання 2_01. Profit Analysis")
+
+    transactions, products, stores = task_2_01_load_data()
+    sales = task_2_01_prepare_sales(transactions, products, stores)
+    monthly = task_2_01_calculate_monthly_profit(sales)
 
     if monthly.empty:
         raise ValueError("Не знайдено даних для розрахунку прибутку")
 
     best_month = monthly.loc[monthly["total_profit"].idxmax()]
     worst_month = monthly.loc[monthly["total_profit"].idxmin()]
-    output_path = save_results(monthly)
+    output_path = task_2_01_save_results(monthly)
 
     print(
         f"Найприбутковіший місяць: {best_month['month']}, "
@@ -135,8 +165,9 @@ def main() -> None:
         print("Цей місяць був збитковим.")
     else:
         print("Збиткових місяців немає.")
-    print(f"Таблицю збережено: {output_path}")
+    print(f"Таблицю збережено: {output_path.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":
-    main()
+    clean_data()
+    task_2_01_profit_analysis()

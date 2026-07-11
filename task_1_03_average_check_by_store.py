@@ -1,20 +1,51 @@
+from __future__ import annotations
+
+import os
+from itertools import combinations
 from pathlib import Path
 
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+import seaborn as sns
+
+from cleaning import main as run_cleaning
 
 
 ROOT = Path(__file__).resolve().parent
-CLEAN_DIR = ROOT / "cleaned_data"
+OUT = ROOT / "cleaned_data"
+CLEANED_FILES = [
+    "company_data_cleaned.xlsx",
+    "customers_cleaned.csv",
+    "employees_cleaned.csv",
+    "stores_cleaned.csv",
+    "marketing_cleaned.csv",
+    "returns_cleaned.csv",
+    "salaries_cleaned.csv",
+    "transactions_cleaned.csv",
+    "support_tickets_cleaned.tsv",
+]
+
+
+def cleaned_data_exists() -> bool:
+    return OUT.exists() and all((OUT / filename).exists() for filename in CLEANED_FILES)
+
+
+def clean_data() -> None:
+    if not cleaned_data_exists():
+        run_cleaning()
+
+
+# задание 1_03
+CLEAN_DIR = OUT
 RESULT_DIR = ROOT / "results" / "task_1_3"
 
 
 def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
     transactions_path = CLEAN_DIR / "transactions_cleaned.csv"
     company_path = CLEAN_DIR / "company_data_cleaned.xlsx"
-
-    if not transactions_path.exists() or not company_path.exists():
-        from cleaning import main as clean_data
-        clean_data()
 
     transactions = pd.read_csv(transactions_path, low_memory=False)
     stores = pd.read_excel(company_path, sheet_name="Stores")
@@ -92,7 +123,9 @@ def print_store(label: str, store: pd.Series) -> None:
     )
 
 
-def main() -> None:
+def task_1_03_average_check_by_store() -> None:
+    print("\nЗавдання 1_03. Середній чек по магазинах")
+
     transactions, stores = load_data()
     result = calculate_average_check(transactions, stores)
 
@@ -102,8 +135,9 @@ def main() -> None:
     output_path = save_results(result)
     print_store("Найвищий середній чек", result.iloc[0])
     print_store("Найнижчий середній чек", result.iloc[-1])
-    print(f"Таблицю збережено: {output_path}")
+    print(f"Таблицю збережено: {output_path.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":
-    main()
+    clean_data()
+    task_1_03_average_check_by_store()
