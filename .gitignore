@@ -19,13 +19,16 @@ results/
 
 # Logs
 *.log
-# Local data
-backup/
-*.csv
-*.xlsx
-cleaned_data/
 
-*.tsv
+# Local/generated data
+backup/
+cleaned_data/
+*_cleaned.csv
+*_cleaned.tsv
+*_cleaned.json
+*_cleaned.xlsx
+cleaning_report.json
+
 *.ini
 
 # Local Codex/project assembly notes

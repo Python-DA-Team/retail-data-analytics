@@ -164,7 +164,7 @@ python main.py
 
 ### Поточний склад Python-завдань
 
-У командному плані `22` завдання. Готові `task_*.py` синхронізовані з відповідними блоками у `main.py`.
+У командному плані `22` завдання. `task_*.py` синхронізовані з відповідними блоками у `main.py`.
 
 ```text
 task_1_01_top_products_by_revenue.py
@@ -188,6 +188,7 @@ task_2_07_time_series_analysis.py
 task_2_08_returns_analysis.py
 task_2_09_store_analytics.py
 task_2_10_P&L_Financial_Modeling.py
+task_2_11_dynamic_executive_dashboard.py
 ```
 
 ### Результати завдань
