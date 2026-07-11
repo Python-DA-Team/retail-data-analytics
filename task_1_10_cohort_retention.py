@@ -1,34 +1,54 @@
+from __future__ import annotations
+
+import os
+from itertools import combinations
 from pathlib import Path
 
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
 import seaborn as sns
 
+from cleaning import main as run_cleaning
+
 
 ROOT = Path(__file__).resolve().parent
-CLEAN_DIR = ROOT / "cleaned_data"
-RESULT_DIR = ROOT / "results" / "task_10"
+OUT = ROOT / "cleaned_data"
+CLEANED_FILES = [
+    "company_data_cleaned.xlsx",
+    "customers_cleaned.csv",
+    "employees_cleaned.csv",
+    "stores_cleaned.csv",
+    "marketing_cleaned.csv",
+    "returns_cleaned.csv",
+    "salaries_cleaned.csv",
+    "transactions_cleaned.csv",
+    "support_tickets_cleaned.tsv",
+]
 
 
-def load_data() -> tuple[pd.DataFrame, pd.DataFrame]:
-    transactions_path = CLEAN_DIR / "transactions_cleaned.csv"
-    products_path = CLEAN_DIR / "company_data_cleaned.xlsx"
+def cleaned_data_exists() -> bool:
+    return OUT.exists() and all((OUT / filename).exists() for filename in CLEANED_FILES)
 
-    if not transactions_path.exists() or not products_path.exists():
-        from cleaning import main as clean_data
-        clean_data()
+
+def clean_data() -> None:
+    if not cleaned_data_exists():
+        run_cleaning()
+
+
+# задание 1_10
+def task_1_10_cohort_retention() -> None:
+    print("\nЗавдання 1_10. Cohort Retention")
+
+    result_dir = ROOT / "results" / "task_1_10"
+    transactions_path = OUT / "transactions_cleaned.csv"
+    products_path = OUT / "company_data_cleaned.xlsx"
 
     transactions = pd.read_csv(transactions_path, low_memory=False)
     products = pd.read_excel(products_path, sheet_name="Products")
-    return transactions, products
 
-
-def calculate_retention(
-    transactions: pd.DataFrame,
-    products: pd.DataFrame,
-) -> tuple[pd.DataFrame, pd.DataFrame]:
     sales = transactions.loc[transactions["is_return"].eq(0)].copy()
     sales["transaction_date"] = pd.to_datetime(sales["transaction_date"], errors="coerce")
     sales = sales.dropna(subset=["customer_id", "product_id", "transaction_date"])
@@ -46,10 +66,12 @@ def calculate_retention(
     first_purchase = (
         sales.groupby("customer_id", as_index=False)
         .first()[["customer_id", "transaction_date", "category"]]
-        .rename(columns={
-            "transaction_date": "first_purchase_date",
-            "category": "first_category",
-        })
+        .rename(
+            columns={
+                "transaction_date": "first_purchase_date",
+                "category": "first_category",
+            }
+        )
     )
 
     sales = sales.merge(first_purchase, on="customer_id", how="inner")
@@ -70,9 +92,13 @@ def calculate_retention(
         .unstack(fill_value=0)
     )
 
-    cohort_size = first_purchase.assign(
-        cohort_month=first_purchase["first_purchase_date"].dt.to_period("M")
-    ).groupby("cohort_month")["customer_id"].nunique()
+    cohort_size = (
+        first_purchase.assign(
+            cohort_month=first_purchase["first_purchase_date"].dt.to_period("M")
+        )
+        .groupby("cohort_month")["customer_id"]
+        .nunique()
+    )
 
     retention = active.div(cohort_size, axis=0).mul(100)
     last_month = sales["purchase_month"].max()
@@ -83,16 +109,17 @@ def calculate_retention(
 
     retention.index = retention.index.astype(str)
     retention.columns = [f"M{int(col)}" for col in retention.columns]
+    retention = retention.round(2)
 
     details = first_purchase.copy()
     details["cohort_month"] = details["first_purchase_date"].dt.to_period("M").astype(str)
-    return retention.round(2), details
 
-
-def save_results(retention: pd.DataFrame, details: pd.DataFrame) -> None:
-    RESULT_DIR.mkdir(parents=True, exist_ok=True)
-    retention.to_csv(RESULT_DIR / "cohort_retention.csv", encoding="utf-8-sig")
-    details.to_csv(RESULT_DIR / "customer_first_category.csv", index=False, encoding="utf-8-sig")
+    result_dir.mkdir(parents=True, exist_ok=True)
+    retention_path = result_dir / "cohort_retention.csv"
+    details_path = result_dir / "customer_first_category.csv"
+    chart_path = result_dir / "cohort_retention.png"
+    retention.to_csv(retention_path, encoding="utf-8-sig")
+    details.to_csv(details_path, index=False, encoding="utf-8-sig")
 
     plt.figure(figsize=(16, 9))
     sns.heatmap(
@@ -108,19 +135,18 @@ def save_results(retention: pd.DataFrame, details: pd.DataFrame) -> None:
     plt.xlabel("Місяць після першої покупки")
     plt.ylabel("Місяць першої покупки")
     plt.tight_layout()
-    plt.savefig(RESULT_DIR / "cohort_retention.png", dpi=180, bbox_inches="tight")
+    plt.savefig(chart_path, dpi=180, bbox_inches="tight")
     plt.close()
 
-
-def main() -> None:
-    transactions, products = load_data()
-    retention, details = calculate_retention(transactions, products)
-    save_results(retention, details)
-
-    print("Cohort Retention, %")
-    print(retention.to_string())
-    print(f"\nРезультати збережено у: {RESULT_DIR}")
+    print(
+        f"Cohort Retention: {len(retention)} когорт, "
+        f"{retention.columns[0]}-{retention.columns[-1]}"
+    )
+    print(f"Таблицю збережено: {retention_path.relative_to(ROOT)}")
+    print(f"Таблицю збережено: {details_path.relative_to(ROOT)}")
+    print(f"Графік збережено: {chart_path.relative_to(ROOT)}")
 
 
 if __name__ == "__main__":
-    main()
+    clean_data()
+    task_1_10_cohort_retention()

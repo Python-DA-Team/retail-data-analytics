@@ -15,6 +15,23 @@ ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "cleaned_data"
 DATA_END = pd.Timestamp("2025-12-31 23:59:59")
 NA_PATTERN = re.compile(r"^\s*(?:|nan|none|n/?a|null|\?)\s*$", re.I)
+CLEANED_FILES = [
+    "company_data_cleaned.xlsx",
+    "customers_cleaned.csv",
+    "employees_cleaned.csv",
+    "stores_cleaned.csv",
+    "marketing_cleaned.csv",
+    "returns_cleaned.csv",
+    "salaries_cleaned.csv",
+    "transactions_cleaned.csv",
+    "support_tickets_cleaned.tsv",
+    "api_logs_cleaned.json",
+    "cleaning_report.json",
+]
+
+
+def cleaned_data_exists() -> bool:
+    return OUT.exists() and all((OUT / filename).exists() for filename in CLEANED_FILES)
 
 
 def base_clean(df: pd.DataFrame) -> pd.DataFrame:
@@ -289,6 +306,9 @@ def save(frame: pd.DataFrame, filename: str, sep: str = ",") -> dict[str, int]:
 
 
 def main() -> None:
+    if cleaned_data_exists():
+        return
+
     OUT.mkdir(exist_ok=True)
     report: dict[str, object] = {}
 
