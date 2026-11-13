@@ -1,4 +1,4 @@
-# Retail Data Analytics
+# 🛒 Retail Data Analytics
 
 Team learning project focused on retail sales analysis for 2024-2025. The project covers product performance, revenue, profitability, returns, time series, financial modeling, data quality, and dashboard development.
 
@@ -68,8 +68,13 @@ retail-data-analytics/
 Task files should include the block number, task number, and a short descriptive name, for example:
 
 ```text
-src/block_1/task_04_category_revenue.py
-outputs/figures/block_1_task_04_category_revenue.png
+customers.customer_id -> transactions.customer_id -> support_tickets.customer_id
+customers.customer_id -> api_logs.user_id
+products.product_id   -> transactions.product_id -> inventory.product_id
+products.product_id   -> marketing.product_id
+stores.store_id       -> transactions.store_id -> employees.store_id
+stores.store_id       -> inventory.store_id
+employees.employee_id -> salaries.employee_id
 ```
 
 ## Team workflow

@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# Virtual environment
+.venv/
+venv/
+
+# PyCharm
+.idea/
+
+# Databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Results
+results/
+
+# Logs
+*.log
+
+# Local/generated data
+backup/
+cleaned_data/
+*_cleaned.csv
+*_cleaned.tsv
+*_cleaned.json
+*_cleaned.xlsx
+cleaning_report.json
+
+*.ini
+
+# Local Codex/project assembly notes
+MAIN_ASSEMBLY_RULES.md

@@ -1,0 +1,506 @@
+employee_id,first_name,last_name,store_id,department,hire_date,salary,performance_score,status,email,role
+1,EmpFirst_1,EmpLast_1,45,Sales,2022-04-04,7177,60.6,Active,empfirst_1.emplast_1@company.com,Merchandiser
+2,EmpFirst_2,EmpLast_2,27,Logistics,2022-11-14,$6992,,Terminated,empfirst_2.emplast_2@company.com,Driver
+3,EmpFirst_3,EmpLast_3,52,Management,2024-05-28,6026,71.8,Active,empfirst_3.emplast_3@company.com,Store Manager
+4,EmpFirst_4,EmpLast_4,48,Logistics,2021-01-03,4980,72.0,Active,empfirst_4.emplast_4@company.com,Packer
+5,EmpFirst_5,EmpLast_5,113,Support,2023-04-15,7876,74.1,Terminated,empfirst_5.emplast_5@company.com,Team Lead
+6,EmpFirst_6,EmpLast_6,118,IT,2024-01-11,7246,70.9,Active,empfirst_6.emplast_6@company.com,Security Specialist
+7,EmpFirst_7,EmpLast_7,101,Management,2021-09-11,4969,72.9,Terminated,empfirst_7.emplast_7@company.com,Director
+8,EmpFirst_8,EmpLast_8,78,Management,2024-02-04,4475,60.3,Active,empfirst_8.emplast_8@company.com,Shift Lead
+9,EmpFirst_9,EmpLast_9,75,Logistics,2019-03-17,17214,56.2,Terminated,empfirst_9.emplast_9@company.com,Coordinator
+10,EmpFirst_10,EmpLast_10,108,Sales,2023-08-04,7615,100.0,Active,empfirst_10.emplast_10@company.com,Sales Lead
+11,EmpFirst_11,EmpLast_11,75,IT,2024-01-18,14044,56.0,Terminated,empfirst_11.emplast_11@company.com,Support Engineer
+12,EmpFirst_12,EmpLast_12,9999,Management,2024-10-08,4574,67.4,Active,empfirst_12.emplast_12@company.com,Director
+13,EmpFirst_13,EmpLast_13,94,Logistics,2023-07-23,3449,59.8,Active,empfirst_13.emplast_13@company.com,Coordinator
+14,EmpFirst_14,EmpLast_14,87,Sales,2020-03-05,7463,68.7,Active,empfirst_14.emplast_14@company.com,Senior Consultant
+15,EmpFirst_15,EmpLast_15,77,IT,2023-12-14,$6252,78.6,Active,empfirst_15.emplast_15@company.com,Developer
+16,EmpFirst_16,EmpLast_16,100,Support,2021-09-14,13350,78.1,OnLeave,empfirst_16.emplast_16@company.com,Quality Analyst
+17,EmpFirst_17,EmpLast_17,5,Logistics,2021-03-17,6850,68.6,Active,empfirst_17.emplast_17@company.com,Coordinator
+18,EmpFirst_18,EmpLast_18,114,SUPPORT,2023-12-18,7061,66.4,Active,empfirst_18.emplast_18@company.com,Escalation Specialist
+19,EmpFirst_19,EmpLast_19,72,Sales,2024-12-18,9260,88.8,Active,empfirst_19.emplast_19@company.com,Sales Lead
+20,EmpFirst_20,EmpLast_20,0,Sales,2023-09-09,6342,52.2,Active,empfirst_20.emplast_20@company.com,Sales Lead
+21,EmpFirst_21,EmpLast_21,80,Support,2024-11-01,4497,75.6,Active,empfirst_21.emplast_21@company.com,Agent
+22,EmpFirst_22,EmpLast_22,77,Sales,2020-05-10,€7101,82.9,Active,empfirst_22.emplast_22@company.com,Sales Lead
+23,EmpFirst_23,EmpLast_23,27,Sales,2021-09-06,5417,59.4,Active,empfirst_23.emplast_23@company.com,Senior Consultant
+24,EmpFirst_24,EmpLast_24,62,Marketing,2022-03-11,9199,95.7,Active,empfirst_24.emplast_24@company.com,SEO Specialist
+25,EmpFirst_25,EmpLast_25,114,Logistics,2024-10-13,6000,53.0,Active,empfirst_25.emplast_25@company.com,Driver
+26,EmpFirst_26,EmpLast_26,33,IT,2020-03-25,6291,79.0,Terminated,empfirst_26.emplast_26@company.com,SysAdmin
+27,EmpFirst_27,EmpLast_27,43,Sales,2019-09-27,3166,55.1,Active,empfirst_27.emplast_27@company.com,Merchandiser
+28,EmpFirst_28,EmpLast_28,42,Support,2019-12-27,7102,87.8,Terminated,empfirst_28.emplast_28@company.com,Agent
+29,EmpFirst_29,EmpLast_29,52,Management,2020-04-13,4594,68.2,Active,empfirst_29.emplast_29@company.com,Store Manager
+30,EmpFirst_30,EmpLast_30,111,Management,2024-09-02,3998,95.3,Active,,Assistant
+31,EmpFirst_31,EmpLast_31,22,Support,2021-08-21,6148,90.1,Active,empfirst_31.emplast_31@company.com,Escalation Specialist
+32,EmpFirst_32,EmpLast_32,45,HR,2019-10-21,5138,68.5,Active,empfirst_32.emplast_32@company.com,HR Manager
+33,EmpFirst_33,EmpLast_33,76,IT,2019-02-21,3255,55.5,Active,empfirst_33.emplast_33@company.com,SysAdmin
+34,EmpFirst_34,EmpLast_34,64,Management,2020-05-23,6274,79.0,Active,empfirst_34.emplast_34@company.com,Shift Lead
+35,EmpFirst_35,EmpLast_35,47,Support,2023-03-24,7901,71.5,OnLeave,empfirst_35.emplast_35@company.com,Senior Agent
+36,EmpFirst_36,EmpLast_36,32,Support,2021-04-16,11405,63.0,Active,empfirst_36.emplast_36@company.com,Escalation Specialist
+37,EmpFirst_37,EmpLast_37,89,HR,2021-09-16,8375,74.5,Active,empfirst_37.emplast_37@company.com,Trainer
+38,EmpFirst_38,EmpLast_38,47,Logistics,2021-10-10,10504,67.2,Active,empfirst_38.emplast_38@company.com,Picker
+39,EmpFirst_39,EmpLast_39,45,Logistics,2024-05-07,6722,50.4,Active,empfirst_39.emplast_39@company.com,Warehouse Lead
+40,EmpFirst_40,EmpLast_40,85,Sales,2019-06-08,2198,63.9,Active,empfirst_40.emplast_40@company.com,Senior Consultant
+41,EmpFirst_41,EmpLast_41,60,Management,2019-07-17,10358,,Active,empfirst_41.emplast_41@company.com,Store Manager
+42,EmpFirst_42,EmpLast_42,114,Management,2024-04-20,8530,95.1,Active,empfirst_42.emplast_42@company.com,Regional Manager
+43,EmpFirst_43,EmpLast_43,6,Marketing,2024-10-05,7731,89.1,Active,empfirst_43.emplast_43@company.com,Specialist
+44,EmpFirst_44,EmpLast_44,98,Logistics,2024-11-23,6601,96.8,Active,empfirst_44.emplast_44@company.com,Packer
+45,EmpFirst_45,EmpLast_45,118,Sales,2022-11-05,5124,69.5,Active,empfirst_45.emplast_45@company.com,Consultant
+46,EmpFirst_46,EmpLast_46,116,Sales,2022-02-21,6492,86.5,OnLeave,empfirst_46.emplast_46@company.com,Senior Consultant
+47,EmpFirst_47,EmpLast_47,56,IT,2022-11-24,2426,79.3,Active,empfirst_47.emplast_47@company.com,Data Analyst
+48,EmpFirst_48,EmpLast_48,97,Logistics,2019-02-26,10326,77.8,Active,empfirst_48.emplast_48@company.com,Coordinator
+49,EmpFirst_49,EmpLast_49,71,Management,2020-02-03,17597,72.3,Active,empfirst_49.emplast_49@company.com,Assistant
+50,EmpFirst_50,EmpLast_50,64,Logistics,2021-05-20,3221,82.8,Active,empfirst_50.emplast_50@company.com,Coordinator
+51,EmpFirst_51,EmpLast_51,0,Logistics,2021-11-18,5726,80.3,Terminated,empfirst_51.emplast_51@company.com,Packer
+52,EmpFirst_52,EmpLast_52,77, Support,2022-12-20,8125,88.0,Terminated,empfirst_52.emplast_52@company.com,Team Lead
+53,EmpFirst_53,EmpLast_53,60,IT,2021-06-03,5300,89.2,Active,empfirst_53.emplast_53@company.com,Support Engineer
+54,EmpFirst_54,EmpLast_54,70,Logistics,1999-07-07,6227,77.3,Active,empfirst_54.emplast_54@company.com,Packer
+55,EmpFirst_55,EmpLast_55,81,Sales,2019-02-24,4895,96.7,Terminated,empfirst_55.emplast_55@company.com,Senior Consultant
+56,EmpFirst_56,EmpLast_56,61,Sales,2021-03-30,5057,67.7,Active,empfirst_56.emplast_56@company.com,Consultant
+57,EmpFirst_57,EmpLast_57,98,Management,2022-01-04,3991,100.0,Active,empfirst_57.emplast_57@company.com,Assistant
+58,EmpFirst_58,EmpLast_58,120,Sales,2024-01-27,10106,58.1,Active,empfirst_58.emplast_58@company.com,Consultant
+59,EmpFirst_59,EmpLast_59,85,Sales,2020-09-23,3402,64.0,Active,empfirst_59.emplast_59@company.com,Merchandiser
+60,EmpFirst_60,EmpLast_60,58,Sales,1999-03-09,5530,92.8,Terminated,empfirst_60.emplast_60@company.com,Consultant
+61,EmpFirst_61,EmpLast_61,79,IT,2022-04-19,8606,80.5,Active,empfirst_61.emplast_61@company.com,Support Engineer
+62,EmpFirst_62,EmpLast_62,2,Sales,2024-09-07,6055,85.7,OnLeave,empfirst_62.emplast_62@company.com,Cashier
+63,EmpFirst_63,EmpLast_63,76,Sales,2022-10-13,4786,,Active,empfirst_63.emplast_63@company.com,Cashier
+64,EmpFirst_64,EmpLast_64,2,HR,2020-11-16,6962,93.5,Terminated,empfirst_64.emplast_64@company.com,Payroll Specialist
+65,EmpFirst_65,EmpLast_65,53,Support,2023-08-10,9271,89.9,Active,empfirst_65.emplast_65@company.com,Escalation Specialist
+66,EmpFirst_66,EmpLast_66,67,Sales,2021-06-15,5466,78.4,Active,empfirst_66.emplast_66@company.com,Consultant
+67,EmpFirst_67,EmpLast_67,99,Support,2021-04-10,6059,97.7,Active,empfirst_67.emplast_67@company.com,Escalation Specialist
+68,EmpFirst_68,EmpLast_68,57,Support,2023-10-21,5299,62.3,Active,empfirst_68.emplast_68@company.com,Senior Agent
+69,EmpFirst_69,EmpLast_69,92,Sales,2022-02-09,₴8185,45.5,Active,empfirst_69.emplast_69@company.com,Consultant
+70,EmpFirst_70,EmpLast_70,80,IT,2020-01-09,5394,73.0,Active,empfirst_70.emplast_70@company.com,Security Specialist
+71,EmpFirst_71,EmpLast_71,15,Sales,2019-10-31,5545,68.1,Active,empfirst_71.emplast_71@company.com,Merchandiser
+72,EmpFirst_72,EmpLast_72,44,Logistics,2019-07-27,11147,86.9,OnLeave,empfirst_72.emplast_72@company.com,Warehouse Lead
+73,EmpFirst_73,EmpLast_73,62,HR,2023-10-02,3511,89.5,Active,empfirst_73.emplast_73@company.com,Coordinator
+74,EmpFirst_74,EmpLast_74,11,Marketing,2023-07-04,3974,,Active,empfirst_74.emplast_74@company.com,Specialist
+75,EmpFirst_75,EmpLast_75,39,HR,2022-04-25,11842,62.4,Active,empfirst_75.emplast_75@company.com,Recruiter
+76,EmpFirst_76,EmpLast_76,70,Management,2022-03-12,3620,95.0,Active,empfirst_76.emplast_76@company.com,Store Manager
+77,EmpFirst_77,EmpLast_77,0,Marketing,2023-11-12,5935,79.8,Terminated,empfirst_77.emplast_77@company.com,Specialist
+78,EmpFirst_78,EmpLast_78,84,Sales,2022-12-28,7590,93.9,OnLeave,empfirst_78.emplast_78@company.com,Merchandiser
+79,EmpFirst_79,EmpLast_79,0,Logistics,2021-10-13,7246,84.0,Active,empfirst_79.emplast_79@company.com,Picker
+80,EmpFirst_80,EmpLast_80,0,Sales,2022-05-18,4410,88.5,Active,empfirst_80.emplast_80@company.com,Senior Consultant
+81,EmpFirst_81,EmpLast_81,29,Marketing,2023-01-11,4153,88.0,Active,empfirst_81.emplast_81@company.com,SEO Specialist
+82,EmpFirst_82,EmpLast_82,57,Sales,2022-05-28,3837,73.4,Terminated,empfirst_82.emplast_82@company.com,Merchandiser
+83,EmpFirst_83,EmpLast_83,-1,Management,2020-08-21,10544,100.0,Active,empfirst_83.emplast_83@company.com,Shift Lead
+84,EmpFirst_84,EmpLast_84,71,HR,2022-09-25,8203,94.0,Active,empfirst_84.emplast_84@company.com,Coordinator
+85,EmpFirst_85,EmpLast_85,62,Sales,2019-07-18,4602,59.0,OnLeave,empfirst_85.emplast_85@company.com,Merchandiser
+86,EmpFirst_86,EmpLast_86,109,IT,2021-06-05,6435,74.8,Active,empfirst_86.emplast_86@company.com,Support Engineer
+87,EmpFirst_87,EmpLast_87,12,Sales,2023-09-25,2303,100.0,OnLeave,empfirst_87.emplast_87@company.com,Senior Consultant
+88,EmpFirst_88,EmpLast_88,110,Management,2020-05-28,6375,68.9,Terminated,,Assistant
+89,EmpFirst_89,EmpLast_89,55,Sales,2023-07-18,6232,53.8,Terminated,empfirst_89.emplast_89@company.com,Merchandiser
+90,EmpFirst_90,EmpLast_90,19,Logistics,2024-09-02,10652,51.3,Active,empfirst_90.emplast_90@company.com,Picker
+91,EmpFirst_91,EmpLast_91,101,IT,2020-02-14,€8525,36.8,Active,empfirst_91.emplast_91@company.com,Data Analyst
+92,EmpFirst_92,EmpLast_92,13,IT,2022-03-26,4890,65.5,Active,empfirst_92.emplast_92@company.com,Developer
+93,EmpFirst_93,EmpLast_93,55,Sales,2019-11-03,4115,77.1,Active,empfirst_93.emplast_93@company.com,Merchandiser
+94,EmpFirst_94,EmpLast_94,7,Logistics,2021-08-30,5061,64.5,OnLeave,empfirst_94.emplast_94@company.com,Coordinator
+95,EmpFirst_95,EmpLast_95,37, Sales,2020-12-23,9638,90.4,Active,empfirst_95.emplast_95@company.com,Cashier
+96,EmpFirst_96,EmpLast_96,116,Marketing,2022-02-19,4507,76.9,Active,empfirst_96.emplast_96@company.com,Content Manager
+97,EmpFirst_97,EmpLast_97,47,Sales,2020-04-14,14582,72.7,Active,empfirst_97.emplast_97@company.com,Merchandiser
+98,EmpFirst_98,EmpLast_98,65,Marketing,2024-10-25,4790,77.0,Active,empfirst_98.emplast_98@company.com,Campaign Lead
+99,EmpFirst_99,EmpLast_99,-1,Support,2024-06-23,7968,66.1,Active,empfirst_99.emplast_99@company.com,Quality Analyst
+100,EmpFirst_100,EmpLast_100,52,Support,2024-07-02,6002,78.4,Active,empfirst_100.emplast_100@company.com,Quality Analyst
+101,EmpFirst_101,EmpLast_101,46,Logistics,2024-08-24,6831,73.3,Active,empfirst_101.emplast_101@company.com,Driver
+102,EmpFirst_102,EmpLast_102,68,Support,2022-04-11,3813,89.4,Active,empfirst_102.emplast_102@company.com,Escalation Specialist
+103,EmpFirst_103,EmpLast_103,10,Management,2019-08-14,4621,87.1,Active,empfirst_103.emplast_103@company.com,Shift Lead
+104,EmpFirst_104,EmpLast_104,80,IT,2023-10-07,6269,80.6,Terminated,empfirst_104.emplast_104@company.com,Developer
+105,EmpFirst_105,EmpLast_105,9,Sales,2023-02-17,9127,73.3,Active,empfirst_105.emplast_105@company.com,Senior Consultant
+106,EmpFirst_106,EmpLast_106,65,HR,2024-10-14,4882,66.2,Active,empfirst_106.emplast_106@company.com,Payroll Specialist
+107,EmpFirst_107,EmpLast_107,83,Sales,2019-12-31,3654,60.6,OnLeave,empfirst_107.emplast_107@company.com,Cashier
+108,EmpFirst_108,EmpLast_108,9999,Sales,2019-12-02,4589,78.8,Active,,Senior Consultant
+109,EmpFirst_109,EmpLast_109,24,Support,2021-08-23,7700,100.0,Active,empfirst_109.emplast_109@company.com,Escalation Specialist
+110,EmpFirst_110,EmpLast_110,27,Sales,2021-01-12,5518,76.1,Active,empfirst_110.emplast_110@company.com,Cashier
+111,EmpFirst_111,EmpLast_111,32,Sales,2021-03-13,5830,97.2,Active,empfirst_111.emplast_111@company.com,Cashier
+112,EmpFirst_112,EmpLast_112,63,Support,2019-09-01,8302,77.2,OnLeave,empfirst_112.emplast_112@company.com,Senior Agent
+113,EmpFirst_113,EmpLast_113,44,Marketing,2024-01-05,6832,69.3,Active,empfirst_113.emplast_113@company.com,Campaign Lead
+114,EmpFirst_114,EmpLast_114,103,Support,2023-06-30,7711,76.4,Active,empfirst_114.emplast_114@company.com,Quality Analyst
+115,EmpFirst_115,EmpLast_115,19,Sales,2024-02-03,8134,91.8,Active,empfirst_115.emplast_115@company.com,Cashier
+116,EmpFirst_116,EmpLast_116,109,Management,2024-06-09,5511,70.4,Active,empfirst_116.emplast_116@company.com,Store Manager
+117,EmpFirst_117,EmpLast_117,61,Sales,2020-12-22,5866,69.6,Active,empfirst_117.emplast_117@company.com,Merchandiser
+118,EmpFirst_118,EmpLast_118,98,Sales,2022-11-20,5645,59.9,Active,empfirst_118.emplast_118@company.com,Consultant
+119,EmpFirst_119,EmpLast_119,94,Logistics,2020-06-23,2360,68.3,OnLeave,empfirst_119.emplast_119@company.com,Picker
+120,EmpFirst_120,EmpLast_120,15,HR,2022-05-26,5083,,Terminated,empfirst_120.emplast_120@company.com,Coordinator
+121,EmpFirst_121,EmpLast_121,57,Logistics,2021-06-17,7217,73.6,Active,empfirst_121.emplast_121@company.com,Picker
+122,EmpFirst_122,EmpLast_122,31,Management,2020-04-03,5384,77.3,Active,empfirst_122.emplast_122@company.com,Regional Manager
+123,EmpFirst_123,EmpLast_123,9999,Logistics,2024-08-07,5026,89.5,Terminated,empfirst_123.emplast_123@company.com,Warehouse Lead
+124,EmpFirst_124,EmpLast_124,106,Support,2019-11-11,9800,76.9,Active,empfirst_124.emplast_124@company.com,Quality Analyst
+125,EmpFirst_125,EmpLast_125,6,Sales,2019-01-31,9359,91.7,Active,empfirst_125.emplast_125@company.com,Consultant
+126,EmpFirst_126,EmpLast_126,73,Sales,2019-03-24,10041,57.6,Active,empfirst_126.emplast_126@company.com,Merchandiser
+127,EmpFirst_127,EmpLast_127,105,IT,2024-03-28,€3634,83.9,Active,empfirst_127.emplast_127@company.com,Security Specialist
+128,EmpFirst_128,EmpLast_128,75,Sales,2023-04-02,7814,,Active,empfirst_128.emplast_128@company.com,Senior Consultant
+129,EmpFirst_129,EmpLast_129,38,Marketing,2020-11-28,4480,77.5,Active,empfirst_129.emplast_129@company.com,Analyst
+130,EmpFirst_130,EmpLast_130,28,Sales,2019-04-22,6473,90.1,OnLeave,empfirst_130.emplast_130@company.com,Consultant
+131,EmpFirst_131,EmpLast_131,55,Sales,2024-08-26,3521,80.0,Active,empfirst_131.emplast_131@company.com,Merchandiser
+132,EmpFirst_132,EmpLast_132,77,Management,2019-08-11,8131,83.3,Active,empfirst_132.emplast_132@company.com,Store Manager
+133,EmpFirst_133,EmpLast_133,48,Sales,2021-10-04,6651,68.6,Active,empfirst_133.emplast_133@company.com,Senior Consultant
+134,EmpFirst_134,EmpLast_134,113,IT,2019-02-26,6918,70.1,Active,empfirst_134.emplast_134@company.com,Support Engineer
+135,EmpFirst_135,EmpLast_135,48,Logistics,2020-01-24,2417,81.1,Active,empfirst_135.emplast_135@company.com,Picker
+136,EmpFirst_136,EmpLast_136,44,Sales,2021-08-21,€7214,74.5,Terminated,empfirst_136.emplast_136@company.com,Merchandiser
+137,EmpFirst_137,EmpLast_137,8,Sales,2023-06-22,$8737,73.7,Active,empfirst_137.emplast_137@company.com,Merchandiser
+138,EmpFirst_138,EmpLast_138,88,HR,2022-09-29,5399,91.4,Active,empfirst_138.emplast_138@company.com,Recruiter
+139,EmpFirst_139,EmpLast_139,22,IT,2019-08-11,9535,,Active,empfirst_139.emplast_139@company.com,Developer
+140,EmpFirst_140,EmpLast_140,32,IT,2019-01-19,€9024,81.3,Active,empfirst_140.emplast_140@company.com,Security Specialist
+141,EmpFirst_141,EmpLast_141,82,Marketing,2022-08-18,6973,100.0,Active,empfirst_141.emplast_141@company.com,SEO Specialist
+142,EmpFirst_142,EmpLast_142,64,Sales,2020-10-31,2998,39.3,Active,empfirst_142.emplast_142@company.com,Senior Consultant
+143,EmpFirst_143,EmpLast_143,96,Support,2024-02-14,9906,93.9,Active,empfirst_143.emplast_143@company.com,Senior Agent
+144,EmpFirst_144,EmpLast_144,23,Sales,2022-03-21,5534,67.7,Active,empfirst_144.emplast_144@company.com,Merchandiser
+145,EmpFirst_145,EmpLast_145,105,Sales,2022-04-12,3133,73.3,Active,empfirst_145.emplast_145@company.com,Merchandiser
+146,EmpFirst_146,EmpLast_146,89,HR,2019-02-12,10259,77.2,Active,empfirst_146.emplast_146@company.com,Recruiter
+147,EmpFirst_147,EmpLast_147,90,Sales,2023-09-21,12180,69.8,Active,empfirst_147.emplast_147@company.com,Cashier
+148,EmpFirst_148,EmpLast_148,88,Sales,2023-02-21,4323,87.7,Active,empfirst_148.emplast_148@company.com,Sales Lead
+149,EmpFirst_149,EmpLast_149,4,Sales,2021-08-26,6087,67.0,Active,empfirst_149.emplast_149@company.com,Merchandiser
+150,EmpFirst_150,EmpLast_150,16,Logistics,2023-05-05,8110,90.2,Active,empfirst_150.emplast_150@company.com,Driver
+151,EmpFirst_151,EmpLast_151,95,HR,2024-03-19,5832,80.3,Active,empfirst_151.emplast_151@company.com,HR Manager
+152,EmpFirst_152,EmpLast_152,94,Marketing,2022-08-13,5504,64.2,Active,empfirst_152.emplast_152@company.com,Content Manager
+153,EmpFirst_153,EmpLast_153,39,Sales,2020-05-27,4030,99.2,Active,empfirst_153.emplast_153@company.com,Consultant
+154,EmpFirst_154,EmpLast_154,8,Sales,2019-01-12,5079,65.5,Active,empfirst_154.emplast_154@company.com,Consultant
+155,EmpFirst_155,EmpLast_155,45,Management,2024-02-22,4568,56.7,Active,,Regional Manager
+156,EmpFirst_156,EmpLast_156,39,SALES,2024-05-06,19135,71.9,Terminated,empfirst_156.emplast_156@company.com,Senior Consultant
+157,EmpFirst_157,EmpLast_157,82,HR,2022-04-12,8831,87.3,Active,empfirst_157.emplast_157@company.com,Trainer
+158,EmpFirst_158,EmpLast_158,79,Logistics,2020-09-25,5179,47.0,Active,empfirst_158.emplast_158@company.com,Warehouse Lead
+159,EmpFirst_159,EmpLast_159,63,Marketing,2020-12-26,7568,87.9,OnLeave,empfirst_159.emplast_159@company.com,SEO Specialist
+160,EmpFirst_160,EmpLast_160,34,Sales,2020-02-12,3559,80.8,Active,empfirst_160.emplast_160@company.com,Merchandiser
+161,EmpFirst_161,EmpLast_161,89,Logistics,2023-02-24,6006,59.2,Active,empfirst_161.emplast_161@company.com,Warehouse Lead
+162,EmpFirst_162,EmpLast_162,88,Support,2024-04-12,8827,71.2,Active,empfirst_162.emplast_162@company.com,Agent
+163,EmpFirst_163,EmpLast_163,98,Support,2024-11-26,12311,81.8,Active,empfirst_163.emplast_163@company.com,Senior Agent
+164,EmpFirst_164,EmpLast_164,86,Sales,2023-12-12,6797,81.3,Active,empfirst_164.emplast_164@company.com,Merchandiser
+165,EmpFirst_165,EmpLast_165,86,IT,2021-02-09,2268,77.1,Active,empfirst_165.emplast_165@company.com,Security Specialist
+166,EmpFirst_166,EmpLast_166,35,HR,2022-06-23,3919,95.1,Active,empfirst_166.emplast_166@company.com,Coordinator
+167,EmpFirst_167,EmpLast_167,26,Sales,2019-03-11,7355,91.9,Active,empfirst_167.emplast_167@company.com,Cashier
+168,EmpFirst_168,EmpLast_168,98,Logistics,2023-11-07,2923,100.0,Active,empfirst_168.emplast_168@company.com,Driver
+169,EmpFirst_169,EmpLast_169,29,Support,2024-07-16,$7037,73.2,Active,empfirst_169.emplast_169@company.com,Escalation Specialist
+170,EmpFirst_170,EmpLast_170,106,Sales,2021-08-11,9521,82.2,Active,empfirst_170.emplast_170@company.com,Sales Lead
+171,EmpFirst_171,EmpLast_171,27,Marketing,2019-02-06,5877,86.8,Active,empfirst_171.emplast_171@company.com,Analyst
+172,EmpFirst_172,EmpLast_172,21,Management,2021-09-01,4261,59.1,Active,empfirst_172.emplast_172@company.com,Shift Lead
+173,EmpFirst_173,EmpLast_173,36,Marketing,2024-09-03,3886,96.1,Active,empfirst_173.emplast_173@company.com,SEO Specialist
+174,EmpFirst_174,EmpLast_174,-1,Sales,2022-12-17,5664,78.7,Active,empfirst_174.emplast_174@company.com,Cashier
+175,EmpFirst_175,EmpLast_175,94,Support,2020-03-30,4715,79.0,Terminated,empfirst_175.emplast_175@company.com,Agent
+176,EmpFirst_176,EmpLast_176,41,Sales,2022-12-03,7164,83.6,Terminated,empfirst_176.emplast_176@company.com,Senior Consultant
+177,EmpFirst_177,EmpLast_177,68,Sales,2023-08-27,8508,79.2,Active,empfirst_177.emplast_177@company.com,Cashier
+178,EmpFirst_178,EmpLast_178,109,Support,2019-01-10,6264,68.4,Active,empfirst_178.emplast_178@company.com,Escalation Specialist
+179,EmpFirst_179,EmpLast_179,80,IT,1999-12-17,7696,61.4,Active,empfirst_179.emplast_179@company.com,Developer
+180,EmpFirst_180,EmpLast_180,-1,IT,2024-12-23,1727,100.0,Active,empfirst_180.emplast_180@company.com,Security Specialist
+181,EmpFirst_181,EmpLast_181,50,HR,2022-12-27,6885,,Active,empfirst_181.emplast_181@company.com,Trainer
+182,EmpFirst_182,EmpLast_182,55,Management,2023-03-28,8486,86.0,Active,empfirst_182.emplast_182@company.com,Director
+183,EmpFirst_183,EmpLast_183,108,Management,2023-10-26,5139,45.2,Active,empfirst_183.emplast_183@company.com,Store Manager
+184,EmpFirst_184,EmpLast_184,111,Logistics,2022-03-25,3808,78.3,Active,empfirst_184.emplast_184@company.com,Driver
+185,EmpFirst_185,EmpLast_185,6,Management,2020-05-07,11427,49.1,Active,empfirst_185.emplast_185@company.com,Shift Lead
+186,EmpFirst_186,EmpLast_186,36,Support,2021-08-17,14340,91.7,Active,empfirst_186.emplast_186@company.com,Escalation Specialist
+187,EmpFirst_187,EmpLast_187,40,Sales,2024-03-03,2568,64.2,Active,empfirst_187.emplast_187@company.com,Sales Lead
+188,EmpFirst_188,EmpLast_188,34,Management,2020-07-23,9950,77.9,Terminated,empfirst_188.emplast_188@company.com,Shift Lead
+189,EmpFirst_189,EmpLast_189,120,HR,2023-03-02,6027,41.9,Terminated,empfirst_189.emplast_189@company.com,Recruiter
+190,EmpFirst_190,EmpLast_190,56,Marketing,2020-03-24,7266,65.3,Terminated,empfirst_190.emplast_190@company.com,Analyst
+191,EmpFirst_191,EmpLast_191,75,Sales,2020-07-09,7054,73.0,Active,empfirst_191.emplast_191@company.com,Senior Consultant
+192,EmpFirst_192,EmpLast_192,94,Support,2023-07-11,9373,94.0,Active,empfirst_192.emplast_192@company.com,Escalation Specialist
+193,EmpFirst_193,EmpLast_193,107,Logistics,2021-10-30,3293,81.5,OnLeave,empfirst_193.emplast_193@company.com,Coordinator
+194,EmpFirst_194,EmpLast_194,64,HR,2022-02-06,8107,54.8,Active,empfirst_194.emplast_194@company.com,Trainer
+195,EmpFirst_195,EmpLast_195,77,Sales,1999-12-29,7783,72.3,Active,empfirst_195.emplast_195@company.com,Consultant
+196,EmpFirst_196,EmpLast_196,45,Support,2020-11-23,8333,97.4,Active,empfirst_196.emplast_196@company.com,Agent
+197,EmpFirst_197,EmpLast_197,12,Logistics,2021-05-25,₴7650,86.3,Active,empfirst_197.emplast_197@company.com,Driver
+198,EmpFirst_198,EmpLast_198,105,Support,2022-01-25,6184,92.2,Active,empfirst_198.emplast_198@company.com,Team Lead
+199,EmpFirst_199,EmpLast_199,76,Sales,2023-11-24,4377,80.4,Active,empfirst_199.emplast_199@company.com,Cashier
+200,EmpFirst_200,EmpLast_200,91,Management,2019-05-26,6624,61.2,Active,empfirst_200.emplast_200@company.com,Store Manager
+201,EmpFirst_201,EmpLast_201,39,Logistics,2019-02-11,11358,,Active,empfirst_201.emplast_201@company.com,Packer
+202,EmpFirst_202,EmpLast_202,49,Logistics,2022-08-24,6845,85.1,Active,empfirst_202.emplast_202@company.com,Picker
+203,EmpFirst_203,EmpLast_203,64,HR,2020-09-04,5860,72.8,Active,empfirst_203.emplast_203@company.com,Coordinator
+204,EmpFirst_204,EmpLast_204,24,Sales,2019-09-01,6678,73.5,Active,empfirst_204.emplast_204@company.com,Cashier
+205,EmpFirst_205,EmpLast_205,88,Sales,2021-10-14,7566,98.5,Active,empfirst_205.emplast_205@company.com,Consultant
+206,EmpFirst_206,EmpLast_206,119,Logistics,2019-10-30,4935,75.6,OnLeave,empfirst_206.emplast_206@company.com,Coordinator
+207,EmpFirst_207,EmpLast_207,19,Logistics,2021-04-02,5504,78.4,OnLeave,empfirst_207.emplast_207@company.com,Coordinator
+208,EmpFirst_208,EmpLast_208,60,HR,2021-06-06,6969,,Active,empfirst_208.emplast_208@company.com,Payroll Specialist
+209,EmpFirst_209,EmpLast_209,112,HR,2021-08-08,5779,68.1,Active,empfirst_209.emplast_209@company.com,Trainer
+210,EmpFirst_210,EmpLast_210,68,Sales,2020-02-08,8666,60.9,Active,empfirst_210.emplast_210@company.com,Merchandiser
+211,EmpFirst_211,EmpLast_211,101,Sales,2024-07-13,5866,48.8,Active,empfirst_211.emplast_211@company.com,Consultant
+212,EmpFirst_212,EmpLast_212,55,Sales,2019-07-15,9400,80.7,Active,empfirst_212.emplast_212@company.com,Sales Lead
+213,EmpFirst_213,EmpLast_213,42,Management,2021-02-27,4142,73.7,Active,empfirst_213.emplast_213@company.com,Assistant
+214,EmpFirst_214,EmpLast_214,66,Marketing,2022-01-10,₴6910,82.1,Active,empfirst_214.emplast_214@company.com,Specialist
+215,EmpFirst_215,EmpLast_215,116,HR,2023-01-30,€3003,56.1,Active,empfirst_215.emplast_215@company.com,Trainer
+216,EmpFirst_216,EmpLast_216,46,Sales,2020-10-04,12390,47.2,Active,empfirst_216.emplast_216@company.com,Merchandiser
+217,EmpFirst_217,EmpLast_217,9999,HR,2022-08-09,11536,84.5,Active,empfirst_217.emplast_217@company.com,HR Manager
+218,EmpFirst_218,EmpLast_218,76,Sales,2022-02-14,5882,73.5,Active,empfirst_218.emplast_218@company.com,Consultant
+219,EmpFirst_219,EmpLast_219,69,Logistics,2027-06-26,11478,75.3,Active,empfirst_219.emplast_219@company.com,Picker
+220,EmpFirst_220,EmpLast_220,8,Logistics,2023-10-25,4676,100.0,Active,empfirst_220.emplast_220@company.com,Coordinator
+221,EmpFirst_221,EmpLast_221,18,Sales,2021-02-10,5024,86.7,Active,empfirst_221.emplast_221@company.com,Sales Lead
+222,EmpFirst_222,EmpLast_222,44,Support,2019-06-04,7672,98.3,Terminated,empfirst_222.emplast_222@company.com,Escalation Specialist
+223,EmpFirst_223,EmpLast_223,66,Logistics,2022-11-18,7191,57.0,Active,empfirst_223.emplast_223@company.com,Packer
+224,EmpFirst_224,EmpLast_224,100,IT,2019-04-13,4785,64.9,Active,empfirst_224.emplast_224@company.com,Support Engineer
+225,EmpFirst_225,EmpLast_225,73,IT,2021-06-30,6301,77.7,Active,empfirst_225.emplast_225@company.com,Support Engineer
+226,EmpFirst_226,EmpLast_226,110,IT,2024-12-21,5928,74.6,Active,empfirst_226.emplast_226@company.com,Data Analyst
+227,EmpFirst_227,EmpLast_227,47,Sales,2020-02-10,4539,66.9,Active,empfirst_227.emplast_227@company.com,Sales Lead
+228,EmpFirst_228,EmpLast_228,40,HR,2020-11-28,8883,85.6,Active,empfirst_228.emplast_228@company.com,Recruiter
+229,EmpFirst_229,EmpLast_229,71,IT,2024-01-13,13253,100.0,Active,,Developer
+230,EmpFirst_230,EmpLast_230,40,Support,2023-02-17,2914,85.6,Terminated,empfirst_230.emplast_230@company.com,Agent
+231,EmpFirst_231,EmpLast_231,16,Logistics,2021-11-10,7492,77.7,Active,empfirst_231.emplast_231@company.com,Packer
+232,EmpFirst_232,EmpLast_232,26,Sales,2019-11-03,6822,80.2,Active,empfirst_232.emplast_232@company.com,Senior Consultant
+233,EmpFirst_233,EmpLast_233,10,Support,2021-10-30,15356,95.3,Terminated,empfirst_233.emplast_233@company.com,Escalation Specialist
+234,EmpFirst_234,EmpLast_234,7,Logistics,2021-11-02,8879,72.2,Active,empfirst_234.emplast_234@company.com,Coordinator
+235,EmpFirst_235,EmpLast_235,6,Sales,2019-07-15,10486,80.4,Active,empfirst_235.emplast_235@company.com,Sales Lead
+236,EmpFirst_236,EmpLast_236,97,Sales,2023-10-23,11292,67.2,OnLeave,empfirst_236.emplast_236@company.com,Cashier
+237,EmpFirst_237,EmpLast_237,56,Management,2024-04-05,5961,77.8,Active,empfirst_237.emplast_237@company.com,Shift Lead
+238,EmpFirst_238,EmpLast_238,30,Sales,2021-07-23,7154,89.4,Terminated,empfirst_238.emplast_238@company.com,Merchandiser
+239,EmpFirst_239,EmpLast_239,10,Management,2022-01-23,12462,83.2,Active,empfirst_239.emplast_239@company.com,Assistant
+240,EmpFirst_240,EmpLast_240,115,Management,2024-07-08,7638,80.2,Active,empfirst_240.emplast_240@company.com,Assistant
+241,EmpFirst_241,EmpLast_241,118,Management,2022-06-16,8808,94.6,Active,empfirst_241.emplast_241@company.com,Shift Lead
+242,EmpFirst_242,EmpLast_242,42,Logistics,2021-06-30,6894,65.5,Active,empfirst_242.emplast_242@company.com,Warehouse Lead
+243,EmpFirst_243,EmpLast_243,82,Management,2023-08-02,5319,85.8,Active,empfirst_243.emplast_243@company.com,Store Manager
+244,EmpFirst_244,EmpLast_244,59,HR,2024-02-07,2621,73.8,OnLeave,empfirst_244.emplast_244@company.com,HR Manager
+245,EmpFirst_245,EmpLast_245,73,Sales,2021-07-22,8939,58.8,Active,empfirst_245.emplast_245@company.com,Senior Consultant
+246,EmpFirst_246,EmpLast_246,36,Support,2021-11-19,7045,72.7,Active,empfirst_246.emplast_246@company.com,Team Lead
+247,EmpFirst_247,EmpLast_247,61,Logistics,2021-10-29,9596,81.6,Active,empfirst_247.emplast_247@company.com,Coordinator
+248,EmpFirst_248,EmpLast_248,117,Management,2021-12-21,6473,68.1,Terminated,empfirst_248.emplast_248@company.com,Director
+249,EmpFirst_249,EmpLast_249,51,Marketing,2021-05-15,3957,66.2,OnLeave,empfirst_249.emplast_249@company.com,Specialist
+250,EmpFirst_250,EmpLast_250,9999,Sales,2024-04-30,8024,76.2,Active,empfirst_250.emplast_250@company.com,Sales Lead
+251,EmpFirst_251,EmpLast_251,100,Marketing,2022-02-01,5942,78.3,Active,empfirst_251.emplast_251@company.com,Campaign Lead
+252,EmpFirst_252,EmpLast_252,22,Marketing,2024-05-15,5086,62.8,Active,empfirst_252.emplast_252@company.com,Content Manager
+253,EmpFirst_253,EmpLast_253,27,IT,2023-08-30,4320,96.5,Active,empfirst_253.emplast_253@company.com,Developer
+254,EmpFirst_254,EmpLast_254,34,Management,2022-09-06,4625,57.6,OnLeave,empfirst_254.emplast_254@company.com,Assistant
+255,EmpFirst_255,EmpLast_255,5,Sales,2019-07-09,3305,70.9,Active,empfirst_255.emplast_255@company.com,Senior Consultant
+256,EmpFirst_256,EmpLast_256,11,Sales,2019-03-12,4196,89.2,Active,empfirst_256.emplast_256@company.com,Sales Lead
+257,EmpFirst_257,EmpLast_257,9999,Sales,2021-06-07,12932,83.3,Active,empfirst_257.emplast_257@company.com,Consultant
+258,EmpFirst_258,EmpLast_258,101,Marketing,2022-10-08,4098,74.0,Active,,SEO Specialist
+259,EmpFirst_259,EmpLast_259,75,Sales,2021-10-19,5017,50.2,Active,empfirst_259.emplast_259@company.com,Consultant
+260,EmpFirst_260,EmpLast_260,100,Logistics,2024-05-06,4956,94.3,Active,empfirst_260.emplast_260@company.com,Packer
+261,EmpFirst_261,EmpLast_261,106,Support,2023-09-22,6778,76.4,Active,empfirst_261.emplast_261@company.com,Agent
+262,EmpFirst_262,EmpLast_262,95,Support,2023-01-17,12116,63.3,Active,empfirst_262.emplast_262@company.com,Escalation Specialist
+263,EmpFirst_263,EmpLast_263,81,Sales,2021-06-19,5236,84.2,Active,empfirst_263.emplast_263@company.com,Merchandiser
+264,EmpFirst_264,EmpLast_264,73,HR,2022-03-27,7315,61.4,Terminated,empfirst_264.emplast_264@company.com,HR Manager
+265,EmpFirst_265,EmpLast_265,12,Marketing,2019-05-17,9238,94.6,Active,empfirst_265.emplast_265@company.com,Analyst
+266,EmpFirst_266,EmpLast_266,16,Management,2021-05-24,3419,63.4,Terminated,empfirst_266.emplast_266@company.com,Director
+267,EmpFirst_267,EmpLast_267,109,Support,2021-01-27,3844,57.4,Active,empfirst_267.emplast_267@company.com,Senior Agent
+268,EmpFirst_268,EmpLast_268,4,Support,2020-11-05,6974,72.6,Active,empfirst_268.emplast_268@company.com,Quality Analyst
+269,EmpFirst_269,EmpLast_269,55,Support,2019-12-20,4203,61.4,Active,empfirst_269.emplast_269@company.com,Team Lead
+270,EmpFirst_270,EmpLast_270,9999,Marketing,2022-06-10,4173,89.4,Active,empfirst_270.emplast_270@company.com,Specialist
+271,EmpFirst_271,EmpLast_271,70,Management,2021-08-12,2831,83.2,Active,empfirst_271.emplast_271@company.com,Assistant
+272,EmpFirst_272,EmpLast_272,34,Logistics,2021-04-22,11954,81.6,OnLeave,empfirst_272.emplast_272@company.com,Picker
+273,EmpFirst_273,EmpLast_273,7,Sales,2023-02-22,5986,84.3,Active,empfirst_273.emplast_273@company.com,Senior Consultant
+274,EmpFirst_274,EmpLast_274,0,Logistics,2023-02-24,5522,80.9,Terminated,empfirst_274.emplast_274@company.com,Packer
+275,EmpFirst_275,EmpLast_275,120,Logistics,2019-12-16,6898,75.3,Active,empfirst_275.emplast_275@company.com,Warehouse Lead
+276,EmpFirst_276,EmpLast_276,25,Sales,2024-03-17,7856,59.6,Active,empfirst_276.emplast_276@company.com,Sales Lead
+277,EmpFirst_277,EmpLast_277,0,Logistics,2019-07-10,10228,70.9,OnLeave,empfirst_277.emplast_277@company.com,Coordinator
+278,EmpFirst_278,EmpLast_278,88,SALES,2020-06-09,6613,82.3,Active,empfirst_278.emplast_278@company.com,Senior Consultant
+279,EmpFirst_279,EmpLast_279,64,Sales,2019-02-16,11684,81.8,Terminated,empfirst_279.emplast_279@company.com,Cashier
+280,EmpFirst_280,EmpLast_280,6,Sales,2020-10-15,5161,75.5,OnLeave,empfirst_280.emplast_280@company.com,Merchandiser
+281,EmpFirst_281,EmpLast_281,65,HR,2021-04-17,5871,98.5,Active,empfirst_281.emplast_281@company.com,HR Manager
+282,EmpFirst_282,EmpLast_282,19,Logistics,2021-03-14,5884,76.3,Active,empfirst_282.emplast_282@company.com,Driver
+283,EmpFirst_283,EmpLast_283,84,HR,2019-11-05,6943,53.4,Active,empfirst_283.emplast_283@company.com,Coordinator
+284,EmpFirst_284,EmpLast_284,115,Marketing,2019-09-22,4677,67.7,Active,empfirst_284.emplast_284@company.com,Specialist
+285,EmpFirst_285,EmpLast_285,103,Support,2022-09-26,10693,78.6,Terminated,empfirst_285.emplast_285@company.com,Senior Agent
+286,EmpFirst_286,EmpLast_286,16,Marketing,2024-10-22,6405,77.7,Active,empfirst_286.emplast_286@company.com,Specialist
+287,EmpFirst_287,EmpLast_287,47,Sales,2019-07-22,6444,41.1,Active,empfirst_287.emplast_287@company.com,Cashier
+288,EmpFirst_288,EmpLast_288,75,IT,2020-08-31,€5579,72.7,Terminated,empfirst_288.emplast_288@company.com,SysAdmin
+289,EmpFirst_289,EmpLast_289,66,Sales,2019-05-04,6513,59.9,Active,empfirst_289.emplast_289@company.com,Consultant
+290,EmpFirst_290,EmpLast_290,118,HR,2021-08-16,8366,82.3,Active,empfirst_290.emplast_290@company.com,Recruiter
+291,EmpFirst_291,EmpLast_291,103,Management,2019-11-16,7368,65.1,Active,empfirst_291.emplast_291@company.com,Regional Manager
+292,EmpFirst_292,EmpLast_292,39,Sales,2022-09-07,3587,67.2,Active,empfirst_292.emplast_292@company.com,Merchandiser
+293,EmpFirst_293,EmpLast_293,29,IT,2021-12-05,11664,91.4,Terminated,empfirst_293.emplast_293@company.com,SysAdmin
+294,EmpFirst_294,EmpLast_294,33,HR,2020-03-05,6394,75.7,Active,empfirst_294.emplast_294@company.com,Recruiter
+295,EmpFirst_295,EmpLast_295,9,Sales,2022-12-13,₴4043,99.3,Active,empfirst_295.emplast_295@company.com,Consultant
+296,EmpFirst_296,EmpLast_296,13,Support,2020-09-17,6110,77.8,Active,empfirst_296.emplast_296@company.com,Quality Analyst
+297,EmpFirst_297,EmpLast_297,60,Management,2022-04-09,6923,71.0,Active,empfirst_297.emplast_297@company.com,Shift Lead
+298,EmpFirst_298,EmpLast_298,-1,Support,2020-03-10,9000,52.0,Active,empfirst_298.emplast_298@company.com,Senior Agent
+299,EmpFirst_299,EmpLast_299,113,Support,2022-05-22,6981,78.4,Active,empfirst_299.emplast_299@company.com,Quality Analyst
+300,EmpFirst_300,EmpLast_300,97,Support,2021-01-21,7939,77.3,Active,empfirst_300.emplast_300@company.com,Senior Agent
+301,EmpFirst_301,EmpLast_301,19,Support,2019-04-18,5836,87.6,Terminated,empfirst_301.emplast_301@company.com,Quality Analyst
+302,EmpFirst_302,EmpLast_302,92,Logistics,2023-05-23,7728,55.2,Active,,Warehouse Lead
+303,EmpFirst_303,EmpLast_303,21,Sales,2020-09-13,7345,75.1,Active,empfirst_303.emplast_303@company.com,Sales Lead
+304,EmpFirst_304,EmpLast_304,28,HR,2021-08-31,11260,60.8,Active,empfirst_304.emplast_304@company.com,HR Manager
+305,EmpFirst_305,EmpLast_305,72,Sales,2023-11-29,4039,81.2,Active,empfirst_305.emplast_305@company.com,Sales Lead
+306,EmpFirst_306,EmpLast_306,119,Sales,2027-09-01,6098,97.2,Active,empfirst_306.emplast_306@company.com,Cashier
+307,EmpFirst_307,EmpLast_307,48,Support,2021-11-14,7795,62.4,Active,empfirst_307.emplast_307@company.com,Team Lead
+308,EmpFirst_308,EmpLast_308,109,Logistics,2021-03-17,9430,71.8,Terminated,empfirst_308.emplast_308@company.com,Coordinator
+309,EmpFirst_309,EmpLast_309,72,Logistics,2024-04-16,7560,78.2,Active,empfirst_309.emplast_309@company.com,Warehouse Lead
+310,EmpFirst_310,EmpLast_310,57,Marketing,2021-03-30,9936,,OnLeave,empfirst_310.emplast_310@company.com,Specialist
+311,EmpFirst_311,EmpLast_311,93,Support,2022-02-03,5720,96.3,Active,empfirst_311.emplast_311@company.com,Senior Agent
+312,EmpFirst_312,EmpLast_312,110,Sales,2022-08-14,7351,99.2,Active,empfirst_312.emplast_312@company.com,Merchandiser
+313,EmpFirst_313,EmpLast_313,20,Logistics,2022-09-07,8270,65.3,Active,empfirst_313.emplast_313@company.com,Packer
+314,EmpFirst_314,EmpLast_314,0,IT,2023-11-19,5006,,OnLeave,empfirst_314.emplast_314@company.com,Data Analyst
+315,EmpFirst_315,EmpLast_315,61,IT,2021-07-31,4978,44.7,Active,empfirst_315.emplast_315@company.com,Support Engineer
+316,EmpFirst_316,EmpLast_316,104,Support,2019-11-15,10212,64.9,Active,empfirst_316.emplast_316@company.com,Quality Analyst
+317,EmpFirst_317,EmpLast_317,85,Support,2019-07-24,4594,86.3,Active,empfirst_317.emplast_317@company.com,Team Lead
+318,EmpFirst_318,EmpLast_318,-1,HR,2024-02-08,8207,73.6,Active,empfirst_318.emplast_318@company.com,Trainer
+319,EmpFirst_319,EmpLast_319,112,Sales,2024-07-06,8430,60.4,Active,empfirst_319.emplast_319@company.com,Cashier
+320,EmpFirst_320,EmpLast_320,20,Sales,2023-12-01,6637,73.8,Active,empfirst_320.emplast_320@company.com,Merchandiser
+321,EmpFirst_321,EmpLast_321,87,Sales,2023-06-09,3406,78.3,Active,empfirst_321.emplast_321@company.com,Cashier
+322,EmpFirst_322,EmpLast_322,69,Management,2020-02-26,3724,,Active,empfirst_322.emplast_322@company.com,Director
+323,EmpFirst_323,EmpLast_323,3,IT,2021-04-08,5105,79.2,Active,empfirst_323.emplast_323@company.com,Security Specialist
+324,EmpFirst_324,EmpLast_324,10,Sales,2019-01-13,12021,64.1,Active,empfirst_324.emplast_324@company.com,Merchandiser
+325,EmpFirst_325,EmpLast_325,22,IT,2020-03-15,8129,90.5,Active,,SysAdmin
+326,EmpFirst_326,EmpLast_326,21,Support,2022-07-27,7517,55.7,Active,empfirst_326.emplast_326@company.com,Quality Analyst
+327,EmpFirst_327,EmpLast_327,76,Support,2021-12-12,10271,100.0,Active,empfirst_327.emplast_327@company.com,Senior Agent
+328,EmpFirst_328,EmpLast_328,42,Marketing,2023-02-06,6373,93.7,Active,empfirst_328.emplast_328@company.com,Analyst
+329,EmpFirst_329,EmpLast_329,58,Support,2022-01-11,8101,90.2,Active,empfirst_329.emplast_329@company.com,Agent
+330,EmpFirst_330,EmpLast_330,89,Management,2022-08-06,10650,82.9,Active,empfirst_330.emplast_330@company.com,Director
+331,EmpFirst_331,EmpLast_331,79,HR,2020-04-03,4285,56.1,Active,empfirst_331.emplast_331@company.com,Trainer
+332,EmpFirst_332,EmpLast_332,12,Sales,2021-11-08,11472,78.8,Active,empfirst_332.emplast_332@company.com,Sales Lead
+333,EmpFirst_333,EmpLast_333,20,Sales,2022-01-16,5519,98.7,Active,empfirst_333.emplast_333@company.com,Merchandiser
+334,EmpFirst_334,EmpLast_334,57, Marketing,2022-12-18,4878,74.8,Terminated,empfirst_334.emplast_334@company.com,Campaign Lead
+335,EmpFirst_335,EmpLast_335,9,Logistics,2023-11-20,5055,80.1,Active,empfirst_335.emplast_335@company.com,Coordinator
+336,EmpFirst_336,EmpLast_336,57,Sales,2020-10-12,6810,79.1,Active,empfirst_336.emplast_336@company.com,Senior Consultant
+337,EmpFirst_337,EmpLast_337,47,Support,2024-06-12,5023,68.7,Active,empfirst_337.emplast_337@company.com,Agent
+338,EmpFirst_338,EmpLast_338,84,Sales,2021-11-10,7248,63.1,Active,empfirst_338.emplast_338@company.com,Merchandiser
+339,EmpFirst_339,EmpLast_339,4,Support,2019-10-09,6067,75.3,OnLeave,empfirst_339.emplast_339@company.com,Quality Analyst
+340,EmpFirst_340,EmpLast_340,9999,Management,2023-12-31,4694,75.6,Active,empfirst_340.emplast_340@company.com,Shift Lead
+341,EmpFirst_341,EmpLast_341,5,Marketing,2022-09-20,9577,93.9,Active,empfirst_341.emplast_341@company.com,Analyst
+342,EmpFirst_342,EmpLast_342,113,Logistics,2024-01-29,3293,74.2,Active,empfirst_342.emplast_342@company.com,Warehouse Lead
+343,EmpFirst_343,EmpLast_343,112,Support,2020-07-10,4405,90.6,Active,empfirst_343.emplast_343@company.com,Quality Analyst
+344,EmpFirst_344,EmpLast_344,6,Support,2020-02-17,7207,61.7,Active,empfirst_344.emplast_344@company.com,Senior Agent
+345,EmpFirst_345,EmpLast_345,107,IT,2021-09-11,6552,82.5,Terminated,empfirst_345.emplast_345@company.com,Developer
+346,EmpFirst_346,EmpLast_346,111,Marketing,2021-07-22,7189,56.9,Terminated,empfirst_346.emplast_346@company.com,Analyst
+347,EmpFirst_347,EmpLast_347,113,Sales,2021-03-31,4233,66.1,Active,empfirst_347.emplast_347@company.com,Merchandiser
+348,EmpFirst_348,EmpLast_348,14,Sales,2024-07-14,8983,82.1,Terminated,empfirst_348.emplast_348@company.com,Senior Consultant
+349,EmpFirst_349,EmpLast_349,94,Marketing,2020-03-02,5807,72.4,Active,empfirst_349.emplast_349@company.com,Specialist
+350,EmpFirst_350,EmpLast_350,52,Marketing,2022-07-19,15973,74.9,Terminated,empfirst_350.emplast_350@company.com,Content Manager
+351,EmpFirst_351,EmpLast_351,96,Sales,2022-01-03,7253,55.8,OnLeave,empfirst_351.emplast_351@company.com,Cashier
+352,EmpFirst_352,EmpLast_352,6,Management,2024-09-21,2336,77.9,Active,empfirst_352.emplast_352@company.com,Regional Manager
+353,EmpFirst_353,EmpLast_353,67,Support,2024-09-03,5849,95.3,Terminated,,Senior Agent
+354,EmpFirst_354,EmpLast_354,87,Support,2022-01-28,5513,80.3,Active,empfirst_354.emplast_354@company.com,Senior Agent
+355,EmpFirst_355,EmpLast_355,41,Support,2022-07-11,5558,92.9,OnLeave,empfirst_355.emplast_355@company.com,Team Lead
+356,EmpFirst_356,EmpLast_356,37,Support,2021-01-13,4144,47.0,Active,empfirst_356.emplast_356@company.com,Agent
+357,EmpFirst_357,EmpLast_357,29,Support,2023-12-22,12106,86.1,Active,empfirst_357.emplast_357@company.com,Senior Agent
+358,EmpFirst_358,EmpLast_358,81,Management,2021-08-27,4932,79.1,Active,empfirst_358.emplast_358@company.com,Regional Manager
+359,EmpFirst_359,EmpLast_359,73,Logistics,2019-06-22,9085,97.0,Active,empfirst_359.emplast_359@company.com,Coordinator
+360,EmpFirst_360,EmpLast_360,52,Sales,2023-06-24,€6914,64.0,Active,empfirst_360.emplast_360@company.com,Senior Consultant
+361,EmpFirst_361,EmpLast_361,56,Support,2021-10-16,€5708,83.9,Terminated,empfirst_361.emplast_361@company.com,Team Lead
+362,EmpFirst_362,EmpLast_362,42,Support,2019-07-26,4099,65.1,Active,empfirst_362.emplast_362@company.com,Escalation Specialist
+363,EmpFirst_363,EmpLast_363,47,Support,2027-06-04,7812,77.2,Active,empfirst_363.emplast_363@company.com,Team Lead
+364,EmpFirst_364,EmpLast_364,77,Logistics,2024-03-20,4365,100.0,Active,empfirst_364.emplast_364@company.com,Packer
+365,EmpFirst_365,EmpLast_365,27,Logistics,2020-06-22,10419,83.0,Active,empfirst_365.emplast_365@company.com,Packer
+366,EmpFirst_366,EmpLast_366,37,SUPPORT,2023-02-22,6229,78.8,Active,empfirst_366.emplast_366@company.com,Team Lead
+367,EmpFirst_367,EmpLast_367,98,HR,2020-07-14,7753,88.6,Active,empfirst_367.emplast_367@company.com,Recruiter
+368,EmpFirst_368,EmpLast_368,42,Sales,2024-07-20,6310,62.6,OnLeave,empfirst_368.emplast_368@company.com,Consultant
+369,EmpFirst_369,EmpLast_369,7,Support,2019-03-19,7638,100.0,Active,empfirst_369.emplast_369@company.com,Escalation Specialist
+370,EmpFirst_370,EmpLast_370,93,IT,2023-03-01,5313,67.8,Active,empfirst_370.emplast_370@company.com,Data Analyst
+371,EmpFirst_371,EmpLast_371,26,Support,2020-09-06,4334,64.6,Active,empfirst_371.emplast_371@company.com,Agent
+372,EmpFirst_372,EmpLast_372,60,Sales,2019-04-03,7869,,Active,empfirst_372.emplast_372@company.com,Consultant
+373,EmpFirst_373,EmpLast_373,41,Support,2023-05-14,4034,79.0,Active,empfirst_373.emplast_373@company.com,Agent
+374,EmpFirst_374,EmpLast_374,40,Support,2022-09-05,8971,85.8,Active,empfirst_374.emplast_374@company.com,Quality Analyst
+375,EmpFirst_375,EmpLast_375,37,Sales,2023-09-14,5296,76.7,Terminated,empfirst_375.emplast_375@company.com,Cashier
+376,EmpFirst_376,EmpLast_376,87,Marketing,2027-06-07,6932,44.2,Active,empfirst_376.emplast_376@company.com,SEO Specialist
+377,EmpFirst_377,EmpLast_377,32,Sales,2019-02-04,6057,74.9,Active,empfirst_377.emplast_377@company.com,Senior Consultant
+378,EmpFirst_378,EmpLast_378,69,Sales,2020-08-06,9483,,Terminated,empfirst_378.emplast_378@company.com,Consultant
+379,EmpFirst_379,EmpLast_379,115,Support,2024-01-08,4408,64.9,Active,empfirst_379.emplast_379@company.com,Escalation Specialist
+380,EmpFirst_380,EmpLast_380,86,Logistics,2021-06-30,₴7001,34.5,Terminated,empfirst_380.emplast_380@company.com,Picker
+381,EmpFirst_381,EmpLast_381,93,Marketing,2020-04-04,4393,72.6,Terminated,empfirst_381.emplast_381@company.com,Content Manager
+382,EmpFirst_382,EmpLast_382,104,Support,2022-11-21,7401,48.5,OnLeave,,Quality Analyst
+383,EmpFirst_383,EmpLast_383,30,IT,2022-08-06,2339,53.8,Active,empfirst_383.emplast_383@company.com,Developer
+384,EmpFirst_384,EmpLast_384,107,IT,2021-01-31,7318,96.2,Terminated,empfirst_384.emplast_384@company.com,SysAdmin
+385,EmpFirst_385,EmpLast_385,60,Logistics,2024-01-26,5422,67.9,Active,empfirst_385.emplast_385@company.com,Driver
+386,EmpFirst_386,EmpLast_386,22,Sales,2022-11-03,7254,87.3,Active,empfirst_386.emplast_386@company.com,Cashier
+387,EmpFirst_387,EmpLast_387,88,HR,2020-05-11,3636,74.7,Active,empfirst_387.emplast_387@company.com,Trainer
+388,EmpFirst_388,EmpLast_388,64,Marketing,2023-07-26,2532,,Active,empfirst_388.emplast_388@company.com,Specialist
+389,EmpFirst_389,EmpLast_389,71,Management,2020-09-06,7965,88.6,Active,empfirst_389.emplast_389@company.com,Regional Manager
+390,EmpFirst_390,EmpLast_390,104,Sales,2023-04-07,3932,,OnLeave,empfirst_390.emplast_390@company.com,Sales Lead
+391,EmpFirst_391,EmpLast_391,110,Support,2022-01-31,6174,89.5,Active,empfirst_391.emplast_391@company.com,Escalation Specialist
+392,EmpFirst_392,EmpLast_392,94,IT,2024-09-21,3712,99.8,Active,empfirst_392.emplast_392@company.com,Support Engineer
+393,EmpFirst_393,EmpLast_393,112,Support,2020-04-10,4835,49.6,Terminated,empfirst_393.emplast_393@company.com,Agent
+394,EmpFirst_394,EmpLast_394,64,Marketing,2021-07-26,7736,75.1,Active,empfirst_394.emplast_394@company.com,Analyst
+395,EmpFirst_395,EmpLast_395,0,Sales,2024-02-04,4505,97.5,Active,empfirst_395.emplast_395@company.com,Sales Lead
+396,EmpFirst_396,EmpLast_396,32, Logistics,2020-08-15,6278,,Active,empfirst_396.emplast_396@company.com,Picker
+397,EmpFirst_397,EmpLast_397,92,Logistics,2021-02-11,4088,45.8,Active,empfirst_397.emplast_397@company.com,Driver
+398,EmpFirst_398,EmpLast_398,28,Logistics,2019-10-28,5008,69.7,Active,empfirst_398.emplast_398@company.com,Driver
+399,EmpFirst_399,EmpLast_399,72,Management,2021-05-07,8656,67.6,Active,empfirst_399.emplast_399@company.com,Shift Lead
+400,EmpFirst_400,EmpLast_400,21,Sales,2023-12-20,5555,87.5,Active,empfirst_400.emplast_400@company.com,Consultant
+401,EmpFirst_401,EmpLast_401,9,Sales,2021-02-12,3689,100.0,Active,empfirst_401.emplast_401@company.com,Consultant
+402,EmpFirst_402,EmpLast_402,87,Logistics,2022-10-24,10378,72.7,Active,empfirst_402.emplast_402@company.com,Picker
+403,EmpFirst_403,EmpLast_403,78,HR,2020-02-03,4810,68.1,OnLeave,empfirst_403.emplast_403@company.com,Payroll Specialist
+404,EmpFirst_404,EmpLast_404,20,Management,2023-12-19,4420,62.8,Active,empfirst_404.emplast_404@company.com,Assistant
+405,EmpFirst_405,EmpLast_405,14,Marketing,2023-10-31,6207,69.6,Active,empfirst_405.emplast_405@company.com,Specialist
+406,EmpFirst_406,EmpLast_406,47,Support,2024-02-20,4239,57.3,Active,empfirst_406.emplast_406@company.com,Quality Analyst
+407,EmpFirst_407,EmpLast_407,32,Support,2023-11-04,$11241,87.0,OnLeave,empfirst_407.emplast_407@company.com,Quality Analyst
+408,EmpFirst_408,EmpLast_408,115, Management,2024-01-11,4725,77.1,Terminated,empfirst_408.emplast_408@company.com,Store Manager
+409,EmpFirst_409,EmpLast_409,9999,Support,2023-02-21,3296,94.1,Active,empfirst_409.emplast_409@company.com,Team Lead
+410,EmpFirst_410,EmpLast_410,110,IT,2023-04-21,5882,75.1,Active,empfirst_410.emplast_410@company.com,Support Engineer
+411,EmpFirst_411,EmpLast_411,58,IT,2021-05-12,3939,76.4,Active,empfirst_411.emplast_411@company.com,Developer
+412,EmpFirst_412,EmpLast_412,70,Sales,2022-04-14,5322,90.5,OnLeave,empfirst_412.emplast_412@company.com,Senior Consultant
+413,EmpFirst_413,EmpLast_413,119,HR,2023-02-10,8421,97.4,Active,empfirst_413.emplast_413@company.com,Payroll Specialist
+414,EmpFirst_414,EmpLast_414,23,Sales,2021-09-06,8529,58.6,Active,empfirst_414.emplast_414@company.com,Sales Lead
+415,EmpFirst_415,EmpLast_415,91,IT,2020-12-12,12069,99.3,Active,empfirst_415.emplast_415@company.com,Security Specialist
+416,EmpFirst_416,EmpLast_416,25,Management,2023-03-22,5185,41.0,Active,empfirst_416.emplast_416@company.com,Director
+417,EmpFirst_417,EmpLast_417,95,Support,2024-04-15,3225,85.7,Active,empfirst_417.emplast_417@company.com,Agent
+418,EmpFirst_418,EmpLast_418,90,Support,2024-11-17,3912,64.5,Active,empfirst_418.emplast_418@company.com,Senior Agent
+419,EmpFirst_419,EmpLast_419,20,Management,2023-06-12,7054,58.4,Active,empfirst_419.emplast_419@company.com,Assistant
+420,EmpFirst_420,EmpLast_420,100,Support,2024-03-06,6609,65.9,Active,empfirst_420.emplast_420@company.com,Quality Analyst
+421,EmpFirst_421,EmpLast_421,37,HR,2022-05-16,4987,61.8,Active,empfirst_421.emplast_421@company.com,Coordinator
+422,EmpFirst_422,EmpLast_422,21,Sales,2024-09-01,4752,45.1,Active,empfirst_422.emplast_422@company.com,Merchandiser
+423,EmpFirst_423,EmpLast_423,12,Management,2024-01-02,7797,73.5,Active,empfirst_423.emplast_423@company.com,Assistant
+424,EmpFirst_424,EmpLast_424,7,Support,2019-06-20,6261,75.8,Active,empfirst_424.emplast_424@company.com,Quality Analyst
+425,EmpFirst_425,EmpLast_425,73,Logistics,2019-05-06,10361,94.5,Active,empfirst_425.emplast_425@company.com,Coordinator
+426,EmpFirst_426,EmpLast_426,113,Sales,2019-09-02,7512,77.3,OnLeave,empfirst_426.emplast_426@company.com,Senior Consultant
+427,EmpFirst_427,EmpLast_427,21,Sales,2024-02-18,2022,80.6,Active,empfirst_427.emplast_427@company.com,Cashier
+428,EmpFirst_428,EmpLast_428,73,Support,2020-01-09,4337,56.8,Active,empfirst_428.emplast_428@company.com,Quality Analyst
+429,EmpFirst_429,EmpLast_429,10,Management,2022-11-02,3270,45.9,OnLeave,empfirst_429.emplast_429@company.com,Assistant
+430,EmpFirst_430,EmpLast_430,0,Support,2021-10-04,7578,86.7,Terminated,empfirst_430.emplast_430@company.com,Team Lead
+431,EmpFirst_431,EmpLast_431,9999,Sales,2024-04-19,10113,87.7,Active,empfirst_431.emplast_431@company.com,Senior Consultant
+432,EmpFirst_432,EmpLast_432,47,Management,2021-06-01,3666,,OnLeave,empfirst_432.emplast_432@company.com,Store Manager
+433,EmpFirst_433,EmpLast_433,59,Sales,2024-11-22,5352,83.2,Active,empfirst_433.emplast_433@company.com,Senior Consultant
+434,EmpFirst_434,EmpLast_434,19,HR,2019-04-30,4096,57.7,Active,empfirst_434.emplast_434@company.com,Trainer
+435,EmpFirst_435,EmpLast_435,32,Logistics,2024-12-29,10063,66.4,OnLeave,empfirst_435.emplast_435@company.com,Coordinator
+436,EmpFirst_436,EmpLast_436,77,Support,2022-05-24,4680,65.6,Terminated,empfirst_436.emplast_436@company.com,Agent
+437,EmpFirst_437,EmpLast_437,37, Marketing,2019-02-18,2229,76.5,OnLeave,empfirst_437.emplast_437@company.com,Campaign Lead
+438,EmpFirst_438,EmpLast_438,117,Management,2024-11-13,2715,52.7,Active,empfirst_438.emplast_438@company.com,Shift Lead
+439,EmpFirst_439,EmpLast_439,69,Logistics,2024-10-29,10043,100.0,Active,empfirst_439.emplast_439@company.com,Coordinator
+440,EmpFirst_440,EmpLast_440,58,Sales,2023-07-02,6350,92.0,Active,empfirst_440.emplast_440@company.com,Sales Lead
+441,EmpFirst_441,EmpLast_441,65,Sales,2021-11-29,4469,53.5,Active,empfirst_441.emplast_441@company.com,Sales Lead
+442,EmpFirst_442,EmpLast_442,-1,Support,2023-04-30,10105,74.8,Terminated,empfirst_442.emplast_442@company.com,Quality Analyst
+443,EmpFirst_443,EmpLast_443,62,Sales,2024-06-26,6037,49.9,Active,empfirst_443.emplast_443@company.com,Cashier
+444,EmpFirst_444,EmpLast_444,89,Support,2019-01-08,9368,81.5,Terminated,empfirst_444.emplast_444@company.com,Agent
+445,EmpFirst_445,EmpLast_445,86,Management,2024-05-08,6329,89.9,Active,empfirst_445.emplast_445@company.com,Director
+446,EmpFirst_446,EmpLast_446,71,Support,2022-02-06,5527,63.7,OnLeave,empfirst_446.emplast_446@company.com,Team Lead
+447,EmpFirst_447,EmpLast_447,104,Management,2024-09-11,4507,59.8,Active,empfirst_447.emplast_447@company.com,Store Manager
+448,EmpFirst_448,EmpLast_448,66,Management,2019-11-11,9303,59.2,Active,empfirst_448.emplast_448@company.com,Assistant
+449,EmpFirst_449,EmpLast_449,29,Support,2019-10-11,4594,84.3,Active,empfirst_449.emplast_449@company.com,Agent
+450,EmpFirst_450,EmpLast_450,22,Sales,2024-05-05,10277,57.8,Active,empfirst_450.emplast_450@company.com,Consultant
+451,EmpFirst_451,EmpLast_451,84,HR,2022-11-17,8961,93.1,Active,empfirst_451.emplast_451@company.com,Payroll Specialist
+452,EmpFirst_452,EmpLast_452,15,Logistics,2019-06-17,4252,80.4,OnLeave,empfirst_452.emplast_452@company.com,Warehouse Lead
+453,EmpFirst_453,EmpLast_453,-1,Logistics,2019-08-22,6759,56.0,Active,empfirst_453.emplast_453@company.com,Warehouse Lead
+454,EmpFirst_454,EmpLast_454,16,Support,2021-11-25,3326,92.8,Active,empfirst_454.emplast_454@company.com,Team Lead
+455,EmpFirst_455,EmpLast_455,81,Marketing,2027-08-02,€7501,53.1,OnLeave,empfirst_455.emplast_455@company.com,Campaign Lead
+456,EmpFirst_456,EmpLast_456,18,Management,2022-08-18,8320,62.6,Active,empfirst_456.emplast_456@company.com,Regional Manager
+457,EmpFirst_457,EmpLast_457,15,Sales,2019-05-16,7076,93.1,Terminated,empfirst_457.emplast_457@company.com,Cashier
+458,EmpFirst_458,EmpLast_458,62,Sales,2023-12-29,7624,94.1,Active,empfirst_458.emplast_458@company.com,Merchandiser
+459,EmpFirst_459,EmpLast_459,75,Support,1999-04-29,7452,74.9,Active,empfirst_459.emplast_459@company.com,Agent
+460,EmpFirst_460,EmpLast_460,15,Sales,2023-02-17,8674,56.7,Active,empfirst_460.emplast_460@company.com,Merchandiser
+461,EmpFirst_461,EmpLast_461,39,Marketing,2023-11-06,6672,82.0,Active,empfirst_461.emplast_461@company.com,Specialist
+462,EmpFirst_462,EmpLast_462,120,Logistics,2024-05-14,$5053,72.2,Active,empfirst_462.emplast_462@company.com,Packer
+463,EmpFirst_463,EmpLast_463,41,Sales,2021-08-10,6295,70.2,Active,empfirst_463.emplast_463@company.com,Merchandiser
+464,EmpFirst_464,EmpLast_464,64,Sales,2021-11-08,4745,81.9,OnLeave,empfirst_464.emplast_464@company.com,Consultant
+465,EmpFirst_465,EmpLast_465,54,IT,2021-03-31,3911,65.8,Active,empfirst_465.emplast_465@company.com,Data Analyst
+466,EmpFirst_466,EmpLast_466,49,Sales,2022-08-03,3278,61.5,Active,empfirst_466.emplast_466@company.com,Cashier
+467,EmpFirst_467,EmpLast_467,63,Sales,2024-12-06,6404,98.0,Active,empfirst_467.emplast_467@company.com,Sales Lead
+468,EmpFirst_468,EmpLast_468,95,HR,2021-04-25,5311,78.4,Active,empfirst_468.emplast_468@company.com,Recruiter
+469,EmpFirst_469,EmpLast_469,28,Sales,2020-05-15,4581,80.4,Active,empfirst_469.emplast_469@company.com,Cashier
+470,EmpFirst_470,EmpLast_470,55,Sales,2024-02-25,9922,,Active,empfirst_470.emplast_470@company.com,Sales Lead
+471,EmpFirst_471,EmpLast_471,58,Sales,2019-12-11,6815,73.3,Active,empfirst_471.emplast_471@company.com,Cashier
+472,EmpFirst_472,EmpLast_472,55,Sales,2020-11-25,4554,81.5,Active,empfirst_472.emplast_472@company.com,Merchandiser
+473,EmpFirst_473,EmpLast_473,111,Marketing,2020-03-24,2938,84.2,Active,empfirst_473.emplast_473@company.com,SEO Specialist
+474,EmpFirst_474,EmpLast_474,112,IT,2023-02-25,7088,44.6,Active,empfirst_474.emplast_474@company.com,Security Specialist
+475,EmpFirst_475,EmpLast_475,118,IT,2020-04-14,₴7819,52.2,OnLeave,empfirst_475.emplast_475@company.com,SysAdmin
+476,EmpFirst_476,EmpLast_476,63,Sales,2024-03-22,8209,57.5,Active,empfirst_476.emplast_476@company.com,Consultant
+477,EmpFirst_477,EmpLast_477,13,Sales,2020-12-11,8516,59.7,Active,empfirst_477.emplast_477@company.com,Senior Consultant
+478,EmpFirst_478,EmpLast_478,28,Management,2023-07-13,5000,64.2,Active,empfirst_478.emplast_478@company.com,Regional Manager
+479,EmpFirst_479,EmpLast_479,116,Sales,2019-11-25,5727,78.6,Active,empfirst_479.emplast_479@company.com,Merchandiser
+480,EmpFirst_480,EmpLast_480,112,Support,2022-03-20,4978,82.1,Active,empfirst_480.emplast_480@company.com,Quality Analyst
+481,EmpFirst_481,EmpLast_481,83,IT,2023-09-03,5048,63.8,Active,empfirst_481.emplast_481@company.com,Developer
+482,EmpFirst_482,EmpLast_482,72,Sales,2024-06-15,6450,81.6,Active,empfirst_482.emplast_482@company.com,Merchandiser
+483,EmpFirst_483,EmpLast_483,95,Logistics,2023-01-20,2926,89.5,Active,empfirst_483.emplast_483@company.com,Coordinator
+484,EmpFirst_484,EmpLast_484,39,Sales,2024-08-12,5884,88.0,Active,empfirst_484.emplast_484@company.com,Consultant
+485,EmpFirst_485,EmpLast_485,99,Sales,2019-03-03,9724,57.6,Active,empfirst_485.emplast_485@company.com,Consultant
+486,EmpFirst_486,EmpLast_486,115,HR,2019-10-19,4935,78.8,Active,empfirst_486.emplast_486@company.com,HR Manager
+487,EmpFirst_487,EmpLast_487,27,Support,2020-09-25,€11382,72.4,Active,empfirst_487.emplast_487@company.com,Escalation Specialist
+488,EmpFirst_488,EmpLast_488,41,IT,2022-06-20,4666,56.0,Active,empfirst_488.emplast_488@company.com,SysAdmin
+489,EmpFirst_489,EmpLast_489,27,Logistics,2020-04-20,8645,65.8,Active,empfirst_489.emplast_489@company.com,Picker
+490,EmpFirst_490,EmpLast_490,90,Sales,2021-08-06,$8678,99.2,Terminated,empfirst_490.emplast_490@company.com,Merchandiser
+491,EmpFirst_491,EmpLast_491,52,Sales,2022-05-26,5703,73.6,Active,empfirst_491.emplast_491@company.com,Merchandiser
+492,EmpFirst_492,EmpLast_492,107,Logistics,2024-11-20,5182,51.3,Active,empfirst_492.emplast_492@company.com,Picker
+493,EmpFirst_493,EmpLast_493,61,HR,2022-01-11,1566,43.7,Active,empfirst_493.emplast_493@company.com,Payroll Specialist
+494,EmpFirst_494,EmpLast_494,10,Marketing,2020-10-10,4512,80.0,Active,empfirst_494.emplast_494@company.com,Specialist
+495,EmpFirst_495,EmpLast_495,19,Sales,2021-01-27,10379,54.9,Active,empfirst_495.emplast_495@company.com,Senior Consultant
+496,EmpFirst_496,EmpLast_496,0,Management,2019-10-21,5984,61.1,Active,empfirst_496.emplast_496@company.com,Regional Manager
+497,EmpFirst_497,EmpLast_497,23,Management,2024-08-31,4232,79.3,Terminated,empfirst_497.emplast_497@company.com,Store Manager
+498,EmpFirst_498,EmpLast_498,57,Sales,2019-03-19,₴6270,100.0,Active,empfirst_498.emplast_498@company.com,Consultant
+499,EmpFirst_499,EmpLast_499,0,Sales,2024-12-08,6137,90.8,Active,empfirst_499.emplast_499@company.com,Senior Consultant
+500,EmpFirst_500,EmpLast_500,66,Sales,2020-08-26,2339,79.4,Active,empfirst_500.emplast_500@company.com,Merchandiser
+501,EmpFirst_368,EmpLast_368,42,Sales,2024-07-20,6310,62.6,OnLeave,empfirst_368.emplast_368@company.com,Consultant
+502,EmpFirst_400,EmpLast_400,21,Sales,2023-12-20,5555,87.5,Active,empfirst_400.emplast_400@company.com,Consultant
+503,EmpFirst_378,EmpLast_378,69,Sales,2020-08-06,9483,,Terminated,empfirst_378.emplast_378@company.com,Consultant
+504,EmpFirst_433,EmpLast_433,59,Sales,2024-11-22,5352,83.2,Active,empfirst_433.emplast_433@company.com,Senior Consultant
+505,EmpFirst_69,EmpLast_69,92,Sales,2022-02-09,₴8185,45.5,Active,empfirst_69.emplast_69@company.com,Consultant
