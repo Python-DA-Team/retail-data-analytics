@@ -367,26 +367,26 @@ def clean_data() -> None:
                     force_ascii=False, date_format="iso")
         report["api_logs_cleaned.json"] = {"rows": len(api), "missing": int(api.isna().sum().sum())}
     else:
-        report["api_logs.json"] = "Файл відсутній у папці проєкту"
+        report["api_logs.json"] = "Datei im Projektordner nicht gefunden"
 
     database = ROOT / "analytics_practice.db"
     if database.exists():
         clean_database(database, OUT / "analytics_practice_cleaned.db")
-        report["analytics_practice_cleaned.db"] = "Очищену копію створено"
+        report["analytics_practice_cleaned.db"] = "Bereinigte Kopie erstellt"
 
     with (OUT / "cleaning_report.json").open("w", encoding="utf-8") as fh:
         json.dump(report, fh, ensure_ascii=False, indent=2, default=str)
-    print(f"Готово: {OUT}")
+    print(f"Fertig: {OUT}")
     print(json.dumps(report, ensure_ascii=False, indent=2, default=str))
 
 
-# задание 1_01
-# Базові (pandas)
-# 1. Топ-10 товарів за виручкою.
-# Згрупувати transactions.csv по product_id (лише продажі, не returns), порахувати sum(total_amount).
-# Об'єднати з Products через company_data.xlsx. Вивести таблицю.
+# Aufgabe 1_01
+# Grundlagen (pandas)
+# 1. Top-10-Produkte nach Umsatz.
+# transactions.csv nach product_id gruppieren (nur Verkäufe, keine Retouren) und sum(total_amount) berechnen.
+# Mit Products aus company_data.xlsx zusammenführen und die Tabelle ausgeben.
 def task_1_01_top_products_by_revenue() -> None:
-    print("\nЗавдання 1_01. Топ-10 товарів за виручкою")
+    print("\nAufgabe 1_01. Top-10-Produkte nach Umsatz")
 
     transactions_path = OUT / 'transactions_cleaned.csv'
     excel_path = OUT / 'company_data_cleaned.xlsx'
@@ -399,7 +399,7 @@ def task_1_01_top_products_by_revenue() -> None:
         df_transactions['total_amount'] = df_transactions['total_amount'].astype(str).str.replace("", regex=True)
     df_transactions['total_amount'] = pd.to_numeric(df_transactions['total_amount'], errors='coerce')
 
-    # групую товари та обчислюю загальну виручку
+    # Produkte gruppieren und Gesamtumsatz berechnen
     revenue_per_product = (
         df_transactions.groupby('product_id')['total_amount']
         .sum()
@@ -409,7 +409,7 @@ def task_1_01_top_products_by_revenue() -> None:
 
     final_table = pd.merge(revenue_per_product, df_products, on='product_id', how='inner')
 
-    # сортую товари з топ-10 за спаданням
+    # Top-10-Produkte absteigend sortieren
     top_10_products = (
         final_table.sort_values(by='total_amount', ascending=False)
         .head(10)
@@ -420,50 +420,50 @@ def task_1_01_top_products_by_revenue() -> None:
     output_columns = ['product_name', 'category', 'total_amount']
     available_columns = [col for col in output_columns if col in top_10_products.columns]
 
-    print(f'\nТОП-10 товарів за виручкою:\n\n{top_10_products[available_columns].to_string(index=False)}')
+    print(f'\nTop-10-Produkte nach Umsatz:\n\n{top_10_products[available_columns].to_string(index=False)}')
     result_dir = ROOT / "results" / "task_1_01"
     result_dir.mkdir(parents=True, exist_ok=True)
     output_path = result_dir / "top_10_products_by_revenue.csv"
     top_10_products[available_columns].to_csv(output_path, index=False, encoding="utf-8-sig")
-    print(f"Таблицю збережено: {output_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {output_path.relative_to(ROOT)}")
     print('-' * 20)
 
 
-# задание 1_02
-# 2. Розподіл виручки по категоріях. pivot_table:
-# category по рядках, місяць по стовпцях, сума total_amount.
-# Яка категорія лідирує щомісяця?
+# Aufgabe 1_02
+# 2. Umsatzverteilung nach Kategorien mit pivot_table:
+# category als Zeilen, Monat als Spalten, Summe von total_amount.
+# Welche Kategorie führt jeden Monat?
 def task_1_02_pivot_table() -> None:
-    print("\nЗавдання 1_02. Розподіл виручки по категоріях")
+    print("\nAufgabe 1_02. Umsatzverteilung nach Kategorien")
 
     CLEAN_DIR = OUT
     RESULT_DIR = ROOT / "results" / "task_1_02_patero_analysis"
 
     def load_table(filename: str, sep: str = ",") -> pd.DataFrame:
-        """Універсальне завантаження очищених таблиць з cleaned_data"""
+        """Universelles Laden bereinigter Tabellen aus cleaned_data"""
         if filename == "products_cleaned.csv":
             path = CLEAN_DIR / "company_data_cleaned.xlsx"
             if not path.exists():
-                raise FileNotFoundError(f"Файл {path} не знайдено")
+                raise FileNotFoundError(f"Datei {path} nicht gefunden")
             return pd.read_excel(path, sheet_name="Products")
 
         path = CLEAN_DIR / filename
         if not path.exists():
-            raise FileNotFoundError(f"Файл {path} не знайдено")
+            raise FileNotFoundError(f"Datei {path} nicht gefunden")
         return pd.read_csv(path, low_memory=False, sep=sep)
 
-    # 1. Завантаження очищених таблиць
+    # 1. Bereinigte Tabellen laden
     transactions = load_table("transactions_cleaned.csv")
     products = load_table("products_cleaned.csv")
 
-    # 2. Перетворення дати у datetime та витяг місяця
+    # 2. Datum in datetime umwandeln und Monat extrahieren
     transactions["transaction_date"] = pd.to_datetime(transactions["transaction_date"], errors="coerce")
     transactions["month"] = transactions["transaction_date"].dt.month
 
-    # 3. Об’єднання транзакцій з продуктами по product_id
+    # 3. Transaktionen und Produkte über product_id zusammenführen
     df = transactions.merge(products, on="product_id", how="left")
 
-    # 4. Побудова pivot_table: категорії по рядках, місяці по стовпцях, сума total_amount
+    # 4. pivot_table erstellen: Kategorien als Zeilen, Monate als Spalten, Summe von total_amount
     pivot = pd.pivot_table(
         df,
         values="total_amount",
@@ -475,7 +475,7 @@ def task_1_02_pivot_table() -> None:
 
     print("Pivot table 'Revenue breakdown by category and month':\n", pivot)
 
-    # 5. Знаходження категорії-лідера щомісяця
+    # 5. Führende Kategorie für jeden Monat bestimmen
     leaders = pivot.idxmax()
     leaders_table = pd.DataFrame({
         "month": leaders.index,
@@ -487,11 +487,11 @@ def task_1_02_pivot_table() -> None:
     leaders_path = RESULT_DIR / "monthly_category_leaders.csv"
     pivot.to_csv(pivot_path, encoding="utf-8-sig")
     leaders_table.to_csv(leaders_path, index=False, encoding="utf-8-sig")
-    print(f"Pivot-таблицю збережено: {pivot_path.relative_to(ROOT)}")
-    print(f"Таблицю лідерів збережено: {leaders_path.relative_to(ROOT)}")
+    print(f"Pivot-Tabelle gespeichert: {pivot_path.relative_to(ROOT)}")
+    print(f"Leaderboard-Tabelle gespeichert: {leaders_path.relative_to(ROOT)}")
 
 
-# задание 1_03
+# Aufgabe 1_03
 CLEAN_DIR = OUT
 RESULT_DIR = ROOT / "results" / "task_1_3"
 
@@ -572,30 +572,30 @@ def save_results(result: pd.DataFrame) -> Path:
 def print_store(label: str, store: pd.Series) -> None:
     print(
         f"{label}: {store['store_name']} (store_id={store['store_id']}), "
-        f"середній чек = {store['average_check']:.2f}"
+        f"durchschnittlicher Bonwert = {store['average_check']:.2f}"
     )
 
 
 def task_1_03_average_check_by_store() -> None:
-    print("\nЗавдання 1_03. Середній чек по магазинах")
+    print("\nAufgabe 1_03. Durchschnittlicher Bonwert pro Filiale")
 
     transactions, stores = load_data()
     result = calculate_average_check(transactions, stores)
 
     if result.empty:
-        raise ValueError("Не знайдено продажів для розрахунку середнього чека")
+        raise ValueError("Keine Verkäufe für die Berechnung des durchschnittlichen Bonwerts gefunden")
 
     output_path = save_results(result)
-    print_store("Найвищий середній чек", result.iloc[0])
-    print_store("Найнижчий середній чек", result.iloc[-1])
-    print(f"Таблицю збережено: {output_path.relative_to(ROOT)}")
+    print_store("Höchster durchschnittlicher Bonwert", result.iloc[0])
+    print_store("Niedrigster durchschnittlicher Bonwert", result.iloc[-1])
+    print(f"Tabelle gespeichert: {output_path.relative_to(ROOT)}")
 
 
-# задание 1_04
-# Візуалізація (matplotlib/seaborn)
-# 4. Barplot: виручка по категоріях за 2024 vs 2025 (поруч).
+# Aufgabe 1_04
+# Visualisierung (matplotlib/seaborn)
+# 4. Balkendiagramm: Umsatz nach Kategorien für 2024 und 2025 (nebeneinander).
 def task_1_04_barplot_revenue_by_category() -> None:
-    print("\nЗавдання 1_04. Barplot: виручка по категоріях за 2024 vs 2025")
+    print("\nAufgabe 1_04. Balkendiagramm: Umsatz nach Kategorien für 2024 und 2025")
 
     transactions_path = OUT / 'transactions_cleaned.csv'
     company_path = OUT / 'company_data_cleaned.xlsx'
@@ -624,7 +624,7 @@ def task_1_04_barplot_revenue_by_category() -> None:
 
     products_clean = products[['product_id', 'category', 'unit_price']]
 
-    print("Об'єднання таблиць та розрахунок виручки...")
+    print("Tabellen zusammenführen und Umsatz berechnen...")
     merged_df = pd.merge(tx, products_clean, on='product_id', how='left')
 
     df_filtered = merged_df[merged_df['year'].isin([2024, 2025])]
@@ -649,26 +649,26 @@ def task_1_04_barplot_revenue_by_category() -> None:
         palette='Set2'
     )
 
-    plt.title('Виручка по категоріях за 2024 vs 2025 роки ', fontsize=16, pad=15)
-    plt.xlabel('Категорія товару', fontsize=12, labelpad=10)
-    plt.ylabel('Загальна виручка', fontsize=12, labelpad=10)
+    plt.title('Umsatz nach Kategorien für 2024 und 2025 ', fontsize=16, pad=15)
+    plt.xlabel('Produktkategorie', fontsize=12, labelpad=10)
+    plt.ylabel('Gesamtumsatz', fontsize=12, labelpad=10)
 
     plt.ticklabel_format(style='plain', axis='y')
     plt.xticks(rotation=30, ha='right')
-    plt.legend(title='Рік', loc='upper right')
+    plt.legend(title='Jahr', loc='upper right')
     plt.tight_layout()
 
     plt.savefig(chart_path, dpi=300, bbox_inches="tight")
     plt.close()
-    print(f"Таблицю збережено: {table_path.relative_to(ROOT)}")
-    print(f"Графік збережено: {chart_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {table_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {chart_path.relative_to(ROOT)}")
 
 
-# задание 1_05
-# Heatmap (sns.heatmap): кореляція unit_price, cost_price, margin_pct, quantity, total_amount.
-# Використати annot=True та cmap='coolwarm'.
+# Aufgabe 1_05
+# Heatmap (sns.heatmap): Korrelation von unit_price, cost_price, margin_pct, quantity und total_amount.
+# annot=True und cmap='coolwarm' verwenden.
 def task_1_05_correlation_heatmap() -> None:
-    print("\nЗавдання 1_05. Heatmap: кореляція числових показників")
+    print("\nAufgabe 1_05. Heatmap: Korrelation numerischer Kennzahlen")
 
     transactions_path = OUT / "transactions_cleaned.csv"
     company_path = OUT / "company_data_cleaned.xlsx"
@@ -709,23 +709,23 @@ def task_1_05_correlation_heatmap() -> None:
         linewidths=0.5,
     )
 
-    plt.title("Матриця кореляції")
+    plt.title("Korrelationsmatrix")
     plt.tight_layout()
     plt.savefig(chart_path, dpi=300, bbox_inches="tight")
     plt.close()
 
-    print("Матрицю кореляції побудовано.")
-    print(f"Таблицю збережено: {table_path.relative_to(ROOT)}")
-    print(f"Графік збережено: {chart_path.relative_to(ROOT)}")
+    print("Korrelationsmatrix erstellt.")
+    print(f"Tabelle gespeichert: {table_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {chart_path.relative_to(ROOT)}")
 
 
-# задание 1_06
-# 6. Boxplot / Violinplot (seaborn) + KDE: розподіл total_amount по категоріях (тільки продажі > 0). Показати викиди. Спробуйте обидва типи:
-#    - sns.boxplot() — медіана, квартилі, викиди
-#    - sns.violinplot() — boxplot + KDE (щільність розподілу)
-#    - Додатково: sns.kdeplot(data=df, x='total_amount', hue='category', fill=True) — порівняння розподілів категорій на одному графіку
+# Aufgabe 1_06
+# 6. Boxplot / Violinplot (seaborn) + KDE: Verteilung von total_amount nach Kategorien (nur Verkäufe > 0). Ausreißer anzeigen. Beide Varianten testen:
+#    - sns.boxplot() — Median, Quartile und Ausreißer
+#    - sns.violinplot() — Boxplot + KDE (Verteilungsdichte)
+#    - Zusätzlich: sns.kdeplot(data=df, x='total_amount', hue='category', fill=True) — Verteilungen der Kategorien in einem Diagramm vergleichen
 def task_1_06_sales_distribution_plots() -> None:
-    print("\nЗавдання 1_06. Sales distribution plots")
+    print("\nAufgabe 1_06. Sales distribution plots")
 
     result_dir = ROOT / "results" / "task_1_06"
 
@@ -772,8 +772,8 @@ def task_1_06_sales_distribution_plots() -> None:
         palette="Set3"
     )
     plt.title("1. Boxplot")
-    plt.xlabel("Категорія товару")
-    plt.ylabel("Сума")
+    plt.xlabel("Produktkategorie")
+    plt.ylabel("Summe")
     plt.xticks(rotation=30, ha="right")
     plt.ticklabel_format(style="plain", axis="y")
     plt.tight_layout()
@@ -790,8 +790,8 @@ def task_1_06_sales_distribution_plots() -> None:
         palette="Set3"
     )
     plt.title("2. Violinplot")
-    plt.xlabel("Категорія товару")
-    plt.ylabel("Сума транзакції")
+    plt.xlabel("Produktkategorie")
+    plt.ylabel("Transaktionsbetrag")
     plt.xticks(rotation=30, ha="right")
     plt.ticklabel_format(style="plain", axis="y")
     plt.tight_layout()
@@ -808,61 +808,61 @@ def task_1_06_sales_distribution_plots() -> None:
         palette="Set1"
     )
     plt.title("3. KDEplot")
-    plt.xlabel("Сума транзакції")
-    plt.ylabel("Щільність розподілу")
+    plt.xlabel("Transaktionsbetrag")
+    plt.ylabel("Verteilungsdichte")
     plt.ticklabel_format(style="plain", axis="x")
     plt.tight_layout()
     plt.savefig(kdeplot_path, dpi=300, bbox_inches="tight")
     plt.close()
 
-    print(f"Побудовано графіки для {df_filtered['category'].nunique()} категорій.")
-    print(f"Таблицю збережено: {table_path.relative_to(ROOT)}")
-    print(f"Графік збережено: {boxplot_path.relative_to(ROOT)}")
-    print(f"Графік збережено: {violinplot_path.relative_to(ROOT)}")
-    print(f"Графік збережено: {kdeplot_path.relative_to(ROOT)}")
+    print(f"Diagramme erstellt für {df_filtered['category'].nunique()} Kategorien.")
+    print(f"Tabelle gespeichert: {table_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {boxplot_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {violinplot_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {kdeplot_path.relative_to(ROOT)}")
 
 
-# задание 1_07
-# 7. [Просунуті] ABC-аналіз товарів. Порахувати суму виручки на товарі 10%.
-# ABC-аналіз товарів. Порахувати суму виручки на товар, відсортувати за спаданням,
-# додати cumsum() частки (кумулятивна сума). A = перші 70% виручки, B = 70–90%, C = останні 10%.
-# Скільки товарів у A, B, C?
+# Aufgabe 1_07
+# 7. [Fortgeschritten] ABC-Analyse der Produkte. Umsatz je Produkt berechnen.
+# ABC-Analyse der Produkte. Umsatz je Produkt berechnen und absteigend sortieren,
+# cumsum() für den kumulierten Anteil hinzufügen. A = erste 70 % des Umsatzes, B = 70–90 %, C = letzte 10 %.
+# Wie viele Produkte gehören zu A, B und C?
 def task_1_07_abc_analysis_of_products() -> None:
-    print("\nЗавдання 1_07. ABC-аналіз товарів")
+    print("\nAufgabe 1_07. ABC-Analyse der Produkte")
 
     RESULT_DIR = ROOT / "results" / "task_1_07"
 
     transactions = pd.read_csv(OUT / "transactions_cleaned.csv", low_memory=False)
     products = pd.read_excel(OUT / "company_data_cleaned.xlsx", sheet_name="Products")
 
-    # 1. Сума виручки на товар
+    # 1. Summe виручки на товар
     revenue_per_product = transactions.groupby("product_id")["total_amount"].sum().reset_index()
 
-    # 2. Об’єднання з products для категорій/назв
+    # 2. Mit products für Kategorien und Namen zusammenführen
     revenue_per_product = revenue_per_product.merge(products, on="product_id", how="left")
 
-    # 3. Сортування за спаданням
+    # 3. Absteigend sortieren
     revenue_per_product = revenue_per_product.sort_values("total_amount", ascending=False)
 
-    # 4. Кумулятивна частка
+    # 4. Kumulierten Anteil berechnen
     total_revenue = revenue_per_product["total_amount"].sum()
     revenue_per_product["cum_share"] = revenue_per_product["total_amount"].cumsum() / total_revenue * 100
 
-    # 5. Присвоєння груп A/B/C та Підрахунок кількості товарів у кожній групі
+    # 5. Gruppen A/B/C zuweisen und die Anzahl der Produkte je Gruppe zählen
     def abc_group(x):
         if x <= 70:
-            return "A (перші 70% виручки)"
+            return "A (erste 70 % des Umsatzes)"
         elif x <= 90:
             return "B (70–90%)"
         else:
-            return "C (останні 10%)"
+            return "C (letzte 10 %)"
 
     revenue_per_product["ABC"] = revenue_per_product["cum_share"].apply(abc_group)
 
     abc_counts = revenue_per_product["ABC"].value_counts()
 
-    # 7. Підрахунок суми виручки на товарі групи C (10%)
-    sum_c = revenue_per_product[revenue_per_product["ABC"] == "C (останні 10%)"]["total_amount"].sum()
+    # 7. Umsatzsumme der Produkte in Gruppe C (10 %) berechnen
+    sum_c = revenue_per_product[revenue_per_product["ABC"] == "C (letzte 10 %)"]["total_amount"].sum()
 
     RESULT_DIR.mkdir(parents=True, exist_ok=True)
     table_path = RESULT_DIR / "abc_analysis_of_products.csv"
@@ -880,20 +880,20 @@ def task_1_07_abc_analysis_of_products() -> None:
         revenue_per_product[["product_id", "product_name", "total_amount", "category", "ABC"]].head(10)
     )
     print("Revenue from Group C products (10%):", sum_c)
-    print(f"Таблицю збережено: {table_path.relative_to(ROOT)}")
-    print(f"Таблицю збережено: {counts_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {table_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {counts_path.relative_to(ROOT)}")
 
 
-# задание 1_08
-# Блок 1. Завдання 8.
-# Market Basket Analysis. Для кожного customer_id зібрати всі category куплених товарів за один день.
-# Знайти найчастіші пари категорій, що купують разом (комбінації 2 категорій).
-# Які топ-5 пар?
-# > Підказка: якщо same-day покупок мало — спробуйте згрупувати по customer_id + тиждень через .dt.isocalendar().week.
-# Використайте itertools.combinations() для генерації пар категорій.
-# Для підрахунку пар зручно застосувати value_counts() на серії пар або nunique() для перевірки кількості унікальних пар.
+# Aufgabe 1_08
+# Block 1. Aufgabe 8.
+# Market-Basket-Analyse. Für jede customer_id alle Kategorien der an einem Tag gekauften Produkte sammeln.
+# Die häufigsten gemeinsam gekauften Kategoriepaare finden (Kombinationen aus 2 Kategorien).
+# Welche 5 Paare sind am häufigsten?
+# > Hinweis: Wenn es zu wenige Same-Day-Käufe gibt, nach customer_id + Woche über .dt.isocalendar().week gruppieren.
+# itertools.combinations() zur Erzeugung der Kategoriepaare verwenden.
+# Für die Zählung value_counts() auf der Paar-Serie oder nunique() für die Anzahl eindeutiger Paare verwenden.
 def task_1_08_market_basket_analysis() -> None:
-    print("\nЗавдання 1_08. Market Basket Analysis")
+    print("\nAufgabe 1_08. Market Basket Analysis")
 
     CLEAN_DIR = OUT
     result_dir = ROOT / "results" / "task_1_08"
@@ -931,25 +931,25 @@ def task_1_08_market_basket_analysis() -> None:
         encoding="utf-8-sig",
     )
 
-    print(" Топ-5 пар категорій, що купують разом")
+    print(" Top-5 gemeinsam gekaufter Kategoriepaare")
     print(top_5)
-    print(f"Таблицю збережено: {table_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {table_path.relative_to(ROOT)}")
 
 
-# задание 1_09
-# Блок 1. Завдання 9.
-# Аналіз знижок. Розбити транзакції на: discount_percent == 0 vs >0.
-#  Порівняти середню кількість одиниць (quantity) та виручку. Чи працюють знижки?
+# Aufgabe 1_09
+# Block 1. Aufgabe 9.
+# Rabattanalyse. Transaktionen aufteilen: discount_percent == 0 gegenüber >0.
+#  Durchschnittliche Stückzahl (quantity) und Umsatz vergleichen. Wirken die Rabatte?
 DATA_PATH = OUT / "transactions_cleaned.csv"
 
 
 def task_1_09_discount_analysis() -> None:
-    print("\nЗавдання 1_09. Аналіз знижок")
+    print("\nAufgabe 1_09. Rabattanalyse")
 
     result_dir = ROOT / "results" / "task_1_09"
 
     if not os.path.exists(DATA_PATH):
-        print(f"Файл {DATA_PATH} не знайдено!")
+        print(f"Datei {DATA_PATH} nicht gefunden!")
         return
 
     df = pd.read_csv(DATA_PATH)
@@ -958,39 +958,39 @@ def task_1_09_discount_analysis() -> None:
     with_discount_df = df[df["discount_percent"] > 0]
 
     no_discount_table = pd.DataFrame({"Кількість": [no_discount_df["transaction_id"].count()],
-                                      "Сума": [no_discount_df["total_amount"].sum()]})
+                                      "Summe": [no_discount_df["total_amount"].sum()]})
     with_discount_table = pd.DataFrame({"Кількість": [with_discount_df["transaction_id"].count()],
-                                        "Сума": [with_discount_df["total_amount"].sum()]})
+                                        "Summe": [with_discount_df["total_amount"].sum()]})
 
-    print("ТАБЛИЦЯ: Транзакції БЕЗ знижок")
+    print("TABELLE: Transaktionen OHNE Rabatt")
     print(no_discount_table)
     print("\n" + "=" * 50 + "\n")
 
-    print("ТАБЛИЦЯ: Транзакції ЗІ знижкою")
+    print("TABELLE: Transaktionen MIT Rabatt")
     print(with_discount_table)
     print("\n" + "=" * 50 + "\n")
 
     df["discount_group"] = ["Без знижки" if d == 0 else "Зі знижкою" for d in df["discount_percent"]]
     analysis = df.groupby("discount_group")[["quantity", "total_amount"]].mean()
 
-    print("СЕРЕДНІ ПОКАЗНИКИ: Без знижки vs Зі знижкою")
+    print("DURCHSCHNITTSWERTE: Ohne Rabatt vs. Mit Rabatt")
     print(analysis.round(2))
 
-    print(" ВИСНОВКИ")
+    print(" FAZIT")
     q_no = analysis.loc["Без знижки", "quantity"]
     q_yes = analysis.loc["Зі знижкою", "quantity"]
     t_no = analysis.loc["Без знижки", "total_amount"]
     t_yes = analysis.loc["Зі знижкою", "total_amount"]
 
     if q_yes > q_no:
-        print(f"- Кількість товарів у кошику зі знижкою вища (+{((q_yes / q_no) - 1) * 100:.1f}%)")
+        print(f"- Die Anzahl der Produkte im Warenkorb ist mit Rabatt höher (+{((q_yes / q_no) - 1) * 100:.1f}%)")
     else:
-        print("- Знижки НЕ стимулюють клієнтів купувати більше товарів.")
+        print("- Rabatte motivieren Kunden NICHT, mehr Produkte zu kaufen.")
 
     if t_yes < t_no:
-        print("- Середній чек зі знижкою НИЖЧИЙ: знижки зменшують маржинальність без приросту обсягу.")
+        print("- Der durchschnittliche Bonwert ist mit Rabatt NIEDRIGER: Rabatte senken die Marge ohne zusätzliches Volumen.")
     else:
-        print("- Середній чек зі знижкою вищий — акції працюють ефективно.")
+        print("- Der durchschnittliche Bonwert ist mit Rabatt höher — die Aktionen wirken effektiv.")
 
     result_dir.mkdir(parents=True, exist_ok=True)
     no_discount_path = result_dir / "transactions_without_discount.csv"
@@ -999,14 +999,14 @@ def task_1_09_discount_analysis() -> None:
     no_discount_table.to_csv(no_discount_path, index=False, encoding="utf-8-sig")
     with_discount_table.to_csv(with_discount_path, index=False, encoding="utf-8-sig")
     analysis.round(2).to_csv(analysis_path, encoding="utf-8-sig")
-    print(f"Таблицю збережено: {no_discount_path.relative_to(ROOT)}")
-    print(f"Таблицю збережено: {with_discount_path.relative_to(ROOT)}")
-    print(f"Таблицю збережено: {analysis_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {no_discount_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {with_discount_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {analysis_path.relative_to(ROOT)}")
 
 
-# задание 1_10
+# Aufgabe 1_10
 def task_1_10_cohort_retention() -> None:
-    print("\nЗавдання 1_10. Cohort Retention")
+    print("\nAufgabe 1_10. Cohort Retention")
 
     result_dir = ROOT / "results" / "task_1_10"
     transactions_path = OUT / "transactions_cleaned.csv"
@@ -1097,25 +1097,25 @@ def task_1_10_cohort_retention() -> None:
         vmax=100,
         cbar_kws={"label": "Retention, %"},
     )
-    plt.title("Cohort Retention за категорією першої покупки")
-    plt.xlabel("Місяць після першої покупки")
-    plt.ylabel("Місяць першої покупки")
+    plt.title("Cohort Retention nach Kategorie des Erstkaufs")
+    plt.xlabel("Monat nach dem Erstkauf")
+    plt.ylabel("Monat des Erstkaufs")
     plt.tight_layout()
     plt.savefig(chart_path, dpi=180, bbox_inches="tight")
     plt.close()
 
     print(
-        f"Cohort Retention: {len(retention)} когорт, "
+        f"Cohort Retention: {len(retention)} Kohorten, "
         f"{retention.columns[0]}-{retention.columns[-1]}"
     )
-    print(f"Таблицю збережено: {retention_path.relative_to(ROOT)}")
-    print(f"Таблицю збережено: {details_path.relative_to(ROOT)}")
-    print(f"Графік збережено: {chart_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {retention_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {details_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {chart_path.relative_to(ROOT)}")
 
 
-# задание 1_11
+# Aufgabe 1_11
 def task_1_11_clv_estimation() -> None:
-    print("\nЗавдання 1_11. CLV Estimation")
+    print("\nAufgabe 1_11. CLV Estimation")
 
     result_dir = ROOT / "results" / "task_1_11"
     transactions_path = OUT / "transactions_cleaned.csv"
@@ -1240,9 +1240,9 @@ def task_1_11_clv_estimation() -> None:
         legend=False,
         ax=axes[0],
     )
-    axes[0].set_title("Кількість клієнтів за CLV-сегментами")
+    axes[0].set_title("Anzahl der Kunden nach CLV-Segment")
     axes[0].set_xlabel("CLV-сегмент")
-    axes[0].set_ylabel("Кількість клієнтів")
+    axes[0].set_ylabel("Anzahl der Kunden")
 
     sns.barplot(
         data=segment_stats.reset_index(),
@@ -1254,7 +1254,7 @@ def task_1_11_clv_estimation() -> None:
         legend=False,
         ax=axes[1],
     )
-    axes[1].set_title("Середній CLV за сегментами")
+    axes[1].set_title("Durchschnittlicher CLV nach Segment")
     axes[1].set_xlabel("CLV-сегмент")
     axes[1].set_ylabel("CLV")
 
@@ -1273,13 +1273,13 @@ def task_1_11_clv_estimation() -> None:
         .reindex(["Low", "Medium", "High", "Premium"])
         .to_string()
     )
-    print(f"Таблицю збережено: {monthly_path.relative_to(ROOT)}")
-    print(f"Таблицю збережено: {customers_path.relative_to(ROOT)}")
-    print(f"Таблицю збережено: {summary_path.relative_to(ROOT)}")
-    print(f"Графік збережено: {chart_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {monthly_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {customers_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {summary_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {chart_path.relative_to(ROOT)}")
 
 
-# задание 2_01
+# Aufgabe 2_01
 def task_2_01_load_data() -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     transactions_path = OUT / "transactions_cleaned.csv"
     company_path = OUT / "company_data_cleaned.xlsx"
@@ -1381,52 +1381,52 @@ def task_2_01_save_results(monthly: pd.DataFrame) -> Path:
 
 
 def task_2_01_profit_analysis() -> None:
-    print("\nЗавдання 2_01. Profit Analysis")
+    print("\nAufgabe 2_01. Profit Analysis")
 
     transactions, products, stores = task_2_01_load_data()
     sales = task_2_01_prepare_sales(transactions, products, stores)
     monthly = task_2_01_calculate_monthly_profit(sales)
 
     if monthly.empty:
-        raise ValueError("Не знайдено даних для розрахунку прибутку")
+        raise ValueError("Keine Daten zur Gewinnberechnung gefunden")
 
     best_month = monthly.loc[monthly["total_profit"].idxmax()]
     worst_month = monthly.loc[monthly["total_profit"].idxmin()]
     output_path = task_2_01_save_results(monthly)
 
     print(
-        f"Найприбутковіший місяць: {best_month['month']}, "
-        f"прибуток = {best_month['total_profit']:.2f}"
+        f"Profitabelster Monat: {best_month['month']}, "
+        f"Gewinn = {best_month['total_profit']:.2f}"
     )
     print(
-        f"Місяць з найнижчим прибутком: {worst_month['month']}, "
-        f"прибуток = {worst_month['total_profit']:.2f}"
+        f"Monat mit dem niedrigsten Gewinn: {worst_month['month']}, "
+        f"Gewinn = {worst_month['total_profit']:.2f}"
     )
     if worst_month["total_profit"] < 0:
-        print("Цей місяць був збитковим.")
+        print("Dieser Monat war defizitär.")
     else:
-        print("Збиткових місяців немає.")
-    print(f"Таблицю збережено: {output_path.relative_to(ROOT)}")
+        print("Es gibt keine defizitären Monate.")
+    print(f"Tabelle gespeichert: {output_path.relative_to(ROOT)}")
 
 
-# задание 2_02
-# 2.2. Pareto Analysis (80/20).
-# Pareto Analysis (80/20). Для всіх продуктів (з Products):
-# Порахувати частку кожного продукту в загальній виручці (transactions)
-# Відсортувати за спаданням, cumsum
-# Знайти, скільки продуктів дають 80% виручки
-# Візуалізувати: крива Парето (line + bar)
+# Aufgabe 2_02
+# 2.2. Pareto-Analyse (80/20).
+# Pareto-Analyse (80/20). Für alle Produkte aus Products:
+# Anteil jedes Produkts am Gesamtumsatz (transactions) berechnen
+# Absteigend sortieren und cumsum berechnen
+# Ermitteln, wie viele Produkte 80 % des Umsatzes erzeugen
+# Visualisieren: Pareto-Kurve (Linie + Balken)
 def task_2_02_patero_analysis_80() -> None:
-    print("\nЗавдання 2_02. Patero Analysis (80/20)")
+    print("\nAufgabe 2_02. Patero Analysis (80/20)")
 
     CLEAN_DIR = OUT
     RESULT_DIR = ROOT / "results" / "task_2_02_patero_analysis_80"
 
     def load_table(filename: str, sep: str = ",") -> pd.DataFrame:
-        """Універсальне завантаження очищених таблиць з cleaned_data"""
+        """Universelles Laden bereinigter Tabellen aus cleaned_data"""
         path = CLEAN_DIR / filename
         if not path.exists():
-            raise FileNotFoundError(f"Файл {path} не знайдено")
+            raise FileNotFoundError(f"Datei {path} nicht gefunden")
         return pd.read_csv(path, low_memory=False, sep=sep)
 
     transactions = load_table("transactions_cleaned.csv")
@@ -1442,11 +1442,11 @@ def task_2_02_patero_analysis_80() -> None:
     n_products_80 = int(revenue_per_product[revenue_per_product["cum_share"] >= 80].index[0] + 1)
 
     def group(x):
-        return "Перші 80% виручки" if x < n_products_80 else "Останні 20% виручки"
+        return "Erste 80 % des Umsatzes" if x < n_products_80 else "Letzte 20 % des Umsatzes"
 
     revenue_per_product["80/20"] = [group(i) for i in range(len(revenue_per_product))]
 
-    print('Quantities of goods in group "Перші 80% виручки": ', n_products_80)
+    print('Produktanzahl in der Gruppe "Erste 80 % des Umsatzes": ', n_products_80)
 
     RESULT_DIR.mkdir(parents=True, exist_ok=True)
     table_path = RESULT_DIR / "patero_analysis_80.csv"
@@ -1457,8 +1457,8 @@ def task_2_02_patero_analysis_80() -> None:
     fig, ax1 = plt.subplots(figsize=(15, 7))
 
     colors = revenue_per_product["80/20"].map({
-        "Перші 80% виручки": "skyblue",
-        "Останні 20% виручки": "lightgreen"
+        "Erste 80 % des Umsatzes": "skyblue",
+        "Letzte 20 % des Umsatzes": "lightgreen"
     })
 
     ax1.bar(revenue_per_product["product_name"], revenue_per_product["total_amount"], color=colors, alpha=0.8)
@@ -1470,9 +1470,9 @@ def task_2_02_patero_analysis_80() -> None:
     ax2.plot(revenue_per_product["product_name"], revenue_per_product["cum_share"], color="red", alpha=0.8)
     ax2.set_ylabel("Cum_share (%)", fontsize=15)
 
-    ax2.axhline(80, color="k", linestyle="--", label="80% поріг")
+    ax2.axhline(80, color="k", linestyle="--", label="80-%-Schwelle")
 
-    ax1.axvline(n_products_80 - 1, color="purple", linestyle="--", label=f"{n_products_80} продуктів = 80%")
+    ax1.axvline(n_products_80 - 1, color="purple", linestyle="--", label=f"{n_products_80} Produkte = 80 %")
 
     plt.title("Patero Analysis (80/20) by products", fontsize=15, fontweight="bold")
     ax2.legend(loc="lower right")
@@ -1485,21 +1485,21 @@ def task_2_02_patero_analysis_80() -> None:
     plt.savefig(chart_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
 
-    print(f"Таблицю збережено: {table_path.relative_to(ROOT)}")
-    print(f"Графік збережено: {chart_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {table_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {chart_path.relative_to(ROOT)}")
 
 
-# задание 2_03
-# [Базові] Data Quality Score
-# Оцінити кожен датафрейм за метриками якості:
+# Aufgabe 2_03
+# [Grundlagen] Data Quality Score
+# Jeden DataFrame anhand von Qualitätsmetriken bewerten:
 # completeness = 1 - % missing;
-# uniqueness = 1 - % дублікатів;
-# validity = % рядків без аномалій;
-# consistency = % рядків з коректними типами та діапазонами;
-# overall_score = average чотирьох метрик.
-# Визначити файл із найвищим та найнижчим DQ Score.
+# uniqueness = 1 - % Duplikate;
+# validity = % Zeilen ohne Anomalien;
+# consistency = % Zeilen mit korrekten Datentypen und Wertebereichen;
+# overall_score = Durchschnitt der vier Metriken.
+# Datei mit dem höchsten und niedrigsten DQ Score bestimmen.
 def task_2_03_data_quality_score() -> None:
-    print("\nЗавдання 2_03. Data Quality Score")
+    print("\nAufgabe 2_03. Data Quality Score")
 
     sns.set_theme(style="whitegrid")
     plt.rcParams["figure.figsize"] = (10, 5)
@@ -1519,7 +1519,7 @@ def task_2_03_data_quality_score() -> None:
 
     for name, path in files_to_check.items():
         if not os.path.exists(path):
-            print(f"Не знайдено файл {name} за шляхом {path}.")
+            print(f"Datei {name} unter {path} nicht gefunden.")
             continue
 
         df = pd.read_csv(path)
@@ -1528,16 +1528,16 @@ def task_2_03_data_quality_score() -> None:
         if total_rows == 0:
             continue
 
-        # перевіряю заповненість файлів даними
+        # Datenvollständigkeit der Dateien prüfen
         total_cells = df.size
         missing_cells = df.isna().sum().sum()
         completeness = 1.0 - (missing_cells / total_cells) if total_cells > 0 else 1.0
 
-        # перевіряю на наявність дублікатів
+        # Dateien auf Duplikate prüfen
         duplicate_rows = df.duplicated().sum()
         uniqueness = 1.0 - (duplicate_rows / total_rows)
 
-        # перевіряю рядки на наявність аномалій та коректність типів даних
+        # Zeilen auf Anomalien und korrekte Datentypen prüfen
         valid_rows_count = total_rows
         consistent_rows_count = total_rows
 
@@ -1602,23 +1602,23 @@ def task_2_03_data_quality_score() -> None:
 
         dq_results.append({
             "File Name": name,
-            "Повнота (%)": round(completeness * 100, 2),
-            "Унікальність (%)": round(uniqueness * 100, 2),
-            "Валідність (%)": round(validity * 100, 2),
-            "Узгодженість (%)": round(consistency * 100, 2),
-            "Загальна оцінка (%)": round(overall_score * 100, 2)
+            "Vollständigkeit (%)": round(completeness * 100, 2),
+            "Eindeutigkeit (%)": round(uniqueness * 100, 2),
+            "Validität (%)": round(validity * 100, 2),
+            "Konsistenz (%)": round(consistency * 100, 2),
+            "Gesamtbewertung (%)": round(overall_score * 100, 2)
         })
 
     df_dq_report = pd.DataFrame(dq_results)
 
-    print(f"\nЗвіт про якість даних(DATA QUALITY REPORT)\n\n{df_dq_report.to_string(index=False)}")
+    print(f"\nDatenqualitätsbericht(DATA QUALITY REPORT)\n\n{df_dq_report.to_string(index=False)}")
     print("-" * 20)
 
-    best_file = df_dq_report.loc[df_dq_report["Загальна оцінка (%)"].idxmax()]
-    worst_file = df_dq_report.loc[df_dq_report["Загальна оцінка (%)"].idxmin()]
+    best_file = df_dq_report.loc[df_dq_report["Gesamtbewertung (%)"].idxmax()]
+    worst_file = df_dq_report.loc[df_dq_report["Gesamtbewertung (%)"].idxmin()]
 
-    print(f"\nНайвищий DQ Score: файл '{best_file['File Name']}' з показником {best_file['Загальна оцінка (%)']}%")
-    print(f"Найнижчий DQ Score: файл '{worst_file['File Name']}' з показником {worst_file['Загальна оцінка (%)']}%")
+    print(f"\nНайвищий DQ Score: файл '{best_file['File Name']}' mit dem Wert {best_file['Gesamtbewertung (%)']}%")
+    print(f"Найнижчий DQ Score: файл '{worst_file['File Name']}' mit dem Wert {worst_file['Gesamtbewertung (%)']}%")
 
     result_dir.mkdir(parents=True, exist_ok=True)
     table_path = result_dir / "data_quality_score.csv"
@@ -1626,34 +1626,34 @@ def task_2_03_data_quality_score() -> None:
     df_dq_report.to_csv(table_path, index=False, encoding="utf-8-sig")
 
     df_melted = df_dq_report.melt(id_vars="File Name",
-                                  value_vars=["Повнота (%)", "Унікальність (%)", "Валідність (%)", "Узгодженість (%)"],
+                                  value_vars=["Vollständigkeit (%)", "Eindeutigkeit (%)", "Validität (%)", "Konsistenz (%)"],
                                   var_name="Metric", value_name="Percentage")
 
     plt.figure(figsize=(10, 5))
     sns.barplot(x="File Name", y="Percentage", hue="Metric", data=df_melted, palette="viridis")
 
     for i, name in enumerate(df_dq_report["File Name"]):
-        score = df_dq_report.loc[df_dq_report["File Name"] == name, "Загальна оцінка (%)"].values[0]
+        score = df_dq_report.loc[df_dq_report["File Name"] == name, "Gesamtbewertung (%)"].values[0]
         plt.plot([i - 0.3, i + 0.3], [score, score], color="red", linestyle="--", linewidth=1.5)
         plt.text(i, score + 2, f"{score}%")
 
-    plt.title("Порівняльний аналіз метрик Data Quality Score")
-    plt.xlabel("Назва файлу / Датасету")
-    plt.ylabel("Показник якості (%)")
+    plt.title("Vergleichende Analyse Metriken des Data Quality Score")
+    plt.xlabel("Dateiname / Datensatz")
+    plt.ylabel("Qualitätskennzahl (%)")
     plt.ylim(0, 115)
-    plt.legend(title="Метрики оцінки", bbox_to_anchor=(1.02, 1), loc="upper left")
+    plt.legend(title="Bewertungsmetriken", bbox_to_anchor=(1.02, 1), loc="upper left")
     plt.tight_layout()
     plt.savefig(chart_path, dpi=300, bbox_inches="tight")
     plt.close()
 
-    print(f"Таблицю збережено: {table_path.relative_to(ROOT)}")
-    print(f"Графік збережено: {chart_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {table_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {chart_path.relative_to(ROOT)}")
 
 
-# задание 2_04
-# Побудувати stacked bar у matplotlib: revenue + cost + profit по місяцях (12 місяців 2025 року). Використати plt.bar() з параметром bottom.
+# Aufgabe 2_04
+# In matplotlib ein gestapeltes Balkendiagramm erstellen: revenue + cost + profit pro Monat (12 Monate des Jahres 2025). plt.bar() mit dem Parameter bottom verwenden.
 def task_2_04_monthly_revenue_stacked_bar() -> None:
-    print("\nЗавдання 2_04. Stacked bar: revenue, cost, profit")
+    print("\nAufgabe 2_04. Stacked bar: revenue, cost, profit")
 
     result_dir = ROOT / "results" / "task_2_04"
 
@@ -1699,15 +1699,15 @@ def task_2_04_monthly_revenue_stacked_bar() -> None:
     costs = monthly_data["cost"]
     profits = monthly_data["profit"]
 
-    month_names = ["Січ", "Лют", "Бер", "Квіт", "Трав", "Черв", "Лип", "Серп", "Врес", "Жовт", "Лист", "Груд"]
+    month_names = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"]
 
-    plt.bar(months, costs, label="Собівартість (Cost)", color="#fc8d62", alpha=0.85)
+    plt.bar(months, costs, label="Kosten (Cost)", color="#fc8d62", alpha=0.85)
 
-    plt.bar(months, profits, bottom=costs, label="Чистий прибуток (Profit)", color="#66c2a5", alpha=0.85)
+    plt.bar(months, profits, bottom=costs, label="Nettogewinn (Profit)", color="#66c2a5", alpha=0.85)
 
-    plt.title("Структура виручки за 2025 рік")
+    plt.title("Umsatzstruktur für 2025")
     plt.xlabel("Місяць")
-    plt.ylabel("Сума")
+    plt.ylabel("Summe")
 
     plt.xticks(range(1, 13), month_names)
 
@@ -1720,16 +1720,16 @@ def task_2_04_monthly_revenue_stacked_bar() -> None:
     plt.savefig(chart_path, dpi=300, bbox_inches="tight")
     plt.close()
 
-    print("Stacked bar за 2025 рік побудовано.")
-    print(f"Таблицю збережено: {table_path.relative_to(ROOT)}")
-    print(f"Графік збережено: {chart_path.relative_to(ROOT)}")
+    print("Gestapeltes Balkendiagramm für 2025 erstellt.")
+    print(f"Tabelle gespeichert: {table_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {chart_path.relative_to(ROOT)}")
 
 
-# задание 2_05
-# [Візуалізація] Pareto curve з лінією 80%
-# Побудувати Pareto curve: cumulative revenue vs products (bar + line). Додати пунктирну лінію 80% для наочності.
+# Aufgabe 2_05
+# [Visualisierung] Pareto-Kurve mit 80-%-Linie
+# Pareto-Kurve erstellen: kumulierter Umsatz gegenüber Produkten (Balken + Linie). Zur besseren Lesbarkeit eine gestrichelte 80-%-Linie hinzufügen.
 def task_2_05_pareto_curve() -> None:
-    print("\nЗавдання 2_05. Pareto curve з лінією 80%")
+    print("\nAufgabe 2_05. Pareto-Kurve mit 80-%-Linie")
 
     result_dir = ROOT / "results" / "task_2_05"
 
@@ -1766,9 +1766,9 @@ def task_2_05_pareto_curve() -> None:
     fig, ax1 = plt.subplots(figsize=(14, 7))
 
     color_bar = "#4f81bd"
-    ax1.bar(product_revenue["product_id"], product_revenue["revenue"], color=color_bar, alpha=0.85, label="Виручка продукту")
-    ax1.set_xlabel("ID Продукту", fontsize=12, labelpad=10)
-    ax1.set_ylabel("Виручка", color=color_bar, fontsize=12)
+    ax1.bar(product_revenue["product_id"], product_revenue["revenue"], color=color_bar, alpha=0.85, label="Produktumsatz")
+    ax1.set_xlabel("Produkt-ID", fontsize=12, labelpad=10)
+    ax1.set_ylabel("Umsatz", color=color_bar, fontsize=12)
     ax1.tick_params(axis="y", labelcolor=color_bar)
 
     clean_labels = [str(int(float(x))) for x in product_revenue["product_id"]]
@@ -1781,13 +1781,13 @@ def task_2_05_pareto_curve() -> None:
     ax2 = ax1.twinx()
     color_line = "#c00000"
     ax2.plot(product_revenue["product_id"], product_revenue["cum_percentage"], color=color_line, marker="o", ms=4, lw=2, label="Кумулятивний %")
-    ax2.set_ylabel("Кумулятивний відсоток", color=color_line, fontsize=12)
+    ax2.set_ylabel("Kumulierter Prozentsatz", color=color_line, fontsize=12)
     ax2.tick_params(axis="y", labelcolor=color_line)
     ax2.set_ylim(0, 105)
 
-    ax2.axhline(y=80, color="gray", linestyle="--", linewidth=1.5, label="Межа Парето (80%)")
+    ax2.axhline(y=80, color="gray", linestyle="--", linewidth=1.5, label="Pareto-Grenze (80 %)")
 
-    plt.title("Аналіз Парето", fontsize=16, pad=20)
+    plt.title("Pareto-Analyse", fontsize=16, pad=20)
 
     lines1, labels1 = ax1.get_legend_handles_labels()
     lines2, labels2 = ax2.get_legend_handles_labels()
@@ -1799,20 +1799,20 @@ def task_2_05_pareto_curve() -> None:
     plt.savefig(chart_path, dpi=300, bbox_inches="tight")
     plt.close()
 
-    print("Pareto curve побудовано.")
-    print(f"Таблицю збережено: {table_path.relative_to(ROOT)}")
-    print(f"Графік збережено: {chart_path.relative_to(ROOT)}")
+    print("Pareto-Kurve erstellt.")
+    print(f"Tabelle gespeichert: {table_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {chart_path.relative_to(ROOT)}")
 
 
-# задание 2_06
-# 6. [Візуалізація] Dashboard (multi-plot):
-# Dashboard (multi-plot): 4 графіки на одному полотні (subplots(2,2)):
-# Revenue trend (line)
-# Profit margin by store format (sns.barplot)
-# Returns rate by category (pie — plt.pie)
-# Monthly transaction count (sns.lineplot з marker='o')
+# Aufgabe 2_06
+# 6. [Visualisierung] Dashboard (Multi-Plot):
+# Dashboard (Multi-Plot): 4 Diagramme auf einer Fläche (subplots(2,2)):
+# Umsatztrend (Linie)
+# Gewinnmarge nach Filialformat (sns.barplot)
+# Retourenquote nach Kategorie (Kreisdiagramm — plt.pie)
+# Monatliche Transaktionsanzahl (sns.lineplot mit marker='o')
 def task_2_06_dashboard_multi_plot() -> None:
-    print("\nЗавдання 2_06. Dashboard (multi-plot)")
+    print("\nAufgabe 2_06. Dashboard (multi-plot)")
 
     RESULT_DIR = ROOT / "results" / "task_2_06"
 
@@ -1852,13 +1852,13 @@ def task_2_06_dashboard_multi_plot() -> None:
     df_clean = df_clean[df_clean["total_amount"] > 0]
 
     share_unknown = (df_clean["store_format"].isna().sum() / len(df_clean)) * 100
-    print(f"Частка Unknown: {share_unknown:.1f}%")
+    print(f"Unknown-Anteil: {share_unknown:.1f}%")
 
-    # враховуючи кількість транзакцій з магазином з форматом NaN та id NaN -5002 строки (5%), переназвемо формат
-    # у 'Uknow' та зробимо умовні 'id'
+    # Aufgrund von 5.002 Transaktionen (5 %) mit NaN bei Filialformat und ID wird das Format umbenannt
+    # in 'Unknown' und es werden Ersatz-IDs vergeben
 
     df_clean["store_format"] = df_clean["store_format"].fillna("Unknown")
-    df_clean["store_id"] = df_clean["store_id"].fillna(-1)  # умовний ID
+    df_clean["store_id"] = df_clean["store_id"].fillna(-1)  # Ersatz-ID
 
     profit_margin_format = (
         df_clean.groupby("store_format").apply(
@@ -1890,7 +1890,7 @@ def task_2_06_dashboard_multi_plot() -> None:
     )
     axes[1, 0].set_title("Returns Rate by Category")
 
-    # 4. Monthly transaction count (lineplot з marker='o')
+    # 4. Monthly transaction count (lineplot mit marker='o')
 
     monthly_counts = transactions.groupby("month")["transaction_id"].count().reset_index()
 
@@ -1921,22 +1921,22 @@ def task_2_06_dashboard_multi_plot() -> None:
     plt.savefig(dashboard_path, dpi=300, bbox_inches="tight")
     plt.close()
 
-    print(f"Таблицю збережено: {revenue_trend_path.relative_to(ROOT)}")
-    print(f"Таблицю збережено: {profit_margin_path.relative_to(ROOT)}")
-    print(f"Таблицю збережено: {returns_rate_path.relative_to(ROOT)}")
-    print(f"Таблицю збережено: {monthly_counts_path.relative_to(ROOT)}")
-    print(f"Графік збережено: {dashboard_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {revenue_trend_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {profit_margin_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {returns_rate_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {monthly_counts_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {dashboard_path.relative_to(ROOT)}")
 
 
-# задание 2_07
-# Завдання 7. Блок 2.
-# Time Series Analysis. З transactions.csv:
-# Згрупувати по днях: sum(total_amount)
-# Додати змінні: dayofweek, month, is_weekend, is_holiday_season (Nov-Dec)
-# Порахувати 7-денне та 30-денне ковзне середнє (rolling()) — зверніть увагу, як rolling() згладжує шум.
-# Використати shift() для визначення днів з різким зростанням/падінням виручки відносно попереднього дня
-# (day-over-day change). Знайти топ-5 днів з найбільшим приростом та падінням.
-# Визначити дні з аномальним падінням/зростанням (>2 std від середнього)
+# Aufgabe 2_07
+# Aufgabe 7. Block 2.
+# Zeitreihenanalyse. Aus transactions.csv:
+# Nach Tagen gruppieren: sum(total_amount)
+# Variablen ergänzen: dayofweek, month, is_weekend, is_holiday_season (Nov–Dez)
+# 7-Tage- und 30-Tage-Gleitmittel (rolling()) berechnen und beachten, wie rolling() das Rauschen glättet.
+# shift() verwenden, um Tage mit starkem Umsatzanstieg oder -rückgang gegenüber dem Vortag zu bestimmen
+# (Day-over-Day-Änderung). Die 5 Tage mit dem größten Anstieg und Rückgang finden.
+# Tage mit anomalem Rückgang/Anstieg (>2 Standardabweichungen vom Mittelwert) bestimmen
 pd.set_option("display.max_columns", None)
 pd.set_option("display.width", 1000)
 
@@ -1988,7 +1988,7 @@ def analyze_revenue_trends(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def task_2_07_time_series_analysis() -> None:
-    print("\nЗавдання 2_07. Time Series Analysis")
+    print("\nAufgabe 2_07. Time Series Analysis")
 
     result_dir = ROOT / "results" / "task_2_07"
 
@@ -1996,18 +1996,18 @@ def task_2_07_time_series_analysis() -> None:
 
     if df is not None:
 
-        print("Етап 1: Результат групування по днях")
+        print("Schritt 1: Ergebnis der Gruppierung nach Tagen")
         print(df)
         print("\n" + "=" * 50 + "\n")
 
         result = analyze_revenue_trends(df)
 
-        print("Результати з ковзними середніми (перші 40 днів):")
+        print("Ergebnisse mit gleitenden Mittelwerten (erste 40 Tage):")
         print(result[["date", "dayofweek", "month", "total_daily_amount", "is_weekend", "is_holiday_season",
                       "rolling_7d", "rolling_30d"]].head(40))
         print("\n" + "=" * 50 + "\n")
 
-        print("Результати з ковзними середніми (кінець періоду):")
+        print("Ergebnisse mit gleitenden Mittelwerten (Ende des Zeitraums):")
         print(result[["date", "dayofweek", "month", "total_daily_amount", "is_weekend", "is_holiday_season",
                       "rolling_7d", "rolling_30d"]].tail())
         print("\n" + "=" * 50 + "\n")
@@ -2015,17 +2015,17 @@ def task_2_07_time_series_analysis() -> None:
         top_growth = result.nlargest(5, "dod_change")
         top_drop = result.nsmallest(5, "dod_change")
 
-        print("Топ-5 днів з найбільшим приростом:")
+        print("Top-5-Tage mit dem größten Anstieg:")
         print(top_growth[["date", "dayofweek", "month", "total_daily_amount", "is_weekend", "is_holiday_season",
                           "dod_change"]])
         print("\n" + "=" * 50 + "\n")
 
-        print("Топ-5 днів з найбільшим падінням:")
+        print("Top-5-Tage mit dem größten Rückgang:")
         print(top_drop[["date", "dayofweek", "month", "total_daily_amount", "is_weekend", "is_holiday_season",
                         "dod_change"]])
         print("\n" + "=" * 50 + "\n")
 
-        print("Дні з аномальними змінами (> 2 std)")
+        print("Tage mit anomalen Änderungen (> 2 Standardabweichungen)")
         anomalies = result[result["is_anomaly"] == 1][["date", "dayofweek", "month", "total_daily_amount", "is_weekend",
                                                        "is_holiday_season", "dod_change"]]
         print(anomalies)
@@ -2039,21 +2039,21 @@ def task_2_07_time_series_analysis() -> None:
         top_growth.to_csv(top_growth_path, index=False, encoding="utf-8-sig")
         top_drop.to_csv(top_drop_path, index=False, encoding="utf-8-sig")
         anomalies.to_csv(anomalies_path, index=False, encoding="utf-8-sig")
-        print(f"Таблицю збережено: {daily_path.relative_to(ROOT)}")
-        print(f"Таблицю збережено: {top_growth_path.relative_to(ROOT)}")
-        print(f"Таблицю збережено: {top_drop_path.relative_to(ROOT)}")
-        print(f"Таблицю збережено: {anomalies_path.relative_to(ROOT)}")
+        print(f"Tabelle gespeichert: {daily_path.relative_to(ROOT)}")
+        print(f"Tabelle gespeichert: {top_growth_path.relative_to(ROOT)}")
+        print(f"Tabelle gespeichert: {top_drop_path.relative_to(ROOT)}")
+        print(f"Tabelle gespeichert: {anomalies_path.relative_to(ROOT)}")
 
 
-# задание 2_08
-# Завдання 8. Блок 2.
-# Returns Analysis. З returns.csv (окремий файл з деталями повернень) та transactions.csv (де is_return == 1):
-# Rate of returns by category (returns / total transactions) — використайте merge з Products для отримання категорії
-# Average refund amount by reason (return_reason з returns.csv). Яка причина найдорожча?
-# Чи корелює discount_percent із ймовірністю повернення? Порівняти середній discount для returns vs non-returns
-# Чи відрізняється return rate по payment_method?
-# Який середній час між покупкою та поверненням (return_date - transaction_date)?
-# Конфігурація відображення
+# Aufgabe 2_08
+# Aufgabe 8. Block 2.
+# Retourenanalyse. Aus returns.csv (separate Datei mit Retourendetails) und transactions.csv (wo is_return == 1):
+# Retourenquote nach Kategorie (returns / Gesamttransaktionen) — merge mit Products verwenden, um die Kategorie zu erhalten
+# Durchschnittlicher Erstattungsbetrag nach Grund (return_reason aus returns.csv). Welcher Grund ist am teuersten?
+# Korreliert discount_percent mit der Retourenwahrscheinlichkeit? Durchschnittlichen Rabatt für Retouren und Nicht-Retouren vergleichen
+# Unterscheidet sich die Retourenquote nach payment_method?
+# Wie lange dauert es durchschnittlich zwischen Kauf und Retoure (return_date - transaction_date)?
+# Anzeige-Konfiguration
 pd.set_option("display.max_columns", None)
 pd.set_option("display.width", 1000)
 
@@ -2069,7 +2069,7 @@ def analyze_return_rate_by_category(transactions, returns, products):
 
     for name, path in FILES.items():
         if not path.exists():
-            print(f"Помилка: Файл {path} не знайдено!")
+            print(f"Помилка: Datei {path} nicht gefunden!")
             return None
 
     transactions = pd.read_csv(FILES["transactions"])
@@ -2119,12 +2119,12 @@ def analyze_return_time(returns):
 
 
 def task_2_08_returns_analysis() -> None:
-    print("\nЗавдання 2_08. Returns Analysis")
+    print("\nAufgabe 2_08. Returns Analysis")
 
     result_dir = ROOT / "results" / "task_2_08"
 
     if not all(f.exists() for f in FILES.values()):
-        print("Помилка: Не всі файли знайдено в папці cleaned_data!")
+        print("Fehler: Nicht alle Dateien wurden im Ordner cleaned_data gefunden!")
         return
 
     transactions = pd.read_csv(FILES["transactions"])
@@ -2134,37 +2134,37 @@ def task_2_08_returns_analysis() -> None:
     result_dir.mkdir(parents=True, exist_ok=True)
 
     category_results = analyze_return_rate_by_category(transactions, returns, products)
-    print("Return Rate по категоріях")
+    print("Retourenquote nach Kategorien")
     print(category_results)
     category_path = result_dir / "return_rate_by_category.csv"
     category_results.to_csv(category_path, encoding="utf-8-sig")
-    print(f"Таблицю збережено: {category_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {category_path.relative_to(ROOT)}")
     print("\n" + "=" * 50 + "\n")
 
     reason_results = analyze_refunds_by_reason(returns)
-    print("Середня сума повернення за причиною")
+    print("Durchschnittlicher Erstattungsbetrag nach Grund")
     print(reason_results)
     reason_path = result_dir / "average_refund_by_reason.csv"
     reason_results.to_csv(reason_path, encoding="utf-8-sig")
-    print(f"Таблицю збережено: {reason_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {reason_path.relative_to(ROOT)}")
     print("\n" + "=" * 50 + "\n")
 
     discount_stats, correlation = analyze_discount_vs_return(transactions)
 
-    print("Вплив знижки на повернення")
+    print("Einfluss des Rabatts auf Retouren")
 
-    print("Середній discount_percent:")
+    print("Durchschnittlicher discount_percent:")
 
     print(f"Non-returns (is_return=0): {discount_stats[0]:.2f}%")
 
     print(f"Returns (is_return=1): {discount_stats[1]:.2f}%")
 
-    print(f"Коефіцієнт кореляції між знижкою та поверненням: {correlation:.4f}")
+    print(f"Korrelationskoeffizient zwischen Rabatt und Retoure: {correlation:.4f}")
 
     if abs(correlation) < 0.1:
-        print("Висновок: Зв'язок між знижкою та ймовірністю повернення майже відсутній.")
+        print("Fazit: Zwischen Rabatt und Retourenwahrscheinlichkeit besteht kaum ein Zusammenhang.")
     else:
-        print("Висновок: Існує помітний статистичний зв'язок між розміром знижки та поверненнями.")
+        print("Fazit: Zwischen Rabatthöhe und Retouren besteht ein erkennbarer statistischer Zusammenhang.")
 
     discount_path = result_dir / "discount_vs_return.csv"
     pd.DataFrame(
@@ -2174,20 +2174,20 @@ def task_2_08_returns_analysis() -> None:
             "correlation": correlation,
         }
     ).to_csv(discount_path, index=False, encoding="utf-8-sig")
-    print(f"Таблицю збережено: {discount_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {discount_path.relative_to(ROOT)}")
     print("\n" + "=" * 50 + "\n")
 
-    print("Return Rate за методом оплати (%)")
+    print("Retourenquote nach Zahlungsmethode (%)")
     payment_results = analyze_return_rate_by_payment(transactions)
     print(payment_results)
     payment_path = result_dir / "return_rate_by_payment_method.csv"
     payment_results.to_csv(payment_path, encoding="utf-8-sig")
-    print(f"Таблицю збережено: {payment_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {payment_path.relative_to(ROOT)}")
     print("\n" + "=" * 50 + "\n")
 
     avg_days = analyze_return_time(returns)
-    print(f"Середній час між покупкою та поверненням")
-    print(f"Клієнти повертають товар в середньому через {avg_days:.1f} днів.")
+    print(f"Durchschnittliche Zeit zwischen Kauf und Retoure")
+    print(f"Kunden retournieren Produkte durchschnittlich nach {avg_days:.1f} Tagen.")
     time_path = result_dir / "average_return_time.csv"
     pd.DataFrame(
         {
@@ -2195,17 +2195,17 @@ def task_2_08_returns_analysis() -> None:
             "value": [avg_days],
         }
     ).to_csv(time_path, index=False, encoding="utf-8-sig")
-    print(f"Таблицю збережено: {time_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {time_path.relative_to(ROOT)}")
 
 
-# задание 2_09
-# [Просунуті] Магазинна аналітика
-# Магазинна аналітика. З company_data.xlsx (Stores + Employees + Inventory + transactions):
-# Revenue per square meter (total_amount / size_sqm) по store_format
-# Revenue per employee (total_amount / кількість співробітників) по магазинах
-# Найефективніший магазин за обома метриками
+# Aufgabe 2_09
+# [Fortgeschritten] Filialanalyse
+# Filialanalyse. Aus company_data.xlsx (Stores + Employees + Inventory + transactions):
+# Umsatz pro Quadratmeter (total_amount / size_sqm) nach store_format
+# Umsatz pro Mitarbeiter (total_amount / Mitarbeiterzahl) nach Filiale
+# Effizienteste Filiale anhand beider Kennzahlen
 def task_2_09_store_analytics() -> None:
-    print("\nЗавдання 2_09. Магазинна аналітика")
+    print("\nAufgabe 2_09. Filialanalyse")
 
     result_dir = ROOT / "results" / "task_2_09"
 
@@ -2239,7 +2239,7 @@ def task_2_09_store_analytics() -> None:
     store_revenue = df_valid_sales.groupby("store_id")["total_amount"].sum().reset_index()
     store_revenue.columns = ["store_id", "total_revenue"]
 
-    # співробітники, що реально працюють (зі статусом активно)
+    # Tatsächlich aktive Mitarbeiter (Status active)
     df_employees["status"] = df_employees["status"].astype(str).str.strip().str.lower()
     df_active_emp = df_employees[df_employees["status"] == "active"]
     employee_count = df_active_emp.groupby("store_id")["employee_id"].count().reset_index()
@@ -2251,7 +2251,7 @@ def task_2_09_store_analytics() -> None:
     df_analytics["store_format"] = df_analytics["store_format"].astype(str).str.strip()
     df_analytics["store_format"] = df_analytics["store_format"].replace({"Streett": "Street", "Mal": "Mall"})
 
-    # метрики в розрізі магазинів
+    # Kennzahlen auf Filialebene
     df_analytics["revenue_per_sqm"] = df_analytics.apply(
         lambda r: r["total_revenue"] / r["size_sqm"] if str(r["store_format"]).lower() != "online" and r[
             "size_sqm"] > 0 else 0,
@@ -2263,7 +2263,7 @@ def task_2_09_store_analytics() -> None:
         axis=1
     )
 
-    # ефективності по формату магазина
+    # Effizienz nach Filialformat
     df_offline_only = df_analytics[df_analytics["store_format"].str.lower() != "online"]
     format_grouped = df_offline_only.groupby("store_format").agg(
         total_revenue=("total_revenue", "sum"),
@@ -2271,7 +2271,7 @@ def task_2_09_store_analytics() -> None:
     ).reset_index()
     format_grouped["revenue_per_sqm"] = format_grouped["total_revenue"] / format_grouped["total_size"]
 
-    # найефективніший магазин (метод рангів для офлайн магазинів)
+    # Effizienteste Filiale (Rangmethode für Offline-Filialen)
     df_rank = df_offline_only[df_offline_only["size_sqm"] > 0].copy()
     if not df_rank.empty:
         df_rank["rank_sqm"] = df_rank["revenue_per_sqm"].rank(ascending=False)
@@ -2297,43 +2297,43 @@ def task_2_09_store_analytics() -> None:
     df_console["total_revenue"] = df_console["total_revenue"].map("{:,.2f}".format)
     df_console["revenue_per_sqm"] = df_console["revenue_per_sqm"].map("{:,.2f}".format)
     df_console["revenue_per_employee"] = df_console["revenue_per_employee"].map("{:,.2f}".format)
-    print(f"Загальний звіт по магазинам (перші 20):\n\n"
+    print(f"Gesamtbericht der Filialen (erste 20):\n\n"
           f"{df_console[['store_id', 'store_name', 'store_format', 'size_sqm', 'employee_count', 'total_revenue', 'revenue_per_sqm', 'revenue_per_employee']].head(20).to_string(index=False)}\n")
     print("-" * 20)
 
     if best_store is not None:
-        print(f"Найефективніший фізичний магазин за обома показниками:\n\n",
-              f"Магазин: {best_store['store_name']} (ID: {best_store['store_id']})\n",
-              f"Країна: {best_store['country']}. Формат: {best_store['store_format']}\n",
-              f"Площа: {best_store['size_sqm']} кв.м. Штат: {int(best_store['employee_count'])} співробітників\n",
-              f"Виручка/кв. метр: {best_store['revenue_per_sqm']:,.2f}\n",
-              f"Виручка/одного співробітника: {best_store['revenue_per_employee']:,.2f}")
+        print(f"Effizienteste physische Filiale anhand beider Kennzahlen:\n\n",
+              f"Filiale: {best_store['store_name']} (ID: {best_store['store_id']})\n",
+              f"Land: {best_store['country']}. Формат: {best_store['store_format']}\n",
+              f"Fläche: {best_store['size_sqm']} кв.м. Mitarbeiter: {int(best_store['employee_count'])} співробітників\n",
+              f"Umsatz/кв. метр: {best_store['revenue_per_sqm']:,.2f}\n",
+              f"Umsatz/одного співробітника: {best_store['revenue_per_employee']:,.2f}")
         best_store.to_frame().T.to_csv(best_store_path, index=False, encoding="utf-8-sig")
-        print(f"Таблицю збережено: {best_store_path.relative_to(ROOT)}")
+        print(f"Tabelle gespeichert: {best_store_path.relative_to(ROOT)}")
 
-    print(f"Таблицю збережено: {analytics_path.relative_to(ROOT)}")
-    print(f"Таблицю збережено: {format_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {analytics_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {format_path.relative_to(ROOT)}")
 
 
-# задание 2_10
-# 10. [Просунуті] Фінансове моделювання P&L.
-# Фінансове моделювання. Створити P&L по місяцях:
+# Aufgabe 2_10
+# 10. [Fortgeschritten] Finanzmodellierung (P&L).
+# Finanzmodellierung. Eine monatliche P&L erstellen:
 # - Revenue: sum(total_amount)
 # - COGS: sum(quantity * cost_price)
 # - Gross Profit = Revenue - COGS
-# - Marketing Cost: sum(budget) з marketing.csv по місяцях кампаній
-# - Salary Cost: sum(net_pay) з salaries.parquet по місяцях
-# - Operating Profit = Gross Profit - Marketing - Salaries - 5% операційні
+# - Marketing Cost: sum(budget) aus marketing.csv nach Kampagnenmonaten
+# - Salary Cost: sum(net_pay) aus salaries.parquet nach Monaten
+# - Operating Profit = Gross Profit - Marketing - Salaries - 5 % Betriebskosten
 # - Net Margin % = Operating Profit / Revenue * 100
 def task_2_10_load_table(filename: str, sep: str = ",") -> pd.DataFrame:
     path = OUT / filename
     if not path.exists():
-        raise FileNotFoundError(f"Файл {path} не знайдено")
+        raise FileNotFoundError(f"Datei {path} nicht gefunden")
     return pd.read_csv(path, low_memory=False, sep=sep)
 
 
 def task_2_10_pnl_financial_modeling() -> None:
-    print("\nЗавдання 2_10. P&L Financial Modeling")
+    print("\nAufgabe 2_10. P&L Financial Modeling")
 
     RESULT_DIR = ROOT / "results" / "task_2_10"
 
@@ -2346,10 +2346,10 @@ def task_2_10_pnl_financial_modeling() -> None:
     transactions["transaction_date"] = pd.to_datetime(transactions["transaction_date"], errors="coerce")
     transactions["month"] = transactions["transaction_date"].dt.to_period("M")
 
-    # - Revenue: sum(total_amount). Revenue: сума total_amount по місяцях
+    # - Revenue: sum(total_amount). Summe von total_amount pro Monat
     revenue = transactions.groupby("month")["total_amount"].sum().reset_index(name="Revenue")
 
-    # - COGS: sum(quantity * cost_price). COGS: сума quantity * cost_price по місяцях
+    # - COGS: sum(quantity * cost_price). Summe von quantity * cost_price pro Monat
     transactions = transactions.merge(products[["product_id", "product_name", "cost_price"]], on="product_id", how="left")
     transactions["COGS"] = transactions["quantity"] * transactions["cost_price"]
     cogs = transactions.groupby("month")["COGS"].sum().reset_index()
@@ -2358,18 +2358,18 @@ def task_2_10_pnl_financial_modeling() -> None:
     pnl = revenue.merge(cogs, on="month")
     pnl["Gross Profit"] = pnl["Revenue"] - pnl["COGS"]
 
-    # - Marketing Cost: sum(budget) з marketing.csv по місяцях кампаній
+    # - Marketing Cost: sum(budget) aus marketing.csv nach Kampagnenmonaten
 
-    # Точний варіант (розподіл бюджету по всіх місяцях кампанії), як кaмпанія триває декілька місяців - більш точний
+    # Präzise Variante: Budget gleichmäßig auf alle Kampagnenmonate verteilen
     marketing["start_date"] = pd.to_datetime(marketing["start_date"], errors="coerce")
     marketing["end_date"] = pd.to_datetime(marketing["end_date"], errors="coerce")
 
     rows = []
     for _, row in marketing.iterrows():
         if pd.notnull(row["start_date"]) and pd.notnull(row["end_date"]):
-            # список місяців між start_date і end_date
+            # Liste der Monate zwischen start_date und end_date
             months = pd.period_range(row["start_date"], row["end_date"], freq="M")
-            # рівномірний розподіл бюджету
+            # Gleichmäßige Verteilung des Budgets
             monthly_budget = row["budget"] / len(months) if len(months) > 0 else row["budget"]
             for m in months:
                 rows.append({"month": m, "Marketing Cost": monthly_budget})
@@ -2378,14 +2378,14 @@ def task_2_10_pnl_financial_modeling() -> None:
 
     pnl = pnl.merge(marketing_cost, on="month", how="left").fillna({"Marketing Cost": 0})
 
-    # - Salary Cost: sum(net_pay) з salaries.parquet по місяцях
-    # сума net_pay по місяцях - беремо готову колонку month
+    # - Salary Cost: sum(net_pay) aus salaries.parquet nach Monaten
+    # Summe von net_pay pro Monat – die vorhandene month-Spalte verwenden
     salaries["month"] = salaries["month"].astype("period[M]")
     salary_cost = salaries.groupby("month")["net_pay"].sum().reset_index(name="Salary Cost")
 
     pnl = pnl.merge(salary_cost, on="month", how="left").fillna({"Salary Cost": 0})
 
-    # - Operating Profit = Gross Profit - Marketing - Salaries - 5% операційні
+    # - Operating Profit = Gross Profit - Marketing - Salaries - 5 % Betriebskosten
     pnl["Operating Profit"] = pnl["Gross Profit"] - pnl["Marketing Cost"] - pnl["Salary Cost"] - (pnl["Revenue"] * 0.05)
 
     # - Net Margin % = Operating Profit / Revenue * 100
@@ -2398,28 +2398,28 @@ def task_2_10_pnl_financial_modeling() -> None:
     pnl.to_csv(table_path, index=False, encoding="utf-8-sig")
 
     print(pnl.head())
-    print(f"Таблицю збережено: {table_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {table_path.relative_to(ROOT)}")
 
-    # Net Margin % — негативний, показує збитковість.
-    # Висновок: вийшла таблиця P&L по місяцях — і видно, що витрати на зарплати та маркетинг значно перевищують
-    # валовий прибуток, тому Operating Profit виходить від’ємним, а Net Margin % негативний (наприклад, −58% у січні).
-    # Це тестові дані, то: модель правильно працює, просто фінансові показники показують збитковість
+    # Net Margin % ist negativ und zeigt die Verlustsituation.
+    # Fazit: Die monatliche P&L zeigt, dass Personal- und Marketingkosten deutlich höher sind als
+    # der Bruttogewinn. Daher sind Operating Profit und Net Margin % negativ (z. B. −58 % im Januar).
+    # Es handelt sich um Testdaten: Das Modell funktioniert korrekt, die Kennzahlen zeigen lediglich einen Verlust.
 
-    # графіки для візуалізації:
-    # Лінійний графік Net Margin %
+    # Diagramme zur Visualisierung:
+    # Liniendiagramm der Net Margin %
     plt.figure(figsize=(10, 4))
     plt.plot(pnl["month"].astype(str), pnl["Net Margin %"], marker="o", color="red")
     plt.xticks(rotation=90)
-    plt.title("Net Margin % по місяцях", fontsize=14, fontweight="bold")
+    plt.title("Net Margin % pro Monat", fontsize=14, fontweight="bold")
     plt.xlabel("Місяць")
     plt.ylabel("Net Margin %")
     plt.grid(True)
     plt.tight_layout()
     plt.savefig(net_margin_chart_path, dpi=300, bbox_inches="tight")
     plt.close()
-    print(f"Графік збережено: {net_margin_chart_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {net_margin_chart_path.relative_to(ROOT)}")
 
-    # Барплот Revenue vs Operating Profit
+    # Balkendiagramm: Revenue vs. Operating Profit
     plt.figure(figsize=(10, 5))
     width = 0.35
     x = range(len(pnl["month"]))
@@ -2428,25 +2428,25 @@ def task_2_10_pnl_financial_modeling() -> None:
     plt.bar([i + width for i in x], pnl["Operating Profit"], width=width, label="Operating Profit", color="green")
 
     plt.xticks([i + width / 2 for i in x], pnl["month"].astype(str), rotation=90)
-    plt.title("Revenue vs Operating Profit по місяцях", fontsize=14, fontweight="bold")
+    plt.title("Revenue vs. Operating Profit pro Monat", fontsize=14, fontweight="bold")
     plt.xlabel("Місяць", fontsize=14)
-    plt.ylabel("Сума")
+    plt.ylabel("Summe")
     plt.legend()
     plt.tight_layout()
     plt.savefig(revenue_profit_chart_path, dpi=300, bbox_inches="tight")
     plt.close()
-    print(f"Графік збережено: {revenue_profit_chart_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {revenue_profit_chart_path.relative_to(ROOT)}")
 
 
-# задание 2_11
-# [Додаткова] Динамічний executive dashboard
-# Динамічний екзек'ютів-дашборд. Створити функцію generate_dashboard(data_path, month),
-# яка приймає шлях до даних та місяць (напр. '2025-06') і будує 6 графіків:
+# Aufgabe 2_11
+# [Zusatzaufgabe] Dynamisches Executive-Dashboard
+# Dynamisches Executive-Dashboard. Eine Funktion generate_dashboard(data_path, month) erstellen,
+# die einen Datenpfad und einen Monat (z. B. '2025-06') übernimmt und 6 Diagramme erstellt:
 # - KPI cards: Revenue, Profit, Margin %, Customers Count, Avg Order Value, Return Rate
-# - Плюс 2 графіки на вибір (тренд, розподіл, Pareto тощо)
-# - Функція має зберігати PNG з ім'ям dashboard_{month}.png
-# - Викликати для трьох різних місяців: '2025-01', '2025-06', '2025-12'
-# - Порівняльний аналіз: який місяць найкращий? Чому?
+# - Zusätzlich 2 frei gewählte Diagramme (Trend, Verteilung, Pareto usw.)
+# - Die Funktion muss eine PNG-Datei mit dem Namen dashboard_{month}.png speichern
+# - Für drei verschiedene Monate aufrufen: '2025-01', '2025-06', '2025-12'
+# - Vergleichende Analyse: Welcher Monat ist der beste und warum?
 def generate_dashboard(data_path, month: str) -> dict[str, float]:
     data_path = Path(data_path)
     result_dir = ROOT / "results" / "task_2_11"
@@ -2461,7 +2461,7 @@ def generate_dashboard(data_path, month: str) -> dict[str, float]:
 
     df = transactions[transactions["month"] == month].copy()
     if df.empty:
-        raise ValueError(f"Немає даних за місяць {month}")
+        raise ValueError(f"Keine Daten für den Monat {month}")
 
     products_small = products[["product_id", "category", "cost_price"]].copy()
     products_small["cost_price"] = pd.to_numeric(products_small["cost_price"], errors="coerce").fillna(0)
@@ -2544,7 +2544,7 @@ def generate_dashboard(data_path, month: str) -> dict[str, float]:
     plt.savefig(dashboard_path, dpi=300, bbox_inches="tight")
     plt.close(fig)
 
-    print(f"Графік збережено: {dashboard_path.relative_to(ROOT)}")
+    print(f"Diagramm gespeichert: {dashboard_path.relative_to(ROOT)}")
 
     return {
         "month": month,
@@ -2558,7 +2558,7 @@ def generate_dashboard(data_path, month: str) -> dict[str, float]:
 
 
 def task_2_11_dynamic_executive_dashboard() -> None:
-    print("\nЗавдання 2_11. Динамічний executive dashboard")
+    print("\nAufgabe 2_11. Dynamisches Executive-Dashboard")
 
     result_dir = ROOT / "results" / "task_2_11"
     months = ["2025-01", "2025-06", "2025-12"]
@@ -2576,16 +2576,16 @@ def task_2_11_dynamic_executive_dashboard() -> None:
         ascending=False,
     ).iloc[0]
 
-    print("\nПорівняльний аналіз")
+    print("\nVergleichende Analyse")
     print(comparison_df.round(2).to_string(index=False))
     print(
-        f"Найкращий місяць: {best_month['month']}. "
-        f"Причина: найбільший profit = {best_month['profit']:.2f}, "
+        f"Bester Monat: {best_month['month']}. "
+        f"Grund: höchster Gewinn = {best_month['profit']:.2f}, "
         f"margin = {best_month['margin_percent']:.2f}%, "
         f"revenue = {best_month['revenue']:.2f}, "
         f"return rate = {best_month['return_rate']:.2f}%."
     )
-    print(f"Таблицю збережено: {comparison_path.relative_to(ROOT)}")
+    print(f"Tabelle gespeichert: {comparison_path.relative_to(ROOT)}")
 
 
 def main() -> None:
@@ -2616,3 +2616,6 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
+
+
+
