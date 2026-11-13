@@ -305,7 +305,7 @@ Generates static dashboards `dashboard_2025-01.png`, `dashboard_2025-06.png`, `d
 
 ### Team Members (Python-DA-Team)
 
-`Serhii` · `Dmytro` · `Svitlana` · `Yuliia` · `Oksana`
+**Serhii (Team Lead)** · `Dmytro` · `Svitlana` · `Yuliia` · `Oksana`
 
 ```text
 [ Personal Branches ] ──► [ Integration: Serhii ] ──► [ Review & QA ] ──► [ Explicit Approval ] ──► [ main ]
