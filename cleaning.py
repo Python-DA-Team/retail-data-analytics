@@ -270,6 +270,8 @@ def clean_json(path: Path, customer_ids: set[int]) -> pd.DataFrame:
         "user_agent", "error_message",
     ]
     df = base_clean(df).reindex(columns=expected_columns)
+    log_id = pd.to_numeric(df["log_id"], errors="coerce").round().astype("Int64")
+    df["log_id"] = log_id.where(log_id.gt(0))
     valid_id(df, "user_id", customer_ids)
     dates(df, ["timestamp"])
     code = pd.to_numeric(df["status_code"], errors="coerce").round().astype("Int64")
