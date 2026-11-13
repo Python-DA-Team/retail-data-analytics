@@ -1,28 +1,33 @@
 # 🛒 Retail Data Analytics
 
-**Python-DA-Team**
-
-*Sales Performance · Profitability · Data Quality · Financial Analytics*
+<p align="center"><strong>PYTHON-DA-TEAM · RETAIL DATA ANALYTICS</strong></p>
+<p align="center"><em>Sales Performance · Profitability · Data Quality · Financial Analytics</em></p>
+<p align="center">
+  <img alt="Python" src="https://img.shields.io/badge/Python-3776AB?style=flat-square&logo=python&logoColor=white">
+  <img alt="pandas" src="https://img.shields.io/badge/pandas-150458?style=flat-square&logo=pandas&logoColor=white">
+  <img alt="NumPy" src="https://img.shields.io/badge/NumPy-013243?style=flat-square&logo=numpy&logoColor=white">
+  <img alt="Matplotlib" src="https://img.shields.io/badge/Matplotlib-0F172A?style=flat-square">
+  <img alt="SQLite" src="https://img.shields.io/badge/SQLite-003B57?style=flat-square&logo=sqlite&logoColor=white">
+</p>
 
 A comprehensive project for analytical processing, data cleaning, and financial modeling of retail sales (2024–2025).
 
----
-
-## 📋 Table of Contents
-
-* [📌 Project Overview](#project-overview)
-* [🛠 Technology Stack](#technology-stack)
-* [📁 Data & Project Structure](#data-project-structure)
-* [🧹 Data Cleaning Module](#data-cleaning-module)
-* [▶️ Running the Project](#running-the-project)
-* [📊 Analytical Tasks](#analytical-tasks)
-  * [Block 1: Products, Revenue, and Customers](#block-1-products-revenue-and-customers)
-  * [Block 2: Profitability and Operations](#block-2-profitability-and-operations)
-* [📐 Metric Definitions & Methodology](#metric-definitions-methodology)
-* [⚠️ Current Analytical Limitations](#current-analytical-limitations)
-* [👥 Team Workflow & Submission](#team-workflow-submission)
+<!-- Optional: add a verified, repository-hosted team banner here when an actual image is available. -->
 
 ---
+
+## 📋 Quick Navigation
+
+| Explore | Work with the project | Reference |
+| :-- | :-- | :-- |
+| [📌 Overview](#project-overview) | [🧹 Data Cleaning](#data-cleaning-module) | [📐 Methodology](#metric-definitions-methodology) |
+| [🛠 Technology Stack](#technology-stack) | [▶️ Running the Project](#running-the-project) | [⚠️ Limitations](#current-analytical-limitations) |
+| [📁 Data & Structure](#data-project-structure) | [📊 Analytical Tasks](#analytical-tasks) | [👥 Team Workflow](#team-workflow-submission) |
+
+**Analytical blocks:** [Products, Revenue & Customers](#block-1-products-revenue-and-customers) · [Profitability & Operations](#block-2-profitability-and-operations)
+
+---
+
 
 <a id="project-overview"></a>
 
@@ -37,18 +42,19 @@ Project Board: [Trello](https://trello.com/b/FnI0Waiu/tima1).
 
 ### Primary Analytical Goals
 
-* **Product & Category Analysis:** Identify top-revenue products and categories; compare category revenue between 2024 and 2025.
-* **Customer Analytics:** Calculate average check, product revenue concentration, customer retention (Cohort Retention), category pairing analysis, and educational CLV (Customer Lifetime Value) scoring.
-* **Operational Profitability:** Assess margin metrics, reported return reasons, retail space efficiency (revenue per m²), and staff productivity (revenue per active employee).
-* **Data Quality & Visualization:** Evaluate raw CSV file quality (Data Quality Score), generate output CSV tables, and render PNG visualizations.
+- **Product & Category Analysis:** Identify top-revenue products and categories; compare category revenue between 2024 and 2025.
+- **Customer Analytics:** Calculate average check, product revenue concentration, customer retention (Cohort Retention), category pairing analysis, and educational CLV (Customer Lifetime Value) scoring.
+- **Operational Profitability:** Assess margin metrics, reported return reasons, retail space efficiency (revenue per m²), and staff productivity (revenue per active employee).
+- **Data Quality & Visualization:** Evaluate raw CSV file quality (Data Quality Score), generate output CSV tables, and render PNG visualizations.
 
 ---
+
 
 <a id="technology-stack"></a>
 
 ## 🛠 Technology Stack
 
-| Domain                 | Tools & Libraries                             |
+| **Domain**             | **Tools & Libraries**                         |
 | ---------------------- | --------------------------------------------- |
 | **Data Processing**    | Python, pandas, NumPy                         |
 | **Data Visualization** | Matplotlib, Seaborn                           |
@@ -62,13 +68,14 @@ Project Board: [Trello](https://trello.com/b/FnI0Waiu/tima1).
 
 ---
 
+
 <a id="data-project-structure"></a>
 
 ## 📁 Data & Project Structure
 
 The file and directory hierarchy of the main analytical pipeline is shown below:
 
-```
+```text
 retail-data-analytics/
 ├── cleaning.py                  # Shared data cleaning module
 ├── task_1_*.py                  # 11 product & customer analysis tasks (Block 1)
@@ -88,7 +95,6 @@ retail-data-analytics/
 ├── results/                     # Locally generated tables and plots
 ├── .gitignore                   # Git ignore rules
 └── README.md                    # Project documentation
-
 ```
 
 ### Input Files and Description
@@ -96,33 +102,34 @@ retail-data-analytics/
 > [!TIP]
 > Source data files must be placed in the same directory as `cleaning.py`. Cloning the repository alone may not include all local datasets.
 
-| File                    | Content / Purpose                                                                                                  |
+| **File**                | **Content / Purpose**                                                                                              |
 | ----------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | `company_data.xlsx`     | 5 sheets: Customers, Products, Stores, Employees, Inventory                                                        |
 | `transactions.csv`      | Transaction IDs, dates, customers, products, stores, quantities, discounts, amounts, payment methods, return flags |
 | `returns.csv`           | Return records, reasons, refund amounts, purchase dates, and return dates                                          |
 | `marketing.csv`         | Campaign dates, budgets, product IDs, campaign performance metrics                                                 |
 | `salaries.csv`          | Payroll records (month and `net_pay` for P&L modeling)                                                             |
-| `customers.csv`         | Customer records (also represented in the Excel workbook)                                                                    |
-| `employees.csv`         | Employee records (also represented in the Excel workbook)                                                                    |
-| `stores.csv`            | Store records (also represented in the Excel workbook)                                                                       |
+| `customers.csv`         | Customer records (also represented in the Excel workbook)                                                          |
+| `employees.csv`         | Employee records (also represented in the Excel workbook)                                                          |
+| `stores.csv`            | Store records (also represented in the Excel workbook)                                                             |
 | `support_tickets.tsv`   | Support service tickets                                                                                            |
 | `api_logs.json`         | API request logs                                                                                                   |
 | `analytics_practice.db` | Local practice DB; cleaned into a separate copy when present                                                       |
 
 ### Primary Join Keys
 
-| Entity        | Join Key | Associated Tables & Files                               |
-| ------------- | ------------------- | ------------------------------------------------------- |
-| **Customers** | `customer_id`       | Transactions, support tickets, API logs (via `user_id`) |
-| **Products**  | `product_id`        | Transactions, returns, inventory, marketing             |
-| **Stores**    | `store_id`          | Transactions, employees, inventory                      |
-| **Employees** | `employee_id`       | Salaries                                                |
+| **Entity**    | **Join Key**  | **Associated Tables & Files**                           |
+| ------------- | ------------- | ------------------------------------------------------- |
+| **Customers** | `customer_id` | Transactions, support tickets, API logs (via `user_id`) |
+| **Products**  | `product_id`  | Transactions, returns, inventory, marketing             |
+| **Stores**    | `store_id`    | Transactions, employees, inventory                      |
+| **Employees** | `employee_id` | Salaries                                                |
 
 > [!NOTE]
 > Python task scripts read table files directly rather than executing SQL queries against the SQLite database. SQLite handling is executed separately inside the cleaning module. Input data may contain missing or invalid IDs; the cleaning module validates key relationships prior to analysis.
 
 ---
+
 
 <a id="data-cleaning-module"></a>
 
@@ -132,25 +139,29 @@ retail-data-analytics/
 
 Where required fields are present, transaction amounts are validated against the formula:
 
-```
+```text
 expected_amount = quantity * unit_price * (1 - discount_percent / 100)
-
 ```
 
 For rows flagged as returns, a negative transaction amount is expected. Invalid values may be replaced with `NaN`; cleaning does not guarantee full imputation of all missing cells.
 
 ### Output Cleaned Files (`cleaned_data/`)
 
-* Cleaned CSV files appended with `_cleaned.csv`.
-* `company_data_cleaned.xlsx` (preserves 5 source sheets; products are extracted from the *Products* sheet).
-* `support_tickets_cleaned.tsv` from the required support tickets input, and `api_logs_cleaned.json` when the JSON source exists.
-* `cleaning_report.json` containing metrics on row counts, missing values, and parsing errors.
-* `analytics_practice_cleaned.db` (when the source DB is present and cleaning runs; the original DB remains untouched). SQLite cleanup uses a limited set of SQL corrections, separate from the tabular cleaning rules.
+- Cleaned CSV files appended with `_cleaned.csv`.
+- `company_data_cleaned.xlsx` (preserves 5 source sheets; products are extracted from the *Products* sheet).
+- `support_tickets_cleaned.tsv` from the required support tickets input, and `api_logs_cleaned.json` when the JSON source exists.
+- `cleaning_report.json` containing metrics on row counts, missing values, and parsing errors.
+- `analytics_practice_cleaned.db` (when the source DB is present and cleaning runs; the original DB remains untouched). SQLite cleanup uses a limited set of SQL corrections, separate from the tabular cleaning rules.
 
-> [!WARNING]
-> **Caching Logic:** The cleaning module skips re-processing if all files in `CLEANED_FILES` exist on disk. Task wrapper functions check a reduced subset of required files. Cache checks do not compare source file modification timestamps or validate cache integrity; the cleaned database is not included in these checks. To regenerate outputs after changing the source data, first ensure the original inputs are available, then rename the existing `cleaned_data/` folder to keep a backup and run `cleaning.py` again. A missing JSON source is skipped, but its cleaned output remains in the cleaner's cache checklist, so later direct cleaning runs will not consider the cache complete. Most tasks process `cleaned_data/`. **Task 2_03 intentionally evaluates 5 raw CSV files** (`customers.csv`, `employees.csv`, `marketing.csv`, `stores.csv`, and `returns.csv`) to measure baseline data quality.
+<details>
+<summary>⚠️ Data cleaning cache behavior & regeneration notes</summary>
+
+**Caching Logic:** The cleaning module skips re-processing if all files in `CLEANED_FILES` exist on disk. Task wrapper functions check a reduced subset of required files. Cache checks do not compare source file modification timestamps or validate cache integrity; the cleaned database is not included in these checks. To regenerate outputs after changing the source data, first ensure the original inputs are available, then rename the existing `cleaned_data/` folder to keep a backup and run `cleaning.py` again. A missing JSON source is skipped, but its cleaned output remains in the cleaner's cache checklist, so later direct cleaning runs will not consider the cache complete. Most tasks process `cleaned_data/`. **Task 2_03 intentionally evaluates 5 raw CSV files** (`customers.csv`, `employees.csv`, `marketing.csv`, `stores.csv`, and `returns.csv`) to measure baseline data quality.
+
+</details>
 
 ---
+
 
 <a id="running-the-project"></a>
 
@@ -165,7 +176,7 @@ Run the following commands from the repository root directory in **Windows Power
 py -3.11 -m venv .venv
 
 # Install dependencies using the virtual environment's Python
-..venv\Scripts\python.exe -m pip install pandas numpy matplotlib seaborn openpyxl
+.\.venv\Scripts\python.exe -m pip install pandas numpy matplotlib seaborn openpyxl
 
 ```
 
@@ -173,13 +184,13 @@ py -3.11 -m venv .venv
 
 ```powershell
 # 1. Run the shared data cleaning pipeline
-..venv\Scripts\python.exe cleaning.py
+.\.venv\Scripts\python.exe cleaning.py
 
 # 2. Examples of executing individual analytical tasks
-..venv\Scripts\python.exe task_1_01_top_products_by_revenue.py
-..venv\Scripts\python.exe task_1_03_average_check_by_store.py
-..venv\Scripts\python.exe "task_2_10_P&L_Financial_Modeling.py"
-..venv\Scripts\python.exe task_2_11_dynamic_executive_dashboard.py
+.\.venv\Scripts\python.exe task_1_01_top_products_by_revenue.py
+.\.venv\Scripts\python.exe task_1_03_average_check_by_store.py
+.\.venv\Scripts\python.exe "task_2_10_P&L_Financial_Modeling.py"
+.\.venv\Scripts\python.exe task_2_11_dynamic_executive_dashboard.py
 
 ```
 
@@ -192,49 +203,49 @@ Outputs are written to `results/` subdirectories as CSV tables and PNG visualiza
 
 ---
 
+
 <a id="analytical-tasks"></a>
 
 ## 📊 Analytical Tasks
 
-<a id="block-1-products-revenue-and-customers"></a>
 
 ### Block 1: Products, Revenue, and Customers
 
-| #         | Script                                     | Analytical Focus                                                            |
-| --------- | ------------------------------------------ | --------------------------------------------------------------------------- |
-| **1_01** | `task_1_01_top_products_by_revenue.py`     | Top 10 products by total revenue                                            |
-| **1_02** | `task_1_02_revenue_pivot_by_category.py`   | Revenue pivot by category and calendar month number; category leaders                 |
-| **1_03** | `task_1_03_average_check_by_store.py`      | Revenue per unique transaction ID across retail stores                      |
-| **1_04** | `task_1_04_barplot_revenue_by_category.py` | Category revenue comparison between 2024 and 2025                           |
-| **1_05** | `task_1_05_correlation_heatmap.py`         | Correlation matrix: price, margin, quantity, and total transaction amount   |
-| **1_06** | `task_1_06_sales_distribution_plots.py`    | Sales distribution analysis (Boxplot, Violin plot, Density plot)            |
-| **1_07** | `task_1_07_abc_analysis_of_products.py`    | Product ABC classification at 70% and 90% cumulative revenue thresholds      |
-| **1_08** | `task_1_08_market_basket_analysis.py`      | Top 5 category pairs by customer and ISO week number                   |
-| **1_09** | `task_1_09_discount_analysis.py`           | Observed quantities and amounts with and without discounts |
-| **1_10** | `task_1_10_cohort_retention.py`            | Monthly customer cohorts and repeat purchases in initial category           |
-| **1_11** | `task_1_11_clv_estimation.py`              | Educational CLV scoring and four segments based on ranked-score quartiles                 |
+| **#**    | **Script**                                 | **Analytical Focus**                                                      |
+| -------- | ------------------------------------------ | ------------------------------------------------------------------------- |
+| **1_01** | `task_1_01_top_products_by_revenue.py`     | Top 10 products by total revenue                                          |
+| **1_02** | `task_1_02_revenue_pivot_by_category.py`   | Revenue pivot by category and calendar month number; category leaders     |
+| **1_03** | `task_1_03_average_check_by_store.py`      | Revenue per unique transaction ID across retail stores                    |
+| **1_04** | `task_1_04_barplot_revenue_by_category.py` | Category revenue comparison between 2024 and 2025                         |
+| **1_05** | `task_1_05_correlation_heatmap.py`         | Correlation matrix: price, margin, quantity, and total transaction amount |
+| **1_06** | `task_1_06_sales_distribution_plots.py`    | Sales distribution analysis (Boxplot, Violin plot, Density plot)          |
+| **1_07** | `task_1_07_abc_analysis_of_products.py`    | Product ABC classification at 70% and 90% cumulative revenue thresholds   |
+| **1_08** | `task_1_08_market_basket_analysis.py`      | Top 5 category pairs by customer and ISO week number                      |
+| **1_09** | `task_1_09_discount_analysis.py`           | Observed quantities and amounts with and without discounts                |
+| **1_10** | `task_1_10_cohort_retention.py`            | Monthly customer cohorts and repeat purchases in initial category         |
+| **1_11** | `task_1_11_clv_estimation.py`              | Educational CLV scoring and four segments based on ranked-score quartiles |
 
 ---
 
-<a id="block-2-profitability-and-operations"></a>
 
 ### Block 2: Profitability and Operations
 
-| #         | Script                                     | Analytical Focus                                                             |
-| --------- | ------------------------------------------ | ---------------------------------------------------------------------------- |
-| **2_01** | `task_2_01_profit_analysis.py`             | Monthly profit on non-return sales after COGS and a 5% revenue-based expense allowance          |
-| **2_02** | `task_2_02_patero_analysis_80.py`          | Pareto analysis: revenue concentration around 80% cumulative threshold       |
-| **2_03** | `task_2_03_data_quality_score.py`          | Data Quality Score across 4 metrics for 5 raw CSV files                      |
-| **2_04** | `task_2_04_monthly_revenue_stacked_bar.py` | 2025 revenue table and stacked costs plus gross profit chart            |
-| **2_05** | `task_2_05_pareto_curve.py`                | Pareto chart: product revenue ranking and cumulative percentage curve        |
-| **2_06** | `task_2_06_Dashboard_(multi-plot).py`      | Multi-panel dashboard: revenue trend, store margin, returns, transactions    |
-| **2_07** | `task_2_07_time_series_analysis.py`        | Daily amounts, 7- and 30-observation rolling means, and anomaly flags    |
+| **#**    | **Script**                                 | **Analytical Focus**                                                                                           |
+| -------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| **2_01** | `task_2_01_profit_analysis.py`             | Monthly profit on non-return sales after COGS and a 5% revenue-based expense allowance                         |
+| **2_02** | `task_2_02_patero_analysis_80.py`          | Pareto analysis: revenue concentration around 80% cumulative threshold                                         |
+| **2_03** | `task_2_03_data_quality_score.py`          | Data Quality Score across 4 metrics for 5 raw CSV files                                                        |
+| **2_04** | `task_2_04_monthly_revenue_stacked_bar.py` | 2025 revenue table and stacked costs plus gross profit chart                                                   |
+| **2_05** | `task_2_05_pareto_curve.py`                | Pareto chart: product revenue ranking and cumulative percentage curve                                          |
+| **2_06** | `task_2_06_Dashboard_(multi-plot).py`      | Multi-panel dashboard: revenue trend, store margin, returns, transactions                                      |
+| **2_07** | `task_2_07_time_series_analysis.py`        | Daily amounts, 7- and 30-observation rolling means, and anomaly flags                                          |
 | **2_08** | `task_2_08_returns_analysis.py`            | Return rates by category and payment method, mean refunds by reason, discount relationships, and return timing |
-| **2_09** | `task_2_09_store_analytics.py`             | Revenue per m² and per active employee, brick-and-mortar store rankings      |
-| **2_10** | `task_2_10_P&L_Financial_Modeling.py`      | Monthly P&L: revenue, COGS, marketing, payroll, 5% expense allowance, operating profit     |
-| **2_11** | `task_2_11_dynamic_executive_dashboard.py` | Executive dashboard: 6 KPI cards, 2 charts, 3-month comparative view         |
+| **2_09** | `task_2_09_store_analytics.py`             | Revenue per m² and per active employee, brick-and-mortar store rankings                                        |
+| **2_10** | `task_2_10_P&L_Financial_Modeling.py`      | Monthly P&L: revenue, COGS, marketing, payroll, 5% expense allowance, operating profit                         |
+| **2_11** | `task_2_11_dynamic_executive_dashboard.py` | Executive dashboard: 6 KPI cards, 2 charts, 3-month comparative view                                           |
 
 ---
+
 
 <a id="metric-definitions-methodology"></a>
 
@@ -245,27 +256,26 @@ Outputs are written to `results/` subdirectories as CSV tables and PNG visualiza
 
 ### 1. Monthly P&L Model in Task 2_10
 
-```
+```text
 Revenue = sum(total_amount)
 COGS = sum(quantity * cost_price)
 Gross Profit = Revenue - COGS
 Operating Profit = Gross Profit - Marketing Cost - Salary Cost - 0.05 * Revenue
 Net Margin % = Operating Profit / Revenue * 100
-
 ```
 
-* **Marketing:** Campaign budgets are split evenly across campaign duration months.
-* **Payroll:** Extracted from the `net_pay` column in `salaries_cleaned.csv`.
-* *Note:* The metric is labeled `Net Margin %`, but its numerator is operating profit; interest and taxes are not modeled separately. The task includes return rows in revenue and does not reverse their product costs in COGS. This treatment needs review before interpreting the output as a financial statement.
+- **Marketing:** Campaign budgets are split evenly across campaign duration months.
+- **Payroll:** Extracted from the `net_pay` column in `salaries_cleaned.csv`.
+- *Note:* The metric is labeled `Net Margin %`, but its numerator is operating profit; interest and taxes are not modeled separately. The task includes return rows in revenue and does not reverse their product costs in COGS. This treatment needs review before interpreting the output as a financial statement.
 
 ### 2. Data Quality Score in Task 2_03
 
 The overall score is the arithmetic mean of four metrics calculated for each of the five source CSV files:
 
-* **Completeness:** Proportion of non-null cells.
-* **Uniqueness:** One minus the proportion of exact duplicate rows.
-* **Validity:** Proportion of rows passing task-specific anomaly checks.
-* **Consistency:** Proportion of rows passing selected value and range checks.
+- **Completeness:** Proportion of non-null cells.
+- **Uniqueness:** One minus the proportion of exact duplicate rows.
+- **Validity:** Proportion of rows passing task-specific anomaly checks.
+- **Consistency:** Proportion of rows passing selected value and range checks.
 
 These checks do not constitute a complete schema, primary-key, or cross-table referential-integrity audit.
 
@@ -274,6 +284,7 @@ These checks do not constitute a complete schema, primary-key, or cross-table re
 Generates static dashboards `dashboard_2025-01.png`, `dashboard_2025-06.png`, `dashboard_2025-12.png`, and a summary table `dashboard_month_comparison.csv`. Each image displays 6 KPI cards, a daily revenue trend, and a category breakdown plot. The function accepts a month parameter; it is not an interactive application and does not calculate MoM or YoY percentage changes.
 
 ---
+
 
 <a id="current-analytical-limitations"></a>
 
@@ -287,6 +298,7 @@ Generates static dashboards `dashboard_2025-01.png`, `dashboard_2025-06.png`, `d
 
 ---
 
+
 <a id="team-workflow-submission"></a>
 
 ## 👥 Team Workflow & Submission
@@ -295,9 +307,8 @@ Generates static dashboards `dashboard_2025-01.png`, `dashboard_2025-06.png`, `d
 
 `Serhii` · `Dmytro` · `Svitlana` · `Yuliia` · `Oksana`
 
-```
+```text
 [ Personal Branches ] ──► [ Integration: Serhii ] ──► [ Review & QA ] ──► [ Explicit Approval ] ──► [ main ]
-
 ```
 
 ### Pre-Submission Checklist
