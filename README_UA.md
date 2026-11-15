@@ -1,3 +1,5 @@
+> **Historischer Dokumentationsstand.** Aktueller Projektumfang, Startanleitung und fachliche Grenzen: [deutsches README](README.md). Diese ältere Beschreibung ist kein aktueller Prüfbericht.
+
 # Retail Data Analytics
 
 Командний навчальний проєкт з аналізу даних роздрібної торгівлі за 2024–2025 роки. Проєкт охоплює продуктовий портфель, виручку, прибутковість, повернення, часові ряди, фінансове моделювання, якість даних і побудову дашбордів.
